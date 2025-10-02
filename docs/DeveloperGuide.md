@@ -392,9 +392,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage
-* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at; a company can have any number of applications
-* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship
+* **Private contact detail**: A contact detail that is not meant to be shared with others
 
 --------------------------------------------------------------------------------------------------------------------
 
