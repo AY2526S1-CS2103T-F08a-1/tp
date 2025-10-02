@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/AY2526S1-CS2103T-F08a-1/tp/graph/badge.svg?token=PWQSXFQV4C)](https://codecov.io/gh/AY2526S1-CS2103T-F08a-1/tp)
 
 ![Ui](docs/images/Ui.png)
+
 **Cerebro** is a desktop app for tracking a CS student’s **internship progress**. It’s designed to be **keyboard-driven** and fast for power users.
 
 **Example usages:** 
