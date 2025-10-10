@@ -7,7 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_INTERVIEW;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalCompanies.ALPHA;
 import static seedu.address.testutil.TypicalCompanies.BOEING;
@@ -34,7 +34,7 @@ public class CompanyTest {
 
         // same name, all other attributes different -> returns true
         Company editedAirbus = new CompanyBuilder(ALPHA).withPhone(VALID_PHONE_BOEING).withEmail(VALID_EMAIL_BOEING)
-                .withAddress(VALID_ADDRESS_BOEING).withTags(VALID_TAG_PENDING_INTERVIEW).build();
+                .withAddress(VALID_ADDRESS_BOEING).withTags(VALID_TAG_GOOD_PAY).build();
         assertTrue(ALPHA.isSameCompany(editedAirbus));
 
         // different name, all other attributes same -> returns false
@@ -86,7 +86,7 @@ public class CompanyTest {
         assertFalse(ALPHA.equals(editedAlice));
 
         // different tags -> returns false
-        editedAlice = new CompanyBuilder(ALPHA).withTags(VALID_TAG_PENDING_INTERVIEW).build();
+        editedAlice = new CompanyBuilder(ALPHA).withTags(VALID_TAG_GOOD_PAY).build();
         assertFalse(ALPHA.equals(editedAlice));
     }
 
@@ -94,7 +94,7 @@ public class CompanyTest {
     public void toStringMethod() {
         String expected = Company.class.getCanonicalName() + "{name=" + ALPHA.getName() + ", phone=" + ALPHA.getPhone()
                 + ", email=" + ALPHA.getEmail() + ", address=" + ALPHA.getAddress() + ", tags=" + ALPHA.getTags()
-                + ", remark=" + ALPHA.getRemark() + "}";
+                + ", remark=" + ALPHA.getRemark() + ", status=" + ALPHA.getStatus() + "}";
         assertEquals(expected, ALPHA.toString());
     }
 }

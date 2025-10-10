@@ -8,6 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_AIRBUS;
+import static seedu.address.logic.commands.CommandTestUtil.STATUS_DESC_AIRBUS;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalCompanies.AIRBUS;
 
@@ -167,7 +168,7 @@ public class LogicManagerTest {
 
         // Triggers the saveAddressBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AIRBUS + PHONE_DESC_AIRBUS
-                + EMAIL_DESC_AIRBUS + ADDRESS_DESC_AIRBUS + REMARK_DESC_AIRBUS;
+                + EMAIL_DESC_AIRBUS + ADDRESS_DESC_AIRBUS + REMARK_DESC_AIRBUS + STATUS_DESC_AIRBUS;
         Company expectedCompany = new CompanyBuilder(AIRBUS).withTags().build();
         ModelManager expectedModel = new ModelManager();
         expectedModel.addCompany(expectedCompany);

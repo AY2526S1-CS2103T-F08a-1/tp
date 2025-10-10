@@ -16,6 +16,7 @@ import seedu.address.model.company.Email;
 import seedu.address.model.company.Name;
 import seedu.address.model.company.Phone;
 import seedu.address.model.company.Remark;
+import seedu.address.model.company.Status;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -31,6 +32,7 @@ class JsonAdaptedCompany {
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final String remark;
+    private final String status;
 
     /**
      * Constructs a {@code JsonAdaptedCompany} with the given company details.
@@ -38,7 +40,8 @@ class JsonAdaptedCompany {
     @JsonCreator
     public JsonAdaptedCompany(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
                               @JsonProperty("email") String email, @JsonProperty("address") String address,
-                              @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("remark") String remark) {
+                              @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("remark") String remark,
+                              @JsonProperty("status") String status) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -47,6 +50,7 @@ class JsonAdaptedCompany {
             this.tags.addAll(tags);
         }
         this.remark = remark;
+        this.status = status;
     }
 
     /**
@@ -61,6 +65,7 @@ class JsonAdaptedCompany {
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
         remark = source.getRemark().value;
+        status = source.getStatus().value;
     }
 
     /**
@@ -114,7 +119,18 @@ class JsonAdaptedCompany {
 
         final Remark modelRemark = new Remark(remark);
 
-        return new Company(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark);
+        // Status can be null for backward compatibility, use default value if null
+        final Status modelStatus;
+        if (status == null) {
+            modelStatus = new Status();
+        } else {
+            if (!Status.isValidStatus(status)) {
+                throw new IllegalValueException(Status.MESSAGE_CONSTRAINTS);
+            }
+            modelStatus = new Status(status);
+        }
+
+        return new Company(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark, modelStatus);
     }
 
 }

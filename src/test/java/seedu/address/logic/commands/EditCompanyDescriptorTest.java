@@ -10,7 +10,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_INTERVIEW;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,7 +55,7 @@ public class EditCompanyDescriptorTest {
         assertFalse(DESC_AIRBUS.equals(editedAirbus));
 
         // different tags -> returns false
-        editedAirbus = new EditCompanyDescriptorBuilder(DESC_AIRBUS).withTags(VALID_TAG_PENDING_INTERVIEW).build();
+        editedAirbus = new EditCompanyDescriptorBuilder(DESC_AIRBUS).withTags(VALID_TAG_GOOD_PAY).build();
         assertFalse(DESC_AIRBUS.equals(editedAirbus));
 
         // different remark -> returns false
@@ -72,7 +72,8 @@ public class EditCompanyDescriptorTest {
                 + editCompanyDescriptor.getEmail().orElse(null) + ", address="
                 + editCompanyDescriptor.getAddress().orElse(null) + ", tags="
                 + editCompanyDescriptor.getTags().orElse(null) + ", remark="
-                + editCompanyDescriptor.getRemark().orElse(null) + "}";
+                + editCompanyDescriptor.getRemark().orElse(null) + ", status="
+                + editCompanyDescriptor.getStatus().orElse(null) + "}";
         assertEquals(expected, editCompanyDescriptor.toString());
     }
 }
