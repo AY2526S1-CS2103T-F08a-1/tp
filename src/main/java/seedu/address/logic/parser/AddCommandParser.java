@@ -37,24 +37,46 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG,
                 PREFIX_REMARK);
 
-        // Check if this is a simple name format (only n/ prefix used)
-        if (isSimpleNameFormat(argMultimap)) {
-            return parseSimpleNameFormat(argMultimap);
-        }
-
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_REMARK)
-                || !argMultimap.getPreamble().isEmpty()) {
+        // Require name and no preamble; other fields are optional
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME) || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
+        // Disallow duplicates for non-repeatable prefixes
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
                 PREFIX_REMARK);
+
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
-        Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
-        Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
+
+        Phone phone;
+        if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
+            phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
+        } else {
+            phone = new Phone("000");
+        }
+
+        Email email;
+        if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
+            email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
+        } else {
+            email = new Email("noemailprovided@placeholder.com");
+        }
+
+        Address address;
+        if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
+            address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
+        } else {
+            address = new Address("No address provided");
+        }
+
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-        Remark remark = ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK).get());
+
+        Remark remark;
+        if (argMultimap.getValue(PREFIX_REMARK).isPresent()) {
+            remark = ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK).get());
+        } else {
+            remark = new Remark("No remark provided");
+        }
 
         Company company = new Company(name, phone, email, address, tagList, remark);
 
@@ -69,33 +91,6 @@ public class AddCommandParser implements Parser<AddCommand> {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 
-    /**
-     * Returns true if this appears to be a simple name format (only n/ prefix used).
-     */
-    private static boolean isSimpleNameFormat(ArgumentMultimap argumentMultimap) {
-        return argumentMultimap.getValue(PREFIX_NAME).isPresent()
-                && !argumentMultimap.getValue(PREFIX_PHONE).isPresent()
-                && !argumentMultimap.getValue(PREFIX_EMAIL).isPresent()
-                && !argumentMultimap.getValue(PREFIX_ADDRESS).isPresent()
-                && !argumentMultimap.getValue(PREFIX_TAG).isPresent()
-                && !argumentMultimap.getValue(PREFIX_REMARK).isPresent()
-                && argumentMultimap.getPreamble().trim().isEmpty();
-    }
-
-    /**
-     * Parses a simple name format input and creates an AddCommand with placeholder values.
-     */
-    private AddCommand parseSimpleNameFormat(ArgumentMultimap argMultimap) throws ParseException {
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME);
-        Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
-        Phone phone = new Phone("000"); // Placeholder that meets validation (3+ digits)
-        Email email = new Email("noemailprovided@placeholder.com"); // Placeholder that meets validation
-        Address address = new Address("No address provided"); // Placeholder that meets validation
-        Set<Tag> tagList = new HashSet<>(); // Empty tags
-        Remark remark = new Remark("No remark provided"); // Placeholder remark
-
-        Company company = new Company(name, phone, email, address, tagList, remark);
-        return new AddCommand(company);
-    }
+    // No longer need separate simple format parsing; handled by optional fields logic above
 
 }

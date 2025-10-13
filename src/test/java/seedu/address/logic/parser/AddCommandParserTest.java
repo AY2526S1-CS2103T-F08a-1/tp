@@ -165,35 +165,50 @@ public class AddCommandParserTest {
                         + REMARK_DESC_BOEING,
                 expectedMessage);
 
-        // missing phone prefix
-        assertParseFailure(parser,
-                NAME_DESC_BOEING + VALID_PHONE_BOEING + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
-                        + REMARK_DESC_BOEING,
-                expectedMessage);
-
-        // missing email prefix
-        assertParseFailure(parser,
-                NAME_DESC_BOEING + PHONE_DESC_BOEING + VALID_EMAIL_BOEING + ADDRESS_DESC_BOEING
-                        + REMARK_DESC_BOEING,
-                expectedMessage);
-
-        // missing address prefix
-        assertParseFailure(parser,
-                NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + VALID_ADDRESS_BOEING
-                        + REMARK_DESC_BOEING,
-                expectedMessage);
-
-        // missing remark prefix
-        assertParseFailure(parser,
-                NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
-                        + VALID_REMARK_BOEING,
-                expectedMessage);
-
         // all prefixes missing
         assertParseFailure(parser,
                 VALID_NAME_BOEING + VALID_PHONE_BOEING + VALID_EMAIL_BOEING + VALID_ADDRESS_BOEING
                         + REMARK_DESC_BOEING,
                 expectedMessage);
+    }
+
+    @Test
+    public void parse_someOptionalFieldsProvided_success() {
+        // name + phone only
+        Company expectedCompanyPhoneOnly = new CompanyBuilder()
+                .withName(VALID_NAME_BOEING)
+                .withPhone(VALID_PHONE_BOEING)
+                .withEmail("noemailprovided@placeholder.com")
+                .withAddress("No address provided")
+                .withTags()
+                .withRemark("No remark provided")
+                .build();
+        assertParseSuccess(parser, NAME_DESC_BOEING + PHONE_DESC_BOEING,
+                new AddCommand(expectedCompanyPhoneOnly));
+
+        // name + email only
+        Company expectedCompanyEmailOnly = new CompanyBuilder()
+                .withName(VALID_NAME_BOEING)
+                .withPhone("000")
+                .withEmail(VALID_EMAIL_BOEING)
+                .withAddress("No address provided")
+                .withTags()
+                .withRemark("No remark provided")
+                .build();
+        assertParseSuccess(parser, NAME_DESC_BOEING + EMAIL_DESC_BOEING,
+                new AddCommand(expectedCompanyEmailOnly));
+
+        // name + address + tag
+        Company expectedCompanyAddressTag = new CompanyBuilder()
+                .withName(VALID_NAME_BOEING)
+                .withPhone("000")
+                .withEmail("noemailprovided@placeholder.com")
+                .withAddress(VALID_ADDRESS_BOEING)
+                .withTags(VALID_TAG_PENDING_APPLICATION)
+                .withRemark("No remark provided")
+                .build();
+        assertParseSuccess(parser, NAME_DESC_BOEING + ADDRESS_DESC_BOEING + TAG_DESC_PENDING_APPLICATION,
+                new AddCommand(expectedCompanyAddressTag));
     }
 
     @Test
