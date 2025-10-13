@@ -250,10 +250,10 @@ public class AddCommandParserTest {
         Company expectedCompany = new CompanyBuilder()
                 .withName(VALID_NAME_BOEING)
                 .withPhone("000")
-                .withEmail("noemail@placeholder.com")
+                .withEmail("noemailprovided@placeholder.com")
                 .withAddress("No address provided")
                 .withTags()
-                .withRemark("")
+                .withRemark("No remark provided")
                 .build();
 
         assertParseSuccess(parser, NAME_DESC_BOEING, new AddCommand(expectedCompany));
