@@ -24,7 +24,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_APPLICATION;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_INTERVIEW;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
