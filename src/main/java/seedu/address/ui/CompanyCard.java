@@ -14,7 +14,7 @@ import seedu.address.model.company.Company;
  */
 public class CompanyCard extends UiPart<Region> {
 
-    private static final String FXML = "companyListCard.fxml";
+    private static final String FXML = "CompanyListCard.fxml";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -53,17 +53,10 @@ public class CompanyCard extends UiPart<Region> {
         name.setText(company.getName().fullName);
 
         // Display user-friendly placeholders
-        String phoneValue = company.getPhone().value;
-        phone.setText(phoneValue.equals("000") ? "No phone provided" : phoneValue);
-
-        String addressValue = company.getAddress().value;
-        address.setText(addressValue.equals("No address provided") ? "No address provided" : addressValue);
-
-        String emailValue = company.getEmail().value;
-        email.setText(emailValue.equals("noemailprovided@placeholder.com") ? "No email provided" : emailValue);
-
-        String remarkValue = company.getRemark().value;
-        remark.setText(remarkValue.equals("No remark provided") ? "No remark provided" : remarkValue);
+        phone.setText(DisplayUtil.displayPhone(company.getPhone().value));
+        address.setText(DisplayUtil.displayAddress(company.getAddress().value));
+        email.setText(DisplayUtil.displayEmail(company.getEmail().value));
+        remark.setText(DisplayUtil.displayRemark(company.getRemark().value));
 
         company.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
