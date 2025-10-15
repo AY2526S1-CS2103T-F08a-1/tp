@@ -37,17 +37,14 @@ public class Messages {
     public static String format(Company company) {
         final StringBuilder builder = new StringBuilder();
 
-        // Format phone with user-friendly placeholder
         String phoneDisplay = company.getPhone().value.equals("000")
                 ? "No phone provided"
                 : company.getPhone().value;
 
-        // Format email with user-friendly placeholder
         String emailDisplay = company.getEmail().value.equals("noemailprovided@placeholder.com")
                 ? "No email provided"
                 : company.getEmail().value;
 
-        // Format address with user-friendly placeholder
         String addressDisplay = company.getAddress().value.equals("No address provided")
                 ? "No address provided"
                 : company.getAddress().value;

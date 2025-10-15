@@ -44,7 +44,7 @@ public class CompanyCard extends UiPart<Region> {
     private Label remark;
 
     /**
-     * Creates a {@code companyCode} with the given {@code Company} and index to display.
+     * Creates a {@code CompanyCard} with the given {@code Company} and index to display.
      */
     public CompanyCard(Company company, int displayedIndex) {
         super(FXML);
@@ -52,7 +52,6 @@ public class CompanyCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         name.setText(company.getName().fullName);
 
-        // Display user-friendly placeholders
         phone.setText(DisplayUtil.displayPhone(company.getPhone().value));
         address.setText(DisplayUtil.displayAddress(company.getAddress().value));
         email.setText(DisplayUtil.displayEmail(company.getEmail().value));
