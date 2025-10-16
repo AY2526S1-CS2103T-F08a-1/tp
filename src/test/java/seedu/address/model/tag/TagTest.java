@@ -36,13 +36,13 @@ public class TagTest {
 
         // valid tag names
         assertTrue(Tag.isValidTagName("friend")); // single word
-        assertTrue(Tag.isValidTagName("PendingInterview")); // alphanumeric with capital letters
-        assertTrue(Tag.isValidTagName("Pending-interview")); // contains hyphen
+        assertTrue(Tag.isValidTagName("DecentLocation")); // alphanumeric with capital letters
+        assertTrue(Tag.isValidTagName("Good-pay")); // contains hyphen
         assertTrue(Tag.isValidTagName("Yet-to-apply")); // multiple hyphens
         assertTrue(Tag.isValidTagName("a")); // single character
         assertTrue(Tag.isValidTagName("123")); // numeric only
         assertTrue(Tag.isValidTagName("friend123")); // alphanumeric
-        assertTrue(Tag.isValidTagName("Pending-interview-round-2")); // multiple words with number
+        assertTrue(Tag.isValidTagName("multiple-words-with-number-123")); // multiple words with number
     }
 
 }

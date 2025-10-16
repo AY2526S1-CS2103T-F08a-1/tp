@@ -8,7 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_INTERVIEW;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showCompanyAtIndex;
@@ -65,10 +65,10 @@ public class EditCommandTest {
 
         CompanyBuilder companyInList = new CompanyBuilder(lastCompany);
         Company editedCompany = companyInList.withName(VALID_NAME_BOEING).withPhone(VALID_PHONE_BOEING)
-                .withTags(VALID_TAG_PENDING_INTERVIEW).withRemark(VALID_REMARK_BOEING).build();
+                .withTags(VALID_TAG_GOOD_PAY).withRemark(VALID_REMARK_BOEING).build();
 
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withName(VALID_NAME_BOEING)
-                .withPhone(VALID_PHONE_BOEING).withTags(VALID_TAG_PENDING_INTERVIEW).withRemark(VALID_REMARK_BOEING)
+                .withPhone(VALID_PHONE_BOEING).withTags(VALID_TAG_GOOD_PAY).withRemark(VALID_REMARK_BOEING)
                 .build();
         EditCommand editCommand = new EditCommand(indexLastCompany, descriptor);
 

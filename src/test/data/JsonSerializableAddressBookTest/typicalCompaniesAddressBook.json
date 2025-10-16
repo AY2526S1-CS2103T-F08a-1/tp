@@ -6,48 +6,55 @@
     "email" : "contact@alpha.com",
     "address" : "123, Jurong West Ave 6, #08-111",
     "tags" : [ "supplier" ],
-    "remark" : "Leading manufacturer of industrial equipment."
+    "remark" : "Leading manufacturer of industrial equipment.",
+    "status" : "to-apply"
   }, {
     "name" : "Beta Corporation",
     "phone" : "98765432",
     "email" : "info@beta.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "tags" : [ "client", "partner" ],
-    "remark" : "Trusted partner for software solutions."
+    "remark" : "Trusted partner for software solutions.",
+    "status" : "tech-interview"
   }, {
     "name" : "Consolidated Traders",
     "phone" : "95352563",
     "email" : "sales@consolidated.com",
     "address" : "1 Wall Street Plaza",
     "tags" : [ ],
-    "remark" : "Specializes in bulk trading operations."
+    "remark" : "Specializes in bulk trading operations.",
+    "status" : "applied"
   }, {
     "name" : "Delta Enterprises",
     "phone" : "87652533",
     "email" : "contact@delta.com",
     "address" : "10 Enterprise Road",
     "tags" : [ "supplier" ],
-    "remark" : "Supplier of high-quality raw materials."
+    "remark" : "Supplier of high-quality raw materials.",
+    "status" : "hr-interview"
   }, {
     "name" : "Elite Manufacturing",
     "phone" : "9482224",
     "email" : "enquiry@elite.com",
     "address" : "50 Michigan Avenue",
     "tags" : [ ],
-    "remark" : "Known for precision engineering."
+    "remark" : "Known for precision engineering.",
+    "status" : "offered"
   }, {
     "name" : "Fusion Systems",
     "phone" : "9482427",
     "email" : "hello@fusion.com",
     "address" : "88 Little Tokyo Street",
     "tags" : [ ],
-    "remark" : "Innovative solutions for IT infrastructure."
+    "remark" : "Innovative solutions for IT infrastructure.",
+    "status" : "oa"
   }, {
     "name" : "Global Trading Co",
     "phone" : "9482442",
     "email" : "info@globaltrading.com",
     "address" : "4 Commerce Street",
     "tags" : [ ],
-    "remark" : "Handles international trading and logistics."
+    "remark" : "Handles international trading and logistics.",
+    "status" : "rejected"
   } ]
 }
