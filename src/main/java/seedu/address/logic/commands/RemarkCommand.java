@@ -55,7 +55,7 @@ public class RemarkCommand extends Command {
         Company companyToEdit = lastShownList.get(index.getZeroBased());
         Company editedCompany = new Company(
                 companyToEdit.getName(), companyToEdit.getPhone(), companyToEdit.getEmail(),
-                companyToEdit.getAddress(), companyToEdit.getTags(), remark);
+                companyToEdit.getAddress(), companyToEdit.getTags(), remark, companyToEdit.getStatus());
 
         model.setCompany(companyToEdit, editedCompany);
         model.updateFilteredCompanyList(Model.PREDICATE_SHOW_ALL_COMPANIES);

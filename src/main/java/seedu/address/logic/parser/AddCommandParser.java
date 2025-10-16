@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import seedu.address.model.company.Email;
 import seedu.address.model.company.Name;
 import seedu.address.model.company.Phone;
 import seedu.address.model.company.Remark;
+import seedu.address.model.company.Status;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -35,7 +37,7 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG,
-                PREFIX_REMARK);
+                PREFIX_REMARK, PREFIX_STATUS);
 
         // Check if this is a simple name format (only n/ prefix used)
         if (isSimpleNameFormat(argMultimap)) {
@@ -48,15 +50,18 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                PREFIX_REMARK);
+                PREFIX_REMARK, PREFIX_STATUS);
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
         Remark remark = ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK).get());
+        Status status = argMultimap.getValue(PREFIX_STATUS).isPresent()
+                ? ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS).get())
+                : new Status(); // Use default if not provided
 
-        Company company = new Company(name, phone, email, address, tagList, remark);
+        Company company = new Company(name, phone, email, address, tagList, remark, status);
 
         return new AddCommand(company);
     }
@@ -79,6 +84,7 @@ public class AddCommandParser implements Parser<AddCommand> {
                 && !argumentMultimap.getValue(PREFIX_ADDRESS).isPresent()
                 && !argumentMultimap.getValue(PREFIX_TAG).isPresent()
                 && !argumentMultimap.getValue(PREFIX_REMARK).isPresent()
+                && !argumentMultimap.getValue(PREFIX_STATUS).isPresent()
                 && argumentMultimap.getPreamble().trim().isEmpty();
     }
 
@@ -94,7 +100,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         Set<Tag> tagList = new HashSet<>(); // Empty tags
         Remark remark = new Remark("No remark provided"); // Placeholder remark
 
-        Company company = new Company(name, phone, email, address, tagList, remark);
+        Company company = new Company(name, phone, email, address, tagList, remark, status);
         return new AddCommand(company);
     }
 

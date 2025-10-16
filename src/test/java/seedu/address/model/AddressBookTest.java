@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_INTERVIEW;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalCompanies.ALPHA;
 import static seedu.address.testutil.TypicalCompanies.getTypicalAddressBook;
@@ -47,7 +47,7 @@ public class AddressBookTest {
     public void resetData_withDuplicatecompanies_throwsDuplicateCompanyException() {
         // Two companies with the same identity fields
         Company editedAlice = new CompanyBuilder(ALPHA).withAddress(VALID_ADDRESS_BOEING)
-                .withTags(VALID_TAG_PENDING_INTERVIEW).build();
+                .withTags(VALID_TAG_GOOD_PAY).build();
         List<Company> newCompanies = Arrays.asList(ALPHA, editedAlice);
         AddressBookStub newData = new AddressBookStub(newCompanies);
 
@@ -74,7 +74,7 @@ public class AddressBookTest {
     public void hasCompany_companyWithSameIdentityFieldsInAddressBook_returnsTrue() {
         addressBook.addCompany(ALPHA);
         Company editedAlice = new CompanyBuilder(ALPHA).withAddress(VALID_ADDRESS_BOEING)
-                .withTags(VALID_TAG_PENDING_INTERVIEW).build();
+                .withTags(VALID_TAG_GOOD_PAY).build();
         assertTrue(addressBook.hasCompany(editedAlice));
     }
 

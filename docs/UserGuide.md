@@ -77,6 +77,12 @@ Format: `help`
 
 Adds a company to the address book.
 
+You can also set an application status when adding:
+`add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS r/REMARK [s/STATUS] [t/TAG]...`
+
+- Valid `STATUS` values: `to-apply`, `applied`, `in-process`, `offered`, `rejected`.
+- If `s/STATUS` is omitted, status defaults to `to-apply`.
+
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -85,7 +91,7 @@ A company can have any number of tags (including 0)
 
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/Betsy Crowe p/1234567 e/betsycrowe@example.com a/Newgate Prison r/From fair s/in-process t/friend t/criminal`
 
 ### Listing all companies : `list`
 
@@ -96,6 +102,8 @@ Format: `list`
 ### Editing a company : `edit`
 
 Edits an existing company in the address book.
+
+You can update the application status using `s/STATUS` where `STATUS` is one of `to-apply`, `applied`, `in-process`, `offered`, `rejected`.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
@@ -108,7 +116,7 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st company to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd company to be `Betsy Crower` and clears all existing tags.
+*  `edit 2 n/Betsy Crower s/offered t/` Edits the name of the 2nd company to be `Betsy Crower`, sets status to `offered`, and clears all existing tags.
 
 ### Locating companies by name: `find`
 
@@ -141,6 +149,18 @@ Format: `delete INDEX`
 Examples:
 * `list` followed by `delete 2` deletes the 2nd company in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st company in the results of the `find` command.
+
+### Updating application status: `status`
+
+Changes only the application status of a company.
+
+Format: `status INDEX s/STATUS`
+
+- Valid `STATUS` values: `to-apply`, `applied`, `in-process`, `offered`, `rejected`.
+
+Examples:
+* `status 1 s/in-process`
+* `status 3 s/rejected`
 
 ### Clearing all entries : `clear`
 
@@ -198,3 +218,4 @@ Action | Format, Examples
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
 **Help** | `help`
+**Status** | `status INDEX s/STATUS`<br> e.g., `status 1 s/offered`

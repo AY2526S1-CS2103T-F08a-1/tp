@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_COMPANIES;
 
@@ -29,6 +30,7 @@ import seedu.address.model.company.Email;
 import seedu.address.model.company.Name;
 import seedu.address.model.company.Phone;
 import seedu.address.model.company.Remark;
+import seedu.address.model.company.Status;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -46,12 +48,13 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_STATUS + "STATUS] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com\n"
             + "For batch editing: " + COMMAND_WORD + " 1,2,3 "
-            + PREFIX_TAG + "applied";
+            + PREFIX_STATUS + "in-process";
 
     public static final String MESSAGE_EDIT_COMPANY_SUCCESS = "Edited Company: %1$s";
     public static final String MESSAGE_BATCH_EDIT_SUCCESS = "Edited %1$d companies successfully";
@@ -204,8 +207,10 @@ public class EditCommand extends Command {
         Address updatedAddress = editCompanyDescriptor.getAddress().orElse(companyToEdit.getAddress());
         Set<Tag> updatedTags = editCompanyDescriptor.getTags().orElse(companyToEdit.getTags());
         Remark updatedRemark = editCompanyDescriptor.getRemark().orElse(companyToEdit.getRemark());
+        Status updatedStatus = editCompanyDescriptor.getStatus().orElse(companyToEdit.getStatus());
 
-        return new Company(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark);
+        return new Company(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark,
+                updatedStatus);
     }
 
     @Override
@@ -245,6 +250,7 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Tag> tags;
         private Remark remark;
+        private Status status;
 
         public EditCompanyDescriptor() {}
 
@@ -259,13 +265,14 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setTags(toCopy.tags);
             setRemark(toCopy.remark);
+            setStatus(toCopy.status);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, remark);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, remark, status);
         }
 
         public void setName(Name name) {
@@ -331,6 +338,20 @@ public class EditCommand extends Command {
             return Optional.ofNullable(remark);
         }
 
+        /**
+         * Sets {@code status} to this object's {@code status}.
+         */
+        public void setStatus(Status status) {
+            this.status = status;
+        }
+
+        /**
+         * Returns an optional status, which is empty if {@code status} is null.
+         */
+        public Optional<Status> getStatus() {
+            return Optional.ofNullable(status);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -348,7 +369,8 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditCompanyDescriptor.email)
                     && Objects.equals(address, otherEditCompanyDescriptor.address)
                     && Objects.equals(tags, otherEditCompanyDescriptor.tags)
-                    && Objects.equals(remark, otherEditCompanyDescriptor.remark);
+                    && Objects.equals(remark, otherEditCompanyDescriptor.remark)
+                    && Objects.equals(status, otherEditCompanyDescriptor.status);
         }
 
         @Override
@@ -360,6 +382,7 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("tags", tags)
                     .add("remark", remark)
+                    .add("status", status)
                     .toString();
         }
     }

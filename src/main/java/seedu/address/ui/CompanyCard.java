@@ -42,6 +42,8 @@ public class CompanyCard extends UiPart<Region> {
     private FlowPane tags;
     @FXML
     private Label remark;
+    @FXML
+    private Label status;
 
     /**
      * Creates a {@code companyCode} with the given {@code Company} and index to display.
@@ -68,5 +70,6 @@ public class CompanyCard extends UiPart<Region> {
         company.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        remark.setText(company.getRemark().value);
     }
 }

@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -35,10 +36,12 @@ public class CommandTestUtil {
     public static final String VALID_EMAIL_BOEING = "boeing@example.com";
     public static final String VALID_ADDRESS_AIRBUS = "Block 312, Amy Street 1";
     public static final String VALID_ADDRESS_BOEING = "Block 123, Bobby Street 3";
-    public static final String VALID_TAG_PENDING_INTERVIEW = "pending-interview";
-    public static final String VALID_TAG_PENDING_APPLICATION = "pending-application";
+    public static final String VALID_TAG_GOOD_PAY = "good-pay";
+    public static final String VALID_TAG_DECENT_LOCATION = "decent-location";
     public static final String VALID_REMARK_AIRBUS = "Great location and pay";
     public static final String VALID_REMARK_BOEING = "Lacking pay but good experience";
+    public static final String VALID_STATUS_AIRBUS = "tech-interview";
+    public static final String VALID_STATUS_BOEING = "to-apply";
 
     public static final String NAME_DESC_AIRBUS = " " + PREFIX_NAME + VALID_NAME_AIRBUS;
     public static final String NAME_DESC_BOEING = " " + PREFIX_NAME + VALID_NAME_BOEING;
@@ -48,16 +51,19 @@ public class CommandTestUtil {
     public static final String EMAIL_DESC_BOEING = " " + PREFIX_EMAIL + VALID_EMAIL_BOEING;
     public static final String ADDRESS_DESC_AIRBUS = " " + PREFIX_ADDRESS + VALID_ADDRESS_AIRBUS;
     public static final String ADDRESS_DESC_BOEING = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOEING;
-    public static final String TAG_DESC_PENDING_APPLICATION = " " + PREFIX_TAG + VALID_TAG_PENDING_APPLICATION;
-    public static final String TAG_DESC_PENDING_INTERVIEW = " " + PREFIX_TAG + VALID_TAG_PENDING_INTERVIEW;
+    public static final String TAG_DESC_DECENT_LOCATION = " " + PREFIX_TAG + VALID_TAG_DECENT_LOCATION;
+    public static final String TAG_DESC_GOOD_PAY = " " + PREFIX_TAG + VALID_TAG_GOOD_PAY;
     public static final String REMARK_DESC_AIRBUS = " " + PREFIX_REMARK + VALID_REMARK_AIRBUS;
     public static final String REMARK_DESC_BOEING = " " + PREFIX_REMARK + VALID_REMARK_BOEING;
+    public static final String STATUS_DESC_AIRBUS = " " + PREFIX_STATUS + VALID_STATUS_AIRBUS;
+    public static final String STATUS_DESC_BOEING = " " + PREFIX_STATUS + VALID_STATUS_BOEING;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
+    public static final String INVALID_STATUS_DESC = " " + PREFIX_STATUS + "pending application"; // spaces not allowed
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
@@ -68,11 +74,12 @@ public class CommandTestUtil {
     static {
         DESC_AIRBUS = new EditCompanyDescriptorBuilder().withName(VALID_NAME_AIRBUS)
                 .withPhone(VALID_PHONE_AIRBUS).withEmail(VALID_EMAIL_AIRBUS).withAddress(VALID_ADDRESS_AIRBUS)
-                .withTags(VALID_TAG_PENDING_APPLICATION).withRemark(VALID_REMARK_AIRBUS).build();
+                .withTags(VALID_TAG_DECENT_LOCATION).withRemark(VALID_REMARK_AIRBUS)
+                .withStatus(VALID_STATUS_AIRBUS).build();
         DESC_BOEING = new EditCompanyDescriptorBuilder().withName(VALID_NAME_BOEING)
                 .withPhone(VALID_PHONE_BOEING).withEmail(VALID_EMAIL_BOEING).withAddress(VALID_ADDRESS_BOEING)
-                .withTags(VALID_TAG_PENDING_INTERVIEW, VALID_TAG_PENDING_APPLICATION).withRemark(VALID_REMARK_BOEING)
-                .build();
+                .withTags(VALID_TAG_GOOD_PAY, VALID_TAG_DECENT_LOCATION).withRemark(VALID_REMARK_BOEING)
+                .withStatus(VALID_STATUS_BOEING).build();
     }
 
     /**

@@ -18,15 +18,15 @@ import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_NON_EMPTY;
 import static seedu.address.logic.commands.CommandTestUtil.PREAMBLE_WHITESPACE;
 import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.REMARK_DESC_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_PENDING_APPLICATION;
-import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_PENDING_INTERVIEW;
+import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_DECENT_LOCATION;
+import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_GOOD_PAY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_APPLICATION;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_PENDING_INTERVIEW;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_DECENT_LOCATION;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -54,29 +54,29 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Company expectedCompany = new CompanyBuilder(BOEING).withTags(VALID_TAG_PENDING_APPLICATION).build();
+        Company expectedCompany = new CompanyBuilder(BOEING).withTags(VALID_TAG_DECENT_LOCATION).build();
 
         // whitespace only preamble
         assertParseSuccess(parser,
                 PREAMBLE_WHITESPACE + NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING
-                        + ADDRESS_DESC_BOEING + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + ADDRESS_DESC_BOEING + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 new AddCommand(expectedCompany));
 
 
         // multiple tags - all accepted
         Company expectedCompanyMultipleTags =
-                new CompanyBuilder(BOEING).withTags(VALID_TAG_PENDING_APPLICATION, VALID_TAG_PENDING_INTERVIEW)
+                new CompanyBuilder(BOEING).withTags(VALID_TAG_DECENT_LOCATION, VALID_TAG_GOOD_PAY)
                 .build();
         assertParseSuccess(parser,
                 NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
-                        + TAG_DESC_PENDING_INTERVIEW + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 new AddCommand(expectedCompanyMultipleTags));
     }
 
     @Test
     public void parse_repeatedNonTagValue_failure() {
         String validExpectedCompanyString = NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING
-                + ADDRESS_DESC_BOEING + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING;
+                + ADDRESS_DESC_BOEING + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING;
 
         // multiple names
         assertParseFailure(parser, NAME_DESC_AIRBUS + validExpectedCompanyString,
@@ -147,8 +147,8 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_optionalFieldsMissing_success() {
-        // zero tags
-        Company expectedCompany = new CompanyBuilder(AIRBUS).withTags().build();
+        // zero tags and status defaults to to-apply
+        Company expectedCompany = new CompanyBuilder(AIRBUS).withTags().withStatus("to-apply").build();
         assertParseSuccess(parser,
                 NAME_DESC_AIRBUS + PHONE_DESC_AIRBUS + EMAIL_DESC_AIRBUS + ADDRESS_DESC_AIRBUS
                         + REMARK_DESC_AIRBUS,
@@ -201,31 +201,31 @@ public class AddCommandParserTest {
         // invalid name
         assertParseFailure(parser,
                 INVALID_NAME_DESC + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
-                        + TAG_DESC_PENDING_INTERVIEW + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 Name.MESSAGE_CONSTRAINTS);
 
         // invalid phone
         assertParseFailure(parser,
                 NAME_DESC_BOEING + INVALID_PHONE_DESC + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
-                        + TAG_DESC_PENDING_INTERVIEW + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 Phone.MESSAGE_CONSTRAINTS);
 
         // invalid email
         assertParseFailure(parser,
                 NAME_DESC_BOEING + PHONE_DESC_BOEING + INVALID_EMAIL_DESC + ADDRESS_DESC_BOEING
-                        + TAG_DESC_PENDING_INTERVIEW + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 Email.MESSAGE_CONSTRAINTS);
 
         // invalid address
         assertParseFailure(parser,
                 NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + INVALID_ADDRESS_DESC
-                        + TAG_DESC_PENDING_INTERVIEW + TAG_DESC_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 Address.MESSAGE_CONSTRAINTS);
 
         // invalid tag
         assertParseFailure(parser,
                 NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
-                        + INVALID_TAG_DESC + VALID_TAG_PENDING_APPLICATION + REMARK_DESC_BOEING,
+                        + INVALID_TAG_DESC + VALID_TAG_DECENT_LOCATION + REMARK_DESC_BOEING,
                 Tag.MESSAGE_CONSTRAINTS);
 
         // remarks can take any values
@@ -239,7 +239,7 @@ public class AddCommandParserTest {
         // non-empty preamble
         assertParseFailure(parser,
                 PREAMBLE_NON_EMPTY + NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING
-                        + ADDRESS_DESC_BOEING + TAG_DESC_PENDING_INTERVIEW + TAG_DESC_PENDING_APPLICATION
+                        + ADDRESS_DESC_BOEING + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION
                         + REMARK_DESC_BOEING,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
