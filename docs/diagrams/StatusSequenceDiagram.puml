@@ -1,0 +1,74 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":StatusCommandParser" as StatusCommandParser LOGIC_COLOR
+participant "s:StatusCommand" as StatusCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("status 1 s/applied")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("status 1 s/applied")
+activate AddressBookParser
+
+create StatusCommandParser
+AddressBookParser -> StatusCommandParser
+activate StatusCommandParser
+
+StatusCommandParser --> AddressBookParser
+deactivate StatusCommandParser
+
+AddressBookParser -> StatusCommandParser : parse("1 s/applied")
+activate StatusCommandParser
+
+create StatusCommand
+StatusCommandParser -> StatusCommand
+activate StatusCommand
+
+StatusCommand --> StatusCommandParser
+deactivate StatusCommand
+
+StatusCommandParser --> AddressBookParser : sc
+deactivate StatusCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+StatusCommandParser -[hidden]-> AddressBookParser
+destroy StatusCommandParser
+
+AddressBookParser --> LogicManager : sc
+deactivate AddressBookParser
+
+LogicManager -> StatusCommand : execute(m)
+activate StatusCommand
+
+StatusCommand -> Model : setCompany(1, applied)
+activate Model
+
+Model --> StatusCommand
+
+StatusCommand -> Model : updateFilteredCompanyList()
+
+Model --> StatusCommand
+deactivate Model
+
+create CommandResult
+StatusCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> StatusCommand
+deactivate CommandResult
+
+StatusCommand --> LogicManager : r
+deactivate StatusCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
