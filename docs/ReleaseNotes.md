@@ -146,7 +146,7 @@ add n/Apple r/Great benefits s/applied
 ### **Edit Command Enhancements**
 
 **New Capabilities:**
-- Batch editing with: 
+- Batch editing with:
   - comma-separated indices
   - `START-END` syntax
   - or BOTH

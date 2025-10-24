@@ -34,12 +34,16 @@ public class MainWindow extends UiPart<Stage> {
     private CompanyListPanel companyListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private MetricsWindow metricsWindow;
 
     @FXML
     private StackPane commandBoxPlaceholder;
 
     @FXML
     private MenuItem helpMenuItem;
+
+    @FXML
+    private MenuItem metricsMenuItem;
 
     @FXML
     private StackPane companyListPanelPlaceholder;
@@ -66,6 +70,7 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
+        metricsWindow = new MetricsWindow();
     }
 
     public Stage getPrimaryStage() {
@@ -160,6 +165,26 @@ public class MainWindow extends UiPart<Stage> {
         helpWindow.focus();
     }
 
+    /**
+     * Opens the metrics window or focuses on it if it's already opened.
+     * If the metrics window is minimized, it will be restored and brought to front.
+     */
+    @FXML
+    public void handleMetrics() {
+        if (!metricsWindow.isShowing()) {
+            metricsWindow.setData(logic.getAddressBook());
+            metricsWindow.show();
+        } else {
+            // Check if the window is minimized (iconified)
+            if (metricsWindow.getRoot().isIconified()) {
+                metricsWindow.getRoot().setIconified(false);
+            }
+            // Update data before focusing
+            metricsWindow.setData(logic.getAddressBook());
+            metricsWindow.focus();
+        }
+    }
+
     void show() {
         primaryStage.show();
     }
@@ -173,6 +198,7 @@ public class MainWindow extends UiPart<Stage> {
                 (int) primaryStage.getX(), (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
+        metricsWindow.hide();
         primaryStage.hide();
     }
 
@@ -193,6 +219,10 @@ public class MainWindow extends UiPart<Stage> {
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
+            }
+
+            if (commandResult.isShowMetrics()) {
+                handleMetrics();
             }
 
             if (commandResult.isExit()) {

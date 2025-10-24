@@ -207,6 +207,22 @@
     -fx-background-color: black;
 }
 
+/* Make menu dropdowns stay open longer */
+.menu {
+    -fx-show-delay: 0ms;
+    -fx-hide-delay: 1000ms;
+}
+
+.menu-item {
+    -fx-padding: 8 12 8 12;
+}
+
+/* Specific styling for View menu to make it more stable */
+.menu:hover {
+    -fx-show-delay: 0ms;
+    -fx-hide-delay: 2000ms;
+}
+
 /*
  * Metro style Push Button
  * Author: Pedro Duque Vieira

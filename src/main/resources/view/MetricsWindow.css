@@ -1,0 +1,88 @@
+/* Metrics Window Styling */
+
+.metrics-content {
+    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-padding: 15;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.metrics-total {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 5 0 5 0;
+}
+
+.metrics-separator {
+    -fx-padding: 5 0 5 0;
+    -fx-border-color: #555555;
+}
+
+.metrics-no-data {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-text-fill: #888888;
+    -fx-padding: 10;
+}
+
+.metrics-status {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 13px;
+    -fx-padding: 4 16 4 16;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-margin: 2 2 2 2;
+}
+
+/* Status-specific colors matching the GUI status tags */
+.status-to-apply {
+    -fx-background-color: #F0F0F0;
+    -fx-text-fill: black;
+}
+
+.status-applied {
+    -fx-background-color: #FFB366;
+    -fx-text-fill: black;
+}
+
+.status-oa {
+    -fx-background-color: #B085F5;
+    -fx-text-fill: black;
+}
+
+.status-tech-interview {
+    -fx-background-color: #FFB3D9;
+    -fx-text-fill: black;
+}
+
+.status-hr-interview {
+    -fx-background-color: #66D9EF;
+    -fx-text-fill: black;
+}
+
+.status-in-process {
+    -fx-background-color: #FFF066;
+    -fx-text-fill: black;
+}
+
+.status-rejected {
+    -fx-background-color: #FF8A80;
+    -fx-text-fill: black;
+}
+
+.status-offered {
+    -fx-background-color: #A8E6CF;
+    -fx-text-fill: black;
+}
+
+.status-accepted {
+    -fx-background-color: #98FB98;
+    -fx-text-fill: black;
+}
+
+/* Window background */
+.root {
+    -fx-background-color: derive(#1d1d1d, 30%);
+}
