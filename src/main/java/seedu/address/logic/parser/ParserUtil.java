@@ -121,6 +121,10 @@ public class ParserUtil {
         if (!Tag.isValidTagName(trimmedTag)) {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
+        if (!Tag.isValidTagLength(trimmedTag)) {
+            throw new ParseException(String.format(Tag.MESSAGE_LENGTH_EXCEEDED_FORMAT,
+                    Tag.MAX_TAG_LENGTH, trimmedTag, trimmedTag.length()));
+        }
         return new Tag(trimmedTag);
     }
 

@@ -10,7 +10,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Tag {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Tag names should be alphanumeric and may contain hyphens to separate words";
+            "Tag names should be alphanumeric and may contain hyphens to separate words. No whitespaces allowed.";
+    public static final int MAX_TAG_LENGTH = 30;
+    public static final String MESSAGE_LENGTH_EXCEEDED_FORMAT =
+            "Tag names must not exceed %d characters.\n"
+                    + "Tag '%s' exceeds 30 character limit. (%d characters)";
     public static final String VALIDATION_REGEX = "[\\p{Alnum}]+(-[\\p{Alnum}]+)*";
 
     public final String tagName;
@@ -23,6 +27,9 @@ public class Tag {
     public Tag(String tagName) {
         requireNonNull(tagName);
         checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
+        checkArgument(tagName.length() <= MAX_TAG_LENGTH,
+                String.format(MESSAGE_LENGTH_EXCEEDED_FORMAT,
+                        MAX_TAG_LENGTH, tagName, tagName.length()));
         this.tagName = tagName;
     }
 
@@ -31,6 +38,13 @@ public class Tag {
      */
     public static boolean isValidTagName(String test) {
         return test.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns true if a given tag is a does not exceed max tag length.
+     */
+    public static boolean isValidTagLength(String test) {
+        return test.length() <= MAX_TAG_LENGTH;
     }
 
     @Override

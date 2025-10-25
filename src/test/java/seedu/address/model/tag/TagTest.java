@@ -20,6 +20,12 @@ public class TagTest {
     }
 
     @Test
+    public void constructor_tagNameTooLong_throwsIllegalArgumentException() {
+        String longTagName = "a".repeat(31); // 31 characters, exceeds the 30 character limit
+        assertThrows(IllegalArgumentException.class, () -> new Tag(longTagName));
+    }
+
+    @Test
     public void isValidTagName() {
         // null tag name
         assertThrows(NullPointerException.class, () -> Tag.isValidTagName(null));
@@ -43,6 +49,16 @@ public class TagTest {
         assertTrue(Tag.isValidTagName("123")); // numeric only
         assertTrue(Tag.isValidTagName("friend123")); // alphanumeric
         assertTrue(Tag.isValidTagName("multiple-words-with-number-123")); // multiple words with number
+        assertTrue(Tag.isValidTagName("a".repeat(30))); // exactly 30 characters (boundary test)
+    }
+
+    @Test
+    public void isValidTagLength() {
+        // invalid tag length
+        assertFalse(Tag.isValidTagLength("a".repeat(31))); // exceeds 30 character limit
+
+        // valid tag names
+        assertTrue(Tag.isValidTagLength("a".repeat(30))); // exactly 30 characters (boundary test)
     }
 
 }
