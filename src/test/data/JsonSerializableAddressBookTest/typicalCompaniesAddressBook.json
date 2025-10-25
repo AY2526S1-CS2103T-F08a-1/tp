@@ -56,5 +56,13 @@
     "tags" : [ ],
     "remark" : "Handles international trading and logistics.",
     "status" : "rejected"
+  }, {
+    "name" : "Holly Design",
+    "phone" : "93232442",
+    "email" : "info@hollydesign.com",
+    "address" : "4 Washington Street",
+    "tags" : [ ],
+    "remark" : "Handles interior design and furniture.",
+    "status" : "to-apply"
   } ]
 }

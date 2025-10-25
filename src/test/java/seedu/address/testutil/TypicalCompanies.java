@@ -59,6 +59,12 @@ public class TypicalCompanies {
             .withRemark("Handles international trading and logistics.")
             .withStatus("rejected")
             .build();
+    public static final Company HOLLY = new CompanyBuilder().withName("Holly Design").withPhone("93232442")
+            .withEmail("info@hollydesign.com")
+            .withAddress("4 Washington Street")
+            .withRemark("Handles interior design and furniture.")
+            .withStatus("to-apply")
+            .build();
 
     // Manually added
     public static final Company HOON = new CompanyBuilder().withName("Hoon Logistics").build();
@@ -90,6 +96,6 @@ public class TypicalCompanies {
     }
 
     public static List<Company> getTypicalcompanies() {
-        return new ArrayList<>(Arrays.asList(ALPHA, BETA, CONS, DELTA, ELITE, FUSION, GLOBAL));
+        return new ArrayList<>(Arrays.asList(ALPHA, BETA, CONS, DELTA, ELITE, FUSION, GLOBAL, HOLLY));
     }
 }
