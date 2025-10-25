@@ -1,11 +1,11 @@
 package seedu.address.model.company;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Company's phone number in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidPhone(String)}
+ * Phone can be null to represent no phone number provided.
  */
 public class Phone {
 
@@ -18,11 +18,12 @@ public class Phone {
     /**
      * Constructs a {@code Phone}.
      *
-     * @param phone A valid phone number.
+     * @param phone A valid phone number, or null if no phone number is provided.
      */
     public Phone(String phone) {
-        requireNonNull(phone);
-        checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
+        if (phone != null) {
+            checkArgument(isValidPhone(phone), MESSAGE_CONSTRAINTS);
+        }
         value = phone;
     }
 
@@ -30,7 +31,7 @@ public class Phone {
      * Returns true if a given string is a valid phone number.
      */
     public static boolean isValidPhone(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test != null && test.matches(VALIDATION_REGEX);
     }
 
     @Override
@@ -50,11 +51,11 @@ public class Phone {
         }
 
         Phone otherPhone = (Phone) other;
-        return value.equals(otherPhone.value);
+        return value == null ? otherPhone.value == null : value.equals(otherPhone.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value == null ? 0 : value.hashCode();
     }
 }

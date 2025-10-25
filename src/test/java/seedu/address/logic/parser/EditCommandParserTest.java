@@ -5,7 +5,6 @@ import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
@@ -44,7 +43,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditCompanyDescriptor;
-import seedu.address.model.company.Address;
 import seedu.address.model.company.Email;
 import seedu.address.model.company.Name;
 import seedu.address.model.company.Phone;
@@ -95,7 +93,7 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS); // invalid name
         assertParseFailure(parser, "1" + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS); // invalid phone
         assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS); // invalid email
-        assertParseFailure(parser, "1" + INVALID_ADDRESS_DESC, Address.MESSAGE_CONSTRAINTS); // invalid address
+        // Note: blank address (VALID_ADDRESS_DESC) is now valid as it clears the address field
         assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_CONSTRAINTS); // invalid tag
 
         // invalid phone followed by valid email
@@ -213,11 +211,11 @@ public class EditCommandParserTest {
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS));
 
         // multiple invalid values
-        userInput = targetIndex.getOneBased() + INVALID_PHONE_DESC + INVALID_ADDRESS_DESC + INVALID_EMAIL_DESC
-                + INVALID_PHONE_DESC + INVALID_ADDRESS_DESC + INVALID_EMAIL_DESC;
+        userInput = targetIndex.getOneBased() + INVALID_PHONE_DESC + INVALID_EMAIL_DESC
+                + INVALID_PHONE_DESC + INVALID_EMAIL_DESC;
 
         assertParseFailure(parser, userInput,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL));
     }
 
     @Test
@@ -347,5 +345,38 @@ public class EditCommandParserTest {
     public void parse_batchEditOutOfIntegerRange_failure() {
         String largeNumber = Long.toString((long) Integer.MAX_VALUE + 1);
         assertParseFailure(parser, "1," + largeNumber + TAG_DESC_DECENT_LOCATION, MESSAGE_INVALID_INDICES);
+    }
+
+    @Test
+    public void parse_clearPhoneField_success() {
+        // Test clearing phone field with blank value
+        Index targetIndex = INDEX_FIRST_COMPANY;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_PHONE;
+        EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withPhone(null).build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_clearEmailField_success() {
+        // Test clearing email field with blank value
+        Index targetIndex = INDEX_FIRST_COMPANY;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_EMAIL;
+        EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withEmail(null).build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_clearAddressField_success() {
+        // Test clearing address field with blank value
+        Index targetIndex = INDEX_FIRST_COMPANY;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_ADDRESS;
+        EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withAddress(null).build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 }

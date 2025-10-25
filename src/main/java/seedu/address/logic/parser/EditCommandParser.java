@@ -21,6 +21,10 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditCompanyDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.logic.parser.exceptions.ParseIndicesException;
+import seedu.address.model.company.Address;
+import seedu.address.model.company.Email;
+import seedu.address.model.company.Phone;
+import seedu.address.model.company.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -69,16 +73,24 @@ public class EditCommandParser implements Parser<EditCommand> {
             editCompanyDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
         }
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            editCompanyDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get()));
+            String val = argMultimap.getValue(PREFIX_PHONE).get();
+            Phone newVal = val.isBlank() ? new Phone(null) : ParserUtil.parsePhone(val);
+            editCompanyDescriptor.setPhone(newVal);
         }
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
-            editCompanyDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
+            String val = argMultimap.getValue(PREFIX_EMAIL).get();
+            Email newVal = val.isBlank() ? new Email(null) : ParserUtil.parseEmail(val);
+            editCompanyDescriptor.setEmail(newVal);
         }
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
-            editCompanyDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
+            String val = argMultimap.getValue(PREFIX_ADDRESS).get();
+            Address newVal = val.isBlank() ? new Address(null) : ParserUtil.parseAddress(val);
+            editCompanyDescriptor.setAddress(newVal);
         }
         if (argMultimap.getValue(PREFIX_REMARK).isPresent()) {
-            editCompanyDescriptor.setRemark(ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK).get()));
+            String val = argMultimap.getValue(PREFIX_REMARK).get();
+            Remark newVal = val.isBlank() ? new Remark(null) : ParserUtil.parseRemark(val);
+            editCompanyDescriptor.setRemark(newVal);
         }
         if (argMultimap.getValue(PREFIX_STATUS).isPresent()) {
             editCompanyDescriptor.setStatus(ParserUtil.parseStatus(argMultimap.getValue(PREFIX_STATUS).get()));

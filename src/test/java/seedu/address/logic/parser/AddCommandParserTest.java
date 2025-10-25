@@ -5,7 +5,6 @@ import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AIRBUS;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOEING;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
@@ -40,7 +39,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.model.company.Address;
 import seedu.address.model.company.Company;
 import seedu.address.model.company.Email;
 import seedu.address.model.company.Name;
@@ -117,14 +115,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, INVALID_PHONE_DESC + validExpectedCompanyString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
-        // invalid address
-        assertParseFailure(parser, INVALID_ADDRESS_DESC + validExpectedCompanyString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS));
-
-        // remarks can take any values
-
         // valid value followed by invalid value
-
         // invalid name
         assertParseFailure(parser, validExpectedCompanyString + INVALID_NAME_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
@@ -136,12 +127,6 @@ public class AddCommandParserTest {
         // invalid phone
         assertParseFailure(parser, validExpectedCompanyString + INVALID_PHONE_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
-
-        // invalid address
-        assertParseFailure(parser, validExpectedCompanyString + INVALID_ADDRESS_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS));
-
-        // remarks can take any values
     }
 
     @Test
@@ -191,12 +176,6 @@ public class AddCommandParserTest {
                         + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
                 Email.MESSAGE_CONSTRAINTS);
 
-        // invalid address
-        assertParseFailure(parser,
-                NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + INVALID_ADDRESS_DESC
-                        + TAG_DESC_GOOD_PAY + TAG_DESC_DECENT_LOCATION + REMARK_DESC_BOEING,
-                Address.MESSAGE_CONSTRAINTS);
-
         // invalid tag
         assertParseFailure(parser,
                 NAME_DESC_BOEING + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + ADDRESS_DESC_BOEING
@@ -207,7 +186,7 @@ public class AddCommandParserTest {
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser,
-                INVALID_NAME_DESC + PHONE_DESC_BOEING + EMAIL_DESC_BOEING + INVALID_ADDRESS_DESC
+                INVALID_NAME_DESC + PHONE_DESC_BOEING + INVALID_EMAIL_DESC + ADDRESS_DESC_BOEING
                         + REMARK_DESC_BOEING,
                 Name.MESSAGE_CONSTRAINTS);
 
@@ -240,21 +219,5 @@ public class AddCommandParserTest {
         // Test simple format with duplicate name prefix
         assertParseFailure(parser, NAME_DESC_BOEING + NAME_DESC_AIRBUS,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
-    }
-
-    // Test that when only name is provided, other fields get placeholder values
-    @Test
-    public void parse_onlyNameProvided_setsPlaceholderValues() {
-        Company expectedCompany = new CompanyBuilder()
-                .withName(VALID_NAME_BOEING)
-                .withPhone("000")
-                .withEmail("noemailprovided@placeholder.com")
-                .withAddress("No address provided")
-                .withRemark("No remark provided")
-                .withTags()
-                .withStatus("to-apply")
-                .build();
-
-        assertParseSuccess(parser, NAME_DESC_BOEING, new AddCommand(expectedCompany));
     }
 }

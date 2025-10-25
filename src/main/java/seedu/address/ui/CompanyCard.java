@@ -54,7 +54,7 @@ public class CompanyCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         name.setText(company.getName().fullName);
         phone.setText(DisplayUtil.displayPhone(company.getPhone().value));
-        address.setText(company.getAddress().value);
+        address.setText(DisplayUtil.displayAddress(company.getAddress().value));
         email.setText(DisplayUtil.displayEmail(company.getEmail().value));
 
         // Create status on its own line

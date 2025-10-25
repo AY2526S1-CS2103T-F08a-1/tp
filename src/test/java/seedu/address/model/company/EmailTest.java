@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 public class EmailTest {
 
     @Test
-    public void constructor_null_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new Email(null));
+    public void constructor_null_success() {
+        // null is now allowed - represents no email provided
+        Email email = new Email(null);
+        assertTrue(email.value == null);
     }
 
     @Test
@@ -21,8 +23,8 @@ public class EmailTest {
 
     @Test
     public void isValidEmail() {
-        // null email
-        assertThrows(NullPointerException.class, () -> Email.isValidEmail(null));
+        // null email - now returns false instead of throwing exception
+        assertFalse(Email.isValidEmail(null));
 
         // blank email
         assertFalse(Email.isValidEmail("")); // empty string
@@ -84,5 +86,39 @@ public class EmailTest {
 
         // different values -> returns false
         assertFalse(email.equals(new Email("other.valid@email")));
+
+        // both null values -> returns true
+        Email nullEmail1 = new Email(null);
+        Email nullEmail2 = new Email(null);
+        assertTrue(nullEmail1.equals(nullEmail2));
+
+        // one null, one non-null -> returns false
+        assertFalse(email.equals(nullEmail1));
+        assertFalse(nullEmail1.equals(email));
+    }
+
+    @Test
+    public void hashCode_test() {
+        // same values -> same hash code
+        Email email1 = new Email("valid@email");
+        Email email2 = new Email("valid@email");
+        assertTrue(email1.hashCode() == email2.hashCode());
+
+        // both null -> same hash code (0)
+        Email nullEmail1 = new Email(null);
+        Email nullEmail2 = new Email(null);
+        assertTrue(nullEmail1.hashCode() == nullEmail2.hashCode());
+        assertTrue(nullEmail1.hashCode() == 0);
+    }
+
+    @Test
+    public void toString_test() {
+        // Test toString for non-null value
+        Email email = new Email("valid@email");
+        assertTrue(email.toString().equals("valid@email"));
+
+        // Test toString for null value
+        Email nullEmail = new Email(null);
+        assertTrue(nullEmail.toString() == null);
     }
 }

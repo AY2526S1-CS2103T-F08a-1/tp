@@ -51,21 +51,21 @@ public class AddCommandParser implements Parser<AddCommand> {
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
             phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         } else {
-            phone = new Phone("000");
+            phone = new Phone(null);
         }
 
         Email email;
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         } else {
-            email = new Email("noemailprovided@placeholder.com");
+            email = new Email(null);
         }
 
         Address address;
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {
             address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         } else {
-            address = new Address("No address provided");
+            address = new Address(null);
         }
 
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));

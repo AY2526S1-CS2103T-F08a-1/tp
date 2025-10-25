@@ -19,9 +19,6 @@ import seedu.address.model.util.SampleDataUtil;
 public class CompanyBuilder {
 
     public static final String DEFAULT_NAME = "Test Company";
-    public static final String DEFAULT_PHONE = "000";
-    public static final String DEFAULT_EMAIL = "noemailprovided@placeholder.com";
-    public static final String DEFAULT_ADDRESS = "No address provided";
     public static final String DEFAULT_REMARK = "No remark provided";
     public static final String DEFAULT_STATUS = "to-apply";
 
@@ -35,12 +32,13 @@ public class CompanyBuilder {
 
     /**
      * Creates a {@code CompanyBuilder} with the default details.
+     * Phone, email, and address are null by default.
      */
     public CompanyBuilder() {
         name = new Name(DEFAULT_NAME);
-        phone = new Phone(DEFAULT_PHONE);
-        email = new Email(DEFAULT_EMAIL);
-        address = new Address(DEFAULT_ADDRESS);
+        phone = new Phone(null);
+        email = new Email(null);
+        address = new Address(null);
         tags = new HashSet<>();
         remark = new Remark(DEFAULT_REMARK);
         status = new Status(DEFAULT_STATUS);

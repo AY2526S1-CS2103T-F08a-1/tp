@@ -12,19 +12,29 @@ public final class DisplayUtil {
      * Returns a user-friendly phone string for display.
      *
      * @param value the raw phone value
-     * @return "No phone provided" if the value is the placeholder value; otherwise the original value
+     * @return "No phone provided" if the value is null; otherwise the original value
      */
     public static String displayPhone(String value) {
-        return "000".equals(value) ? "No phone provided" : value;
+        return value == null ? "No phone provided" : value;
     }
 
     /**
      * Returns a user-friendly email string for display.
      *
      * @param value the raw email value
-     * @return "No email provided" if the value equals the placeholder value, otherwise the orignal value
+     * @return "No email provided" if the value is null, otherwise the original value
      */
     public static String displayEmail(String value) {
-        return "noemailprovided@placeholder.com".equals(value) ? "No email provided" : value;
+        return value == null ? "No email provided" : value;
+    }
+
+    /**
+     * Returns a user-friendly address string for display.
+     *
+     * @param value the raw address value
+     * @return "No address provided" if the value is null, otherwise the original value
+     */
+    public static String displayAddress(String value) {
+        return value == null ? "No address provided" : value;
     }
 }

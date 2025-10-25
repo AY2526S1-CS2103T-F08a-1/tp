@@ -3,6 +3,7 @@ package seedu.address.model.company;
 /**
  * Represents a Person's remark in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidRemark(String)}
+ * Remark can be null to represent no remark provided.
  */
 public class Remark {
 
@@ -15,20 +16,20 @@ public class Remark {
     public final String value;
 
     /**
-     * Constructs an {@code Address}.
+     * Constructs a {@code Remark}.
      *
-     * @param remark A valid address.
+     * @param remark A valid remark, or null if no remark is provided.
      */
     public Remark(String remark) {
-        // remark can take any value or be empty
+        // remark can take any value, be empty, or be null
         value = remark;
     }
 
     /**
-     * Returns true if a given string is a valid email.
+     * Returns true if a given string is a valid remark.
      */
     public static boolean isValidRemark(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test != null && test.matches(VALIDATION_REGEX);
     }
 
     @Override
@@ -48,12 +49,12 @@ public class Remark {
         }
 
         Remark otherRemark = (Remark) other;
-        return value.equals(otherRemark.value);
+        return value == null ? otherRemark.value == null : value.equals(otherRemark.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value == null ? 0 : value.hashCode();
     }
 
 }

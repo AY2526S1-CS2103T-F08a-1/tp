@@ -1,11 +1,11 @@
 package seedu.address.model.company;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Company's address in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidAddress(String)}
+ * Address can be null to represent no address provided.
  */
 public class Address {
 
@@ -22,19 +22,20 @@ public class Address {
     /**
      * Constructs an {@code Address}.
      *
-     * @param address A valid address.
+     * @param address A valid address, or null if no address is provided.
      */
     public Address(String address) {
-        requireNonNull(address);
-        checkArgument(isValidAddress(address), MESSAGE_CONSTRAINTS);
+        if (address != null) {
+            checkArgument(isValidAddress(address), MESSAGE_CONSTRAINTS);
+        }
         value = address;
     }
 
     /**
-     * Returns true if a given string is a valid email.
+     * Returns true if a given string is a valid address.
      */
-    public static boolean isValidAddress(String test) {
-        return test.matches(VALIDATION_REGEX);
+    public static boolean isValidAddress(String address) {
+        return address != null && address.matches(VALIDATION_REGEX);
     }
 
     @Override
@@ -54,12 +55,12 @@ public class Address {
         }
 
         Address otherAddress = (Address) other;
-        return value.equals(otherAddress.value);
+        return value == null ? otherAddress.value == null : value.equals(otherAddress.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value == null ? 0 : value.hashCode();
     }
 
 }

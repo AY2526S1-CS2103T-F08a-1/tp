@@ -1,6 +1,6 @@
 package seedu.address.model.company;
 
-import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,7 +12,8 @@ import seedu.address.model.tag.Tag;
 
 /**
  * Represents a Company in the address book.
- * Guarantees: details are present and not null, field values are validated, immutable.
+ * Guarantees: name, tags, remark, and status are not null; phone, email, and address can be null;
+ * field values are validated, immutable.
  */
 public class Company {
 
@@ -28,11 +29,14 @@ public class Company {
     private final Status status;
 
     /**
-     * Every field must be present and not null.
+     * Name, tags and status must be present and not null.
+     * Phone, email, remark and address can take in null to represent an "empty" field.
      */
     public Company(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Remark remark,
                    Status status) {
-        requireAllNonNull(name, phone, email, address, tags, remark, status);
+        requireNonNull(name);
+        requireNonNull(tags);
+        requireNonNull(status);
         this.name = name;
         this.phone = phone;
         this.email = email;

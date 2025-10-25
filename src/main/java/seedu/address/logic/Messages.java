@@ -38,14 +38,19 @@ public class Messages {
         final StringBuilder builder = new StringBuilder();
 
         // Format phone with user-friendly placeholder
-        String phoneDisplay = company.getPhone().value.equals("000")
+        String phoneDisplay = company.getPhone().value == null
                 ? "No phone provided"
                 : company.getPhone().value;
 
         // Format email with user-friendly placeholder
-        String emailDisplay = company.getEmail().value.equals("noemailprovided@placeholder.com")
+        String emailDisplay = company.getEmail().value == null
                 ? "No email provided"
                 : company.getEmail().value;
+
+        // Format address with user-friendly placeholder
+        String addressDisplay = company.getAddress().value == null
+                ? "No address provided"
+                : company.getAddress().value;
 
         builder.append(company.getName())
                 .append("; Phone: ")
@@ -53,7 +58,7 @@ public class Messages {
                 .append("; Email: ")
                 .append(emailDisplay)
                 .append("; Address: ")
-                .append(company.getAddress())
+                .append(addressDisplay)
                 .append("; Status: ")
                 .append(company.getStatus())
                 .append("; Tags: ");
