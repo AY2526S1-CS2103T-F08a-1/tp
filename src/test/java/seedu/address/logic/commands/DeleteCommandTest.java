@@ -14,14 +14,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.company.Company;
+import seedu.address.testutil.TypicalCompanies;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code DeleteCommand}.
@@ -29,6 +33,23 @@ import seedu.address.model.company.Company;
 public class DeleteCommandTest {
 
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    private String prevSkipPrompts;
+
+    @BeforeEach
+    void forceBypassPrompts() {
+        prevSkipPrompts = System.getProperty("seedu.skipPrompts");
+        System.setProperty("seedu.skipPrompts", "true");
+    }
+
+    @AfterEach
+    void restoreBypassFlag() {
+        if (prevSkipPrompts == null) {
+            System.clearProperty("seedu.skipPrompts");
+        } else {
+            System.setProperty("seedu.skipPrompts", prevSkipPrompts);
+        }
+    }
 
     /** Tests that a valid index in an unfiltered list deletes the correct company successfully. */
     @Test
@@ -152,5 +173,31 @@ public class DeleteCommandTest {
     private void showNoCompany(Model model) {
         model.updateFilteredCompanyList(p -> false);
         assertTrue(model.getFilteredCompanyList().isEmpty());
+    }
+
+    @Test
+    public void execute_multipleUnorderedIndicesMessageSorted_success() {
+        Model model = new ModelManager(TypicalCompanies.getTypicalAddressBook(), new UserPrefs());
+
+        // Use indices 3 and 1 (unordered) to exercise both sorting (for message) and descending delete logic.
+        List<Index> unordered = List.of(Index.fromOneBased(3), Index.fromOneBased(1));
+        DeleteCommand cmd = new DeleteCommand(unordered);
+
+        // Snapshot companies (the command does this internally as well)
+        Company first = model.getFilteredCompanyList().get(0);
+        Company third = model.getFilteredCompanyList().get(2);
+
+        Model expected = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        // Delete the same objects from expected (order doesn't matter when deleting by object)
+        expected.deleteCompany(first);
+        expected.deleteCompany(third);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_COMPANY_SUCCESS,
+                // message should list in ascending index order: 1, 3
+                Stream.of(first, third)
+                        .map(Messages::format)
+                        .collect(Collectors.joining(", ")));
+
+        assertCommandSuccess(cmd, model, expectedMessage, expected);
     }
 }

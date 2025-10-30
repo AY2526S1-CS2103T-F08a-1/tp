@@ -155,6 +155,30 @@ Each `Company` object contains the following fields:
 * `Remark` (required, but can be empty) - Additional notes about the company
 * `Status` (required) - Application status (e.g., Applied, Interview, Offered, Rejected)
 
+#### Design considerations for nullable fields
+
+**Aspect: How optional fields (Phone, Email, Address, Remark) are represented:**
+
+The current implementation uses wrapper objects (e.g., `Phone`, `Email`, `Address`, `Remark`) that can hold null values internally, but the `Company` object never stores null references to these wrapper objects.
+
+**Key design principles:**
+* All fields passed to the `Company` constructor must be non-null (enforced by `requireAllNonNull`)
+* Empty/absent values are represented by wrapper objects containing null internally (e.g., `new Phone(null)`)
+* The `Company` object always has non-null references to all wrapper objects, even if the values inside are null
+
+**Rationale:**
+
+This design is crucial for commands like `EditCommand` to function correctly. In `EditCommand.EditCompanyDescriptor`, null is used to represent "do not edit this field", while a wrapper object with null inside (e.g., `new Phone(null)`) represents "clear this field to empty".
+
+For example:
+* `editCompanyDescriptor.getPhone()` returns `Optional.empty()` → means "don't change the phone number"
+* `editCompanyDescriptor.getPhone()` returns `Optional.of(new Phone(null))` → means "clear the phone number"
+
+If `Company` stored null directly in its fields, `EditCommand` would be unable to distinguish between "unedited field" and "cleared field", as both would be represented as null.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative approach would be to store null directly in `Company` fields, which is simpler but makes it impossible for `EditCommand` to distinguish between fields that should remain unchanged versus fields that should be cleared.
+</div>
+
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Company` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Company` needing their own `Tag` objects. Similarly, `Status` objects are stored centrally, but each `Company` can reference at most one `Status`. <br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />

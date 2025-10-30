@@ -62,7 +62,8 @@ public class EditCommand extends Command {
             + PREFIX_STATUS + "applied "
             + PREFIX_TAG + "FAANG";
 
-    public static final String MESSAGE_EDIT_SUCCESS = "Edited %1$d companies successfully";
+    public static final String MESSAGE_EDIT_SUCCESS_SINGLE = "Edited 1 company successfully";
+    public static final String MESSAGE_EDIT_SUCCESS_MULTIPLE = "Edited %1$d companies successfully";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_COMPANY = "This company already exists in the address book.";
     public static final String MESSAGE_MISSING_INDEX = "Invalid format: missing index.\n" + MESSAGE_USAGE;
@@ -120,7 +121,7 @@ public class EditCommand extends Command {
 
         model.setCompany(companyToEdit, editedCompany);
         model.updateFilteredCompanyList(PREDICATE_SHOW_ALL_COMPANIES);
-        return new CommandResult(String.format(MESSAGE_EDIT_SUCCESS, indices.size()));
+        return new CommandResult(MESSAGE_EDIT_SUCCESS_SINGLE);
     }
 
     /**
@@ -151,7 +152,7 @@ public class EditCommand extends Command {
         }
 
         model.updateFilteredCompanyList(PREDICATE_SHOW_ALL_COMPANIES);
-        return new CommandResult(String.format(MESSAGE_EDIT_SUCCESS, indices.size()));
+        return new CommandResult(String.format(MESSAGE_EDIT_SUCCESS_MULTIPLE, indices.size()));
     }
 
     /**
