@@ -13,6 +13,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.company.Company;
+import seedu.address.ui.ConfirmWindow;
 
 /**
  * Deletes one or more companies by their displayed indices from the address book.
@@ -67,6 +68,19 @@ public class DeleteCommand extends Command {
             if (idx.getZeroBased() >= listSize) {
                 throw new CommandException(Messages.MESSAGE_INVALID_COMPANY_DISPLAYED_INDEX);
             }
+        }
+
+        // Ask user before destructive action
+        boolean ok = ConfirmWindow.confirm(
+                "✅ Confirm Deletion",
+                "Delete selected compan" + (targetIndices.size() > 1 ? "ies" : "y") + "?",
+                "This action cannot be undone.\n"
+                        + "You are about to delete " + targetIndices.size() + " entr"
+                        + (targetIndices.size() > 1 ? "ies." : "y.")
+                        + "\n"
+        );
+        if (!ok) {
+            return new CommandResult("Deletion cancelled.");
         }
 
         // Snapshot the companies to be deleted (before mutation), in ascending order for message.

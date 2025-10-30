@@ -27,6 +27,11 @@ checkstyle {
 
 test {
     useJUnitPlatform()
+
+    // Bypass interactive dialogs / JavaFX for CI & unit tests
+    systemProperty "seedu.skipPrompts", "true"
+    systemProperty "java.awt.headless", "true"
+
     finalizedBy jacocoTestReport
 }
 

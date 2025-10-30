@@ -38,7 +38,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -70,13 +70,18 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `CompanyListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+Additionally, the UI includes separate window components:
+* `HelpWindow` - Displays help information to the user
+* `MetricsWindow` - Displays statistics and metrics about the companies in the address book
+* `ClosableWindow` - Abstract base class for windows that can be closed with keyboard shortcuts
+
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -87,7 +92,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -116,8 +121,20 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+The following commands are currently supported:
+* `AddCommand` - Adds a company to the address book
+* `EditCommand` - Edits an existing company's details
+* `DeleteCommand` - Deletes a company from the address book
+* `FindCommand` - Finds companies by name keywords
+* `FilterCommand` - Filters companies by status
+* `ListCommand` - Lists all companies
+* `ClearCommand` - Clears all companies from the address book
+* `MetricsCommand` - Displays statistics about the companies
+* `HelpCommand` - Shows help information
+* `ExitCommand` - Exits the application
+
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="450" />
 
@@ -126,8 +143,41 @@ The `Model` component,
 
 * stores the address book data i.e., all `Company` objects (which are contained in a `UniqueCompanyList` object).
 * stores the currently 'selected' `Company` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Company>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* stores a `UserPref` object that represents the user's preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+
+Each `Company` object contains the following fields:
+* `Name` (required) - The company name
+* `Phone` (optional/nullable) - Contact phone number
+* `Email` (optional/nullable) - Contact email address
+* `Address` (optional/nullable) - Company address
+* `Tags` (required, but can be empty) - Set of tags for categorization
+* `Remark` (required, but can be empty) - Additional notes about the company
+* `Status` (required) - Application status (e.g., Applied, Interview, Offered, Rejected)
+
+#### Design considerations for nullable fields
+
+**Aspect: How optional fields (Phone, Email, Address, Remark) are represented:**
+
+The current implementation uses wrapper objects (e.g., `Phone`, `Email`, `Address`, `Remark`) that can hold null values internally, but the `Company` object never stores null references to these wrapper objects.
+
+**Key design principles:**
+* All fields passed to the `Company` constructor must be non-null (enforced by `requireAllNonNull`)
+* Empty/absent values are represented by wrapper objects containing null internally (e.g., `new Phone(null)`)
+* The `Company` object always has non-null references to all wrapper objects, even if the values inside are null
+
+**Rationale:**
+
+This design is crucial for commands like `EditCommand` to function correctly. In `EditCommand.EditCompanyDescriptor`, null is used to represent "do not edit this field", while a wrapper object with null inside (e.g., `new Phone(null)`) represents "clear this field to empty".
+
+For example:
+* `editCompanyDescriptor.getPhone()` returns `Optional.empty()` → means "don't change the phone number"
+* `editCompanyDescriptor.getPhone()` returns `Optional.of(new Phone(null))` → means "clear the phone number"
+
+If `Company` stored null directly in its fields, `EditCommand` would be unable to distinguish between "unedited field" and "cleared field", as both would be represented as null.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative approach would be to store null directly in `Company` fields, which is simpler but makes it impossible for `EditCommand` to distinguish between fields that should remain unchanged versus fields that should be cleared.
+</div>
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Company` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Company` needing their own `Tag` objects. Similarly, `Status` objects are stored centrally, but each `Company` can reference at most one `Status`. <br>
 
@@ -138,7 +188,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
@@ -156,6 +206,60 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Filter feature
+
+The filter feature allows users to filter companies by their application status. This is implemented through the `FilterCommand` class.
+
+#### Implementation
+
+The `FilterCommand` works as follows:
+
+1. The user executes `filter s/STATUS` (e.g., `filter s/in-process`)
+2. The `FilterCommandParser` parses the status parameter and creates a `FilterCommand` object
+3. The `FilterCommand` updates the filtered company list in the model using a predicate that matches companies with the specified status
+4. The UI automatically updates to display only companies matching the filter
+
+The supported status values are:
+* `to-apply` - Companies the user plans to apply to
+* `applied` - Applications that have been submitted
+* `oa` - Online assessment stage
+* `tech-interview` - Technical interview stage
+* `hr-interview` - HR interview stage
+* `in-process` - Applications currently in process
+* `offered` - Received an offer
+* `accepted` - Accepted an offer
+* `rejected` - Application rejected
+
+#### Design considerations
+
+**Aspect: How to implement filtering:**
+
+* **Alternative 1 (current choice):** Use a predicate to filter the ObservableList
+  * Pros: Simple to implement, leverages existing filtered list functionality
+  * Cons: Limited to single status filtering at a time
+
+* **Alternative 2:** Allow multiple status filters
+  * Pros: More flexible for users who want to see multiple statuses
+  * Cons: More complex parsing and predicate logic required
+
+### Metrics feature
+
+The metrics feature provides users with statistics about their internship applications. This is implemented through the `MetricsCommand` and `MetricsWindow` classes.
+
+#### Implementation
+
+The `MetricsCommand` works as follows:
+
+1. The user executes the `metrics` command
+2. The `MetricsCommand` returns a `CommandResult` with `showMetrics` flag set to true
+3. The `MainWindow` detects this flag and opens/focuses the `MetricsWindow`
+4. The `MetricsWindow` retrieves data from the address book and displays statistics about application statuses
+
+The metrics window shows:
+* Distribution of applications across different status categories
+* Total number of applications
+* Visual representation of application progress
 
 ### \[Proposed\] Undo/redo feature
 
@@ -425,7 +529,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file Expected: Shows the GUI with a set of sample companies. The window size may not be optimum.
 
 1. Saving window preferences
 
@@ -443,7 +547,7 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all companies using the `list` command. Multiple companies in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First company is deleted from the list. Details of the deleted company shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
       Expected: No company is deleted. Error details shown in the status message. Status bar remains the same.
@@ -452,6 +556,34 @@ testers are expected to do more *exploratory* testing.
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
+
+### Filtering companies by status
+
+1. Filtering companies by application status
+
+   1. Prerequisites: Have companies with various statuses in the list. Use `list` to see all companies.
+
+   1. Test case: `filter s/applied`<br>
+      Expected: Only companies with status "applied" are shown. Number of companies displayed shown in the status message.
+
+   1. Test case: `filter s/in-process`<br>
+      Expected: Only companies with status "in-process" are shown.
+
+   1. Test case: `filter s/invalid-status`<br>
+      Expected: Error message shown indicating invalid status. List remains unchanged.
+
+   1. Test case: `filter` (missing status parameter)<br>
+      Expected: Error message showing correct command format.
+
+### Viewing metrics
+
+1. Opening the metrics window
+
+   1. Test case: `metrics`<br>
+      Expected: Metrics window opens showing statistics about application statuses. If window is already open, it is brought to focus and data is refreshed.
+
+   1. Test case: Close the metrics window and run `metrics` again<br>
+      Expected: Metrics window reopens with current data.
 
 ### Saving data
 
