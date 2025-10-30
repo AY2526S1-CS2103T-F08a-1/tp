@@ -304,6 +304,7 @@ All fields are **REPLACED**, not added to existing values:
 - At least 1 field must be specified
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
 - Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
+- Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
 - Single editing: All fields allowed
 - Batch editing: All fields allowed except Name (prevents creating duplicate company names)
 
@@ -353,6 +354,8 @@ You can combine both methods! Use `delete 1,3,6-8,10` to delete companies 1, 3, 
 **Rules:**
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
 - Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
+- Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`)
+
 
 <div markdown="block" class="alert alert-danger">
 **:exclamation: Important - Index Reference:**<br>
