@@ -100,15 +100,15 @@ All operations are permanent! No undo available.
 
 Summary of fields available for a Company and their valid values.
 
-| Field      | Requirements                                                                                                     | Valid Examples                             | Invalid Examples                                              |
-|------------|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------|---------------------------------------------------------------|
-| **Name**   | Only alphanumeric characters and spaces, cannot be blank                                                        | `Google`, `Meta Inc`                       | `@Google`, `Meta!`, `""` (blank)                              |
-| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`            | `12`, `+65 9123  4567` (double-spaced),<br>`91+234567`        |
-| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `john.doe@example.com`                     | `john..doe@example.com`, `@test`                              |
-| **Address**| Free text                                                                                                       | `123 Main St, #01-01`                      | -                                                             |
-| **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                       | `pending`, `done`                                             |
+| Field      | Requirements                                                                                                     | Valid Examples                      | Invalid Examples                                              |
+|------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|---------------------------------------------------------------|
+| **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                   |
+| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, `+65 9123  4567` (double-spaced),<br>`91+234567`        |
+| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `john.doe@example.com`              | `john..doe@example.com`, `@test`                              |
+| **Address**| Free text                                                                                                       | `123 Main St, #01-01`               | -                                                             |
+| **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                             |
 | **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: `BACKEND` is treated the same as `backend`. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
-| **Remark** | Free text                                                                                                       | `Met at career fair`                       | -                                                             |
+| **Remark** | Free text                                                                                                       | `Met at career fair`                | -                                                             |
 
 ## Commands
 
