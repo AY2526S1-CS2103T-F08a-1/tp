@@ -1,5 +1,5 @@
 package seedu.address.model.company;
-
+//@@author kzfsg
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
