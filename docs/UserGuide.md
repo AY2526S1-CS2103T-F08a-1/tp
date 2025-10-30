@@ -144,11 +144,43 @@ Shows a list of all companies in Cerebro.
 
 ---
 
-### Filtering companies by status: `filter`
+### Filtering companies by status and tags: `filter`
 
-Finds companies by status values. Case-insensitive, lists all companies that **matches** the status.
+Filters companies by status and/or tags. 
 
-**Format:** `filter s/STATUS`
+**Format:** `filter [s/STATUS] [t/TAG]...`
+
+**Filter Types:**
+
+**Status Filter:** `filter s/STATUS`
+```
+filter s/applied
+→ Shows all companies with "applied" status
+```
+
+**Tag Filter:** `filter t/TAG [t/MORE_TAGS]...`
+```
+filter t/rem
+→ Shows companies with tags containing "rem" (e.g. "remote-work")
+
+filter t/rem t/good  
+→ Shows companies with tags containing "rem" OR "good"
+```
+
+**Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
+```
+filter s/applied t/rem t/good
+→ Shows companies with "applied" status AND (tags containing "rem" OR "good")
+```
+
+<div markdown="block" class="alert alert-success">
+**Filter Rules:**
+* **At least one field required** - Must specify either status or tag(s)
+* **Case-insensitive** - `APPLIED` matches `applied`, `FRONTEND` matches `frontend`
+* **Substring matching for tags** - `rem` matches `remote-work`, `premium`
+* **OR logic for multiple tags** - Any matching tag qualifies
+* **AND logic between status and tags** - Must match status AND at least one tag
+</div>
 
 **Result for `filter s/applied`:**
 
@@ -245,46 +277,48 @@ edit 1 p/91234567 e/careers@google.com
 
 **Batch Edit:** Edit multiple companies with the same changes
 
-| Method | Format | Requirements                  | Example |
-|--------|--------|-------------------------------|---------|
-| **Comma-separated** | `edit INDEX,INDEX,INDEX [fields]` | No trailing commas            | `edit 1,3,5 s/rejected` |
-| **Range** | `edit START-END [fields]` | START ≤ END, inclusive of ENF | `edit 2-4 s/applied` |
-
-```
-edit 1,3,5 s/rejected
-→ Edited 3 companies (indices 1, 3, 5) - Status updated to rejected
-
-edit 2-4 s/applied  
-→ Edited 3 companies (indices 2, 3, 4) - Status updated to applied
-```
+| Method | Format | Requirements           | Example | Result |
+|--------|--------|------------------------|---------|--------|
+| **Comma-separated** | `edit INDEX,INDEX,INDEX [fields]` | No trailing commas     | `edit 1,3,5 s/rejected` | Edited 3 companies (indices 1, 3, 5) - Status updated to rejected |
+| **Range** | `edit START-END [fields]` | START ≤ END, inclusive | `edit 2-4 s/applied` | Edited 3 companies (indices 2, 3, 4) - Status updated to applied |
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can combine both methods in one command! Use `edit 1,3,6-8,10 s/applied` to edit companies 1, 3, 6, 7, 8, and 10 all at once.
 </div>
 
-**Rules:**
-- At least 1 field must be specified
-- Single editing: All fields allowed
-- Batch editing: All fields allowed except Name
+**Clear any field:** Use empty value to clear
+```
+edit 3 t/           → All tags cleared
+edit 3 r/           → Remark cleared  
+edit 3 t/ r/        → Both tags and remark cleared
+```
 
-**Clear tags:** `edit 3 t/` (tags replaced, not cumulative)
-```
-Edited Company 3 - All tags cleared
-```
-<div markdown="span" class="alert alert-danger">:exclamation: **Warning:** edits will replace existing fields, including replacing all existing tags.
+<div markdown="span" class="alert alert-danger">:exclamation: **Important - Field Replacement:**
+All fields are **REPLACED**, not added to existing values:
+- `edit 1 t/tech` → Removes all existing tags, sets only "tech"
+- `edit 1 r/New remark` → Completely replaces existing remark
+- `edit 1 t/` → Clears all tags
 </div>
 
-**Batch edit in action:** `edit 1,3 s/accepted`
-
-<img src="images/BatchEditResult.png" alt="Batch edit" width="400"/>
+**Rules:**
+- At least 1 field must be specified
+- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
+- Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
+- Single editing: All fields allowed
+- Batch editing: All fields allowed except Name (prevents creating duplicate company names)
 
 <div markdown="block" class="alert alert-danger">
 **:exclamation: Important - Index Reference:**<br>
-Indices refer to the numbers shown in the **current displayed list**. After using `find`, edit indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
+Indices refer to the numbers shown in the **current displayed list**. After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
 </div>
 
+**Context Examples:**
+- `list` → `edit 2` (edits 2nd company from full list)
+- `find Goog` → `edit 1` (edits 1st company from search results)
+- `filter applied` → `edit 1-3` (edits 1st company from filtered results)
+
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use batch editing after deadlines: `edit 1-10 s/applied` updates all at once!
+Use batch editing after applying: `edit 1-10 s/applied` updates all at once!
 </div>
 
 [↑ Back to Top](#table-of-contents)
@@ -293,31 +327,46 @@ Use batch editing after deadlines: `edit 1-10 s/applied` updates all at once!
 
 ### Deleting a company : `delete`
 
-Deletes one or more companies from Cerebro. Supports single deletion, batch deletion.
+Removes one or more companies from Cerebro permanently.
 
-**Format:** `delete INDEX [MORE_INDICES]` or `delete START-END`
+**Format:** `delete INDEX(ES)`
 
-* Deletes the company(ies) at the specified index/indices
-* The index refers to the index number shown in the displayed company list
-* The index **must be a positive integer** 1, 2, 3, …​
-* **Single deletion:** `delete INDEX` - Deletes one company
-* **Comma-Separated deletion:** `delete INDEX,INDEX,INDEX` - Deletes multiple companies (separate with commas)
-* **Range deletion:** `delete START-END` - Deletes all companies from START to END index (inclusive)
-* Duplicate indices are ignored (first occurrence kept)
-* All specified companies are deleted in a single operation
+**Delete Types:**
+
+**Single Delete:** `delete INDEX`
+```
+delete 2
+→ Deleted Company 2: [company details]
+```
+
+**Batch Delete:** Remove multiple companies in one operation
+
+| Method | Format | Requirements                | Example | Result |
+|--------|--------|-----------------------------|---------|--------|
+| **Comma-separated** | `delete INDEX,INDEX,INDEX` | No spaces between indices   | `delete 1,3,5` | Deleted 3 companies (indices 1, 3, 5) |
+| **Range** | `delete START-END` | START ≤ END, inclusive | `delete 2-4` | Deleted 3 companies (indices 2, 3, 4) |
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You can combine both methods! Use `delete 1,3,6-8,10` to delete companies 1, 3, 6, 7, 8, and 10 all at once.
+</div>
+
+**Rules:**
+- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
+- Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
+
+<div markdown="block" class="alert alert-danger">
+**:exclamation: Important - Index Reference:**<br>
+Indices refer to the numbers shown in the **current displayed list**. After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
+</div>
+
+**Context Examples:**
+- `list` → `delete 2` (deletes 2nd company from full list)
+- `find Goog` → `delete 1` (deletes 1st company from search results)
+- `filter applied` → `delete 1` (deletes 1st company from filtered results)
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 This action cannot be undone! Company data will be permanently deleted.
 </div>
-
-Examples:
-
-* `delete 2` - Deletes the 2nd company
-* `delete 1,3,5` - Deletes the 1st, 3rd, and 5th companies
-* `delete 2-4` - Deletes companies at indices 2, 3, and 4
-* `list` followed by `delete 2` - Deletes the 2nd company in the full list
-* `find Google` followed by `delete 1` - Deletes the 1st company in the filtered results
-* `filter applied` followed by `delete 1` - Deletes the 1st company in the filtered results of companies with status `applied`
 
 [↑ Back to Top](#table-of-contents)
 
@@ -360,8 +409,8 @@ If your changes to the data file make its format invalid, **Cerebro will discard
 
 ### Upcoming Features
 - Archiving & backing up data files
-- Undo changes
-- Reminders for upcoming application deadlines
+- Undo changes: Quickly revert mistaken edits or deletions
+- Reminders: Stay on top of application deadlines
 
 ---
 
@@ -373,10 +422,16 @@ Common questions and troubleshooting for using Cerebro.
 **A**: Company names must be unique (case-insensitive). Cerebro rejects duplicates and shows an error message.
 
 **Q: How do I track multiple roles at the same company?**  
-**A**: Use tags to differentiate positions (`add n/Google SWE` vs `add n/Google PM`) or add role details in remarks.
+**A**: Use tags to differentiate positions (`add t/Google SWE` vs `add t/Google PM`) or/and add respective role details in remarks.
 
 **Q: Can I undo a delete or clear operation?** 
-**A**: No, deletions are permanent. Restore from backup by copying your `addressbook.json` file back to the data folder before restarting.
+**A**: No, deletions are permanent and cannot be undone within the app. To recover deleted data:
+1. Close Cerebro
+2. Navigate to `[JAR location]/data/` folder  
+3. Replace `addressbook.json` with your backup file
+4. Restart Cerebro
+
+**Prevention tip:** Regularly backup your `addressbook.json` file before making major changes.
 
 **Q: How do I transfer my data to another computer?**  
 **A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/addressbook.json`.
@@ -395,24 +450,24 @@ Quick reference table for all Cerebro commands.
 
 ### Viewing Commands
 
-Action | Format | Examples
---------|--------|----------
-**[List](#listing-all-companies--list)** | `list` | `list`
-**[Filter](#filtering-companies-by-status-filter)** | `filter s/STATUS` | `filter s/accepted`
-**[Find](#locating-companies-by-name-find)** | `find KEYWORD [MORE_KEYWORDS]` | `find Google Meta`
+Action | Format                         | Examples
+--------|--------------------------------|----------
+**[List](#listing-all-companies--list)** | `list`                         | `list`
+**[Filter](#filtering-companies-by-status-filter)** | `filter s/STATUS t/TAG`        | `filter s/accepted t/frontend`
+**[Find](#locating-companies-by-name-find)** | `find KEYWORD [MORE_KEYWORDS]` | `find Goog Meta`
 
 ### Action Commands
 
-Action | Format | Examples
---------|--------|----------
-**[Add](#adding-a-company-add)** | `add n/NAME [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `add n/Google Inc`<br>`add n/Meta p/65432100 e/careers@meta.com`<br>`add n/Apple r/Great benefits s/applied`
-**[Edit (Single)](#editing-a-company--edit)** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `edit 2 n/Meta Platforms s/offered`
-**[Edit (Comma-Separated)](#editing-a-company--edit)** | `edit INDEX,INDEX,INDEX [fields]` | `edit 1,3,5 s/rejected`
-**[Edit (Range)](#editing-a-company--edit)** | `edit START-END [fields]` | `edit 2-4 s/applied t/tech`
-**[Delete (Single)](#deleting-a-company--delete)** | `delete INDEX` | `delete 3`
-**[Delete (Comma-Separated)](#deleting-a-company--delete)** | `delete INDEX [MORE_INDICES]` | `delete 1 3 5`
-**[Delete (Range)](#deleting-a-company--delete)** | `delete START-END` | `delete 2-4`
-**[Clear](#clearing-all-entries--clear)** | `clear` | `clear`
+Action | Format                                                                  | Examples
+--------|-------------------------------------------------------------------------|----------
+**[Add](#adding-a-company-add)** | `add [n/NAME] p/PHONE e/EMAIL a/ADDRESS r/REMARK s/STATUS t/TAG…​`      | `add n/Google Inc`<br>`add n/Meta p/65432100 e/careers@meta.com`<br>`add n/Apple r/Great benefits s/applied`
+**[Edit (Single)](#editing-a-company--edit)** | `edit INDEX n/NAME p/PHONE e/EMAIL a/ADDRESS r/REMARK s/STATUS t/TAG…​` | `edit 2 n/Meta Platforms s/offered`
+**[Edit (Comma-Separated)](#editing-a-company--edit)** | `edit INDEX, [MORE_INDICES] [at least 1 field]`                         | `edit 1,3,5 s/rejected`
+**[Edit (Range)](#editing-a-company--edit)** | `edit START-END [at least 1 field]`                                               | `edit 2-4 s/applied t/tech`
+**[Delete (Single)](#deleting-a-company--delete)** | `delete INDEX`                                                          | `delete 3`
+**[Delete (Comma-Separated)](#deleting-a-company--delete)** | `delete INDEX, [MORE_INDICES]`                                          | `delete 1,3,5`
+**[Delete (Range)](#deleting-a-company--delete)** | `delete START-END`                                                      | `delete 2-4`
+**[Clear](#clearing-all-entries--clear)** | `clear`                                                                 | `clear`
 
 ### Other Commands
 
