@@ -473,3 +473,88 @@
     -fx-text-fill: black;
 }
 
+/* ===== Confirm dialog look & feel (scoped) ===== */
+.confirm-dialog .dialog-pane,
+.confirm-dialog {
+    /* keep your dark background */
+    -fx-background-color: #1d1d1d;
+}
+
+/* Add gap under the message text */
+.dialog-pane > *.label.content {
+    -fx-padding: 12 20 12 20;   /* bottom = 12px ≈ one line */
+}
+
+.confirm-dialog > *.button-bar > *.container {
+    /* right-align, nice spacing, no odd outlines */
+    -fx-alignment: CENTER_RIGHT;
+    -fx-spacing: 12;
+    -fx-padding: 12px 20px 18px 20px;
+    -fx-background-color: transparent;
+}
+
+/* Base pill button (like your "Copy URL") */
+.confirm-dialog .pill-button {
+    -fx-background-color: #5a5a5a;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16 8 16;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-effect: none;
+    -fx-font-size: 14px;
+}
+
+/* Hover state for grey button */
+.confirm-dialog .pill-button:hover {
+    -fx-background-color: #6a6a6a;
+}
+
+/* Primary (YES) button: blue */
+.confirm-dialog .pill-button-primary {
+    -fx-background-color: #0ea5e9;
+    -fx-pref-width: 125px;
+    -fx-min-width: 125px;
+    -fx-max-width: 125px;
+
+}
+.confirm-dialog .pill-button-primary:hover {
+    -fx-background-color: #38bdf8;
+    -fx-pref-width: 125px;
+    -fx-min-width: 125px;
+    -fx-max-width: 125px;
+}
+
+/* Optional: keep a grey secondary for Cancel (class present for clarity) */
+.confirm-dialog .pill-button-secondary {
+    -fx-pref-width: 113px;
+    -fx-min-width: 113px;
+    -fx-max-width: 113px;
+}
+
+/* Remove the dotted/segmented focus ring completely */
+.confirm-dialog .pill-button:focused,
+.confirm-dialog .pill-button:default:focused {
+    -fx-effect: none;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Make content text in the lower half match your metrics window */
+.confirm-dialog .content.label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+
+/* Header styling stays consistent with your dark theme */
+.confirm-dialog:header *.header-panel {
+    -fx-background-color: derive(#1d1d1d, 25%);
+}
+.confirm-dialog:header *.header-panel *.label {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-padding: 12px 20px 12px 20px;
+}
+

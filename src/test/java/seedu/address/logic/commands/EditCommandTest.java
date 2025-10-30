@@ -52,8 +52,7 @@ public class EditCommandTest {
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder(editedCompany).build();
         EditCommand editCommand = new EditCommand(List.of(INDEX_FIRST_COMPANY), descriptor);
 
-        String expectedMessage =
-                String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 1);
+        String expectedMessage = EditCommand.MESSAGE_EDIT_SUCCESS_SINGLE;
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setCompany(model.getFilteredCompanyList().get(0), editedCompany);
@@ -74,8 +73,7 @@ public class EditCommandTest {
                 .build();
         EditCommand editCommand = new EditCommand(List.of(indexLastCompany), descriptor);
 
-        String expectedMessage =
-                String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 1);
+        String expectedMessage = EditCommand.MESSAGE_EDIT_SUCCESS_SINGLE;
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setCompany(lastCompany, editedCompany);
@@ -92,8 +90,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(List.of(INDEX_FIRST_COMPANY),
                 new EditCompanyDescriptorBuilder().withName(VALID_NAME_BOEING).build());
 
-        String expectedMessage =
-                String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 1);
+        String expectedMessage = EditCommand.MESSAGE_EDIT_SUCCESS_SINGLE;
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setCompany(model.getFilteredCompanyList().get(0), editedCompany);
@@ -197,7 +194,7 @@ public class EditCommandTest {
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withTags("applied").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -236,7 +233,7 @@ public class EditCommandTest {
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withTags("applied").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 1);
+        String expectedMessage = EditCommand.MESSAGE_EDIT_SUCCESS_SINGLE;
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -278,7 +275,7 @@ public class EditCommandTest {
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withTags("interview").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 3);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 3);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -344,7 +341,7 @@ public class EditCommandTest {
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withStatus(VALID_STATUS_BOEING).build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -365,7 +362,7 @@ public class EditCommandTest {
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withRemark(VALID_REMARK_BOEING).build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -387,7 +384,7 @@ public class EditCommandTest {
                 .withStatus(VALID_STATUS_AIRBUS).withRemark(VALID_REMARK_BOEING).withTags("applied").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setCompany(model.getFilteredCompanyList().get(INDEX_SECOND_COMPANY.getZeroBased()),
@@ -407,7 +404,7 @@ public class EditCommandTest {
                 .withEmail("newemail@example.com").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -429,7 +426,7 @@ public class EditCommandTest {
                 .withAddress("123 New Street, New City").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
@@ -451,7 +448,7 @@ public class EditCommandTest {
                 .withPhone("99887766").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company secondCompany = model.getFilteredCompanyList().get(INDEX_SECOND_COMPANY.getZeroBased());
@@ -478,7 +475,7 @@ public class EditCommandTest {
                 .withRemark("Batch edited companies").build();
         EditCommand editCommand = new EditCommand(indices, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS, 2);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
