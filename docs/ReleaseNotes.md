@@ -285,7 +285,7 @@ edit 2 n/Meta Platforms s/offered t/
 A: Company names must be unique (case-insensitive). Cerebro will reject duplicates with an error message.
 
 **Q: Can I undo a delete or clear operation?**
-A: No, these operations are permanent. Restore from your `addressbook.json` backup if needed.
+A: No, these operations are permanent. Restore from your `Cerebro.json` backup if needed.
 
 **Q: What's the difference between `status` and `edit` for updating status?**
 A: `status` is a quick single-purpose command, while `edit` allows multi-field updates. Use whichever is convenient!
