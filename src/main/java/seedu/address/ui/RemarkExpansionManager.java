@@ -112,7 +112,7 @@ public class RemarkExpansionManager {
 
         // Get text width
         // Create a Text node to measure actual text width
-        Text textNode = new Text(fullText);
+        Text textNode = new Text("Remark: " + fullText);
         textNode.setFont(remarkLabel.getFont());
 
         double textWidth = textNode.getBoundsInLocal().getWidth();
