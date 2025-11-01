@@ -532,14 +532,13 @@ testers are expected to do more *exploratory* testing.
 
    1. Double-click the jar file Expected: Shows the GUI with a set of sample companies. The window size may not be optimum.
 
-1. Saving window preferences
+
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
-
-1. _{ more test cases …​ }_
 
 ### Deleting a company
 
@@ -556,7 +555,6 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
 
 ### Filtering companies by status
 
@@ -590,6 +588,37 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. **Test case: Missing data file on startup**<br>
+      Prerequisites: Delete or rename the file `data/Cerebro.json` before launching the application.<br>
+      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. A log message appears: "Data file not found. Will be starting with a sample AddressBook."
 
-1. _{ more test cases …​ }_
+   1. **Test case: Corrupted data file with invalid JSON syntax**<br>
+      Prerequisites: Replace the contents of `data/Cerebro.json` with plain text (e.g., "not json format!" or any non-JSON content).<br>
+      Expected: Application starts successfully with an empty address book (no companies loaded). A warning is logged indicating the data file could not be loaded. The corrupted file is not overwritten or deleted.
+
+   1. **Test case: Valid JSON but invalid company data**<br>
+      Prerequisites: Edit `data/Cerebro.json` to contain valid JSON structure but with invalid data values. For example, set a company's phone field to `"invalidPhone123!@#"` or set a company's name to empty/whitespace-only string.<br>
+      Expected: Application starts successfully with an empty address book. A log message appears indicating "Illegal values found in data file". The file is not modified.
+
+
+2. Saving data automatically after commands
+
+   1. **Test case: Data persists after adding a company**<br>
+      Prerequisites: Launch application with existing data.<br>
+      Steps: Execute `add n/NewCompany p/91234567 e/new@company.com a/123 Street` and wait for success message. Close the application and relaunch it.<br>
+      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json`.
+
+   1. **Test case: Data persists after deleting companies**<br>
+      Prerequisites: List has at least 3 companies.<br>
+      Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
+      Expected: The deleted companies do not appear in the list upon relaunch. The remaining companies are preserved with their data intact.
+
+
+3. Data file permissions and access
+
+   1. **Test case: Read-only data file**<br>
+      Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
+      Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
+      Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
+
+   
