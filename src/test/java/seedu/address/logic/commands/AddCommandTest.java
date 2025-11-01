@@ -302,29 +302,29 @@ public class AddCommandTest {
      */
     @Test
     public void execute_companyWithMixedCaseTags_convertedToLowercase() throws Exception {
-    ModelStubAcceptingCompanyAdded modelStub = new ModelStubAcceptingCompanyAdded();
-    Company companyWithMixedCaseTags = new CompanyBuilder()
-        .withName("Casey Inc")
-        .withPhone("11111111")
-        .withEmail("contact@casey.com")
-        .withAddress("1 Case Street")
-        .withTags("Client", "PartNer", "SupPLier")
-        .build();
+        ModelStubAcceptingCompanyAdded modelStub = new ModelStubAcceptingCompanyAdded();
+        Company companyWithMixedCaseTags = new CompanyBuilder()
+                .withName("Casey Inc")
+                .withPhone("11111111")
+                .withEmail("contact@casey.com")
+                .withAddress("1 Case Street")
+                .withTags("Client", "PartNer", "SupPLier")
+                .build();
 
-    // expected company uses lowercase tag strings
-    Company expectedCompany = new CompanyBuilder()
-        .withName("Casey Inc")
-        .withPhone("11111111")
-        .withEmail("contact@casey.com")
-        .withAddress("1 Case Street")
-        .withTags("client", "partner", "supplier")
-        .build();
+        // expected company uses lowercase tag strings
+        Company expectedCompany = new CompanyBuilder()
+                .withName("Casey Inc")
+                .withPhone("11111111")
+                .withEmail("contact@casey.com")
+                .withAddress("1 Case Street")
+                .withTags("client", "partner", "supplier")
+                .build();
 
-    CommandResult commandResult = new AddCommand(companyWithMixedCaseTags).execute(modelStub);
+        CommandResult commandResult = new AddCommand(companyWithMixedCaseTags).execute(modelStub);
 
-    assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(expectedCompany)),
-        commandResult.getFeedbackToUser());
-    assertEquals(Arrays.asList(expectedCompany), modelStub.companiesAdded);
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(expectedCompany)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(expectedCompany), modelStub.companiesAdded);
     }
 
     /**

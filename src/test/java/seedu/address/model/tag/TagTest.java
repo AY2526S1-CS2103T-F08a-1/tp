@@ -1,8 +1,8 @@
 package seedu.address.model.tag;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.model.tag.Tag.MAX_TAG_LENGTH;
 import static seedu.address.testutil.Assert.assertThrows;
 
