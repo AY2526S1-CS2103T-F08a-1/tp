@@ -9,7 +9,6 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 * I, Bridget, used Claude Code to fix Checkstyle errors and improve code formatting across the codebase. All suggestions were reviewed before being applied.
 * I, Jeffrey, used Claude to prettify the Release Notes into a markdown format.
 
@@ -148,12 +147,14 @@ The `Model` component,
 
 Each `Company` object contains the following fields:
 * `Name` (required) - The company name
-* `Phone` (optional/nullable) - Contact phone number
-* `Email` (optional/nullable) - Contact email address
-* `Address` (optional/nullable) - Company address
+* `Phone` (required wrapper; value may be null) - Contact phone number (absent phone is represented as `new Phone(null)`)
+* `Email` (required wrapper; value may be null) - Contact email address (absent email is represented as `new Email(null)`)
+* `Address` (required wrapper; value may be null) - Company address (absent address is represented as `new Address(null)`)
 * `Tags` (required, but can be empty) - Set of tags for categorization
-* `Remark` (required, but can be empty) - Additional notes about the company
+* `Remark` (required wrapper; value may be null or empty) - Additional notes about the company (absent remark is represented as `new Remark(null)`)
 * `Status` (required) - Application status (e.g., Applied, Interview, Offered, Rejected)
+
+Why always-present wrappers? Optional user input (e.g., phone) is modeled as a non-null wrapper object whose internal value may be null. This keeps model associations at multiplicity “1” and allows commands (especially `EditCommand`) to distinguish between “leave unchanged” and “clear value”. See the design note below for details.
 
 #### Design considerations for nullable fields
 

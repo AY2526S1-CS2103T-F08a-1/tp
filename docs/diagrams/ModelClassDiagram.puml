@@ -40,9 +40,9 @@ UserPrefs .up.|> ReadOnlyUserPrefs
 AddressBook *--> "1" UniqueCompanyList
 UniqueCompanyList --> "~* all" Company
 Company *--> "1" Name
-Company *--> "0..1" Phone
-Company *--> "0..1" Email
-Company *--> "0..1" Address
+Company *--> "1" Phone
+Company *--> "1" Email
+Company *--> "1" Address
 Company *--> "*" Tag
 Company *--> "1" Remark
 Company *--> "1" Status
