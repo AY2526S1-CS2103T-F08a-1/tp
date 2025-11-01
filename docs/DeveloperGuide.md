@@ -125,7 +125,7 @@ The following commands are currently supported:
 * `EditCommand` - Edits an existing company's details
 * `DeleteCommand` - Deletes a company from the address book
 * `FindCommand` - Finds companies by name keywords
-* `FilterCommand` - Filters companies by status
+* `FilterCommand` - Filters companies by status and/or tags
 * `ListCommand` - Lists all companies
 * `ClearCommand` - Clears all companies from the address book
 * `MetricsCommand` - Displays statistics about the companies
@@ -210,15 +210,17 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Filter feature
 
-The filter feature allows users to filter companies by their application status. This is implemented through the `FilterCommand` class.
+The filter feature allows users to filter companies by their application status and/or tags. This is implemented through the `FilterCommand` class.
 
 #### Implementation
 
 The `FilterCommand` works as follows:
 
-1. The user executes `filter s/STATUS` (e.g., `filter s/in-process`)
-2. The `FilterCommandParser` parses the status parameter and creates a `FilterCommand` object
-3. The `FilterCommand` updates the filtered company list in the model using a predicate that matches companies with the specified status
+1. The user executes `filter <s/STATUS|t/TAG> [t/TAG]...` (e.g., `filter s/in-process`, `filter t/remote-friendly`, or `filter s/applied t/tech`)
+2. The `FilterCommandParser` parses the status and/or tag parameters and creates a `FilterCommand` object
+3. The `FilterCommand` updates the filtered company list in the model using a predicate that matches companies with:
+   - The specified status (if provided), AND
+   - Any of the specified tags as substrings (if provided)
 4. The UI automatically updates to display only companies matching the filter
 
 The supported status values are:
@@ -555,11 +557,11 @@ testers are expected to do more *exploratory* testing.
       Expected: Similar to previous.
 
 
-### Filtering companies by status
+### Filtering companies by status and/or tags
 
 1. Filtering companies by application status
 
-   1. Prerequisites: Have companies with various statuses in the list. Use `list` to see all companies.
+   1. Prerequisites: Have companies with various statuses and tags in the list. Use `list` to see all companies.
 
    1. Test case: `filter s/applied`<br>
       Expected: Only companies with status "applied" are shown. Number of companies displayed shown in the status message.
@@ -570,7 +572,29 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `filter s/invalid-status`<br>
       Expected: Error message shown indicating invalid status. List remains unchanged.
 
-   1. Test case: `filter` (missing status parameter)<br>
+2. Filtering companies by tags
+
+   1. Prerequisites: Have companies with various tags in the list. Use `list` to see all companies.
+
+   1. Test case: `filter t/remote`<br>
+      Expected: Only companies with tags containing "remote" (e.g., "remote-friendly", "remote-work") are shown.
+
+   1. Test case: `filter t/remote t/tech`<br>
+      Expected: Companies with tags containing "remote" OR "tech" are shown.
+
+3. Filtering companies by both status and tags
+
+   1. Prerequisites: Have companies with various statuses and tags in the list. Use `list` to see all companies.
+
+   1. Test case: `filter s/applied t/tech`<br>
+      Expected: Only companies with status "applied" AND tags containing "tech" are shown.
+
+   1. Test case: `filter s/in-process t/remote t/good`<br>
+      Expected: Companies with status "in-process" AND tags containing "remote" OR "good" are shown.
+
+4. Error cases
+
+   1. Test case: `filter` (missing parameters)<br>
       Expected: Error message showing correct command format.
 
 ### Viewing metrics
