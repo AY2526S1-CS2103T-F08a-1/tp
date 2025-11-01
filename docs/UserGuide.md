@@ -73,8 +73,6 @@ Command format and important information about using Cerebro's command line inte
   * e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-* Use a backslash `\` to escape command prefixes e.g. in your remark
-  * e.g. `add n/Company r/This is a remark with a \r/ for some reason` -> Remark: This is a remark with a r/ for some reason
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
 </div>
@@ -83,6 +81,14 @@ Command format and important information about using Cerebro's command line inte
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
+</div>
+
+<div markdown="block" class="alert alert-primary">
+:bulb: **Power Tip: Escaping prefixes with backslash (`\`)**
+* Use a backslash `\` to escape command prefixes in any parameter
+  * e.g. `add n/Company r/This is a remark with a \r/ for some reason` -> Remark: "This is a remark with a r/ for some reason"
+* Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
+  * `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 </div>
 
 **Typical Workflow:**
