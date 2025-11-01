@@ -532,8 +532,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Double-click the jar file Expected: Shows the GUI with a set of sample companies. The window size may not be optimum.
 
-
-2. Saving window preferences
+1. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
@@ -600,8 +599,7 @@ testers are expected to do more *exploratory* testing.
       Prerequisites: Edit `data/Cerebro.json` to contain valid JSON structure but with invalid data values. For example, set a company's phone field to `"invalidPhone123!@#"` or set a company's name to empty/whitespace-only string.<br>
       Expected: Application starts successfully with an empty address book. A log message appears indicating "Illegal values found in data file". The file is not modified.
 
-
-2. Saving data automatically after commands
+1. Saving data automatically after commands
 
    1. **Test case: Data persists after adding a company**<br>
       Prerequisites: Launch application with existing data.<br>
@@ -613,8 +611,7 @@ testers are expected to do more *exploratory* testing.
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
       Expected: The deleted companies do not appear in the list upon relaunch. The remaining companies are preserved with their data intact.
 
-
-3. Data file permissions and access
+1. Data file permissions and access
 
    1. **Test case: Read-only data file**<br>
       Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
