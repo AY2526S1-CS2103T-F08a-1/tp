@@ -30,15 +30,6 @@ public class MetricsCalculator {
     }
 
     /**
-     * Creates a MetricsCalculator with custom status ordering.
-     *
-     * @param statusOrder List of status strings in desired display order
-     */
-    public MetricsCalculator(List<String> statusOrder) {
-        this.statusOrder = statusOrder;
-    }
-
-    /**
      * Calculates metrics for the given address book data.
      *
      * @param addressBook The address book containing company data
