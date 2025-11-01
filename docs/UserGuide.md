@@ -61,14 +61,14 @@ Command format and important information about using Cerebro's command line inte
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  * e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+  * e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/Google Inc`.
 * For items in angle brackets, and separated by a pipe `|`, exactly one of the items are required.<br>
   * e.g `<INDEX|START-END>` can be used as `1` or as `1-2`.
   * e.g `<s/STATUS|t/TAG>` can be used as `s/applied` or as `t/good-pay`.
 * Items in square brackets are optional.<br>
-  * e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  * e.g `n/NAME [t/TAG]` can be used as `n/Google Inc t/tech` or as `n/Google Inc`.
 * Items with `…` after them can be used multiple times including zero times.<br>
-  * e.g. `[t/TAG]…` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+  * e.g. `[t/TAG]…` can be used as ` ` (i.e. 0 times), `t/tech`, `t/tech t/remote` etc.
 * Parameters can be in any order.<br>
   * e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
@@ -88,7 +88,7 @@ All operations are permanent! No undo available.
 **Typical Workflow:**
 
 1. **Research:** `add n/CompanyName` (quick entry)
-2. **Add details:** `edit 1 e/contact_email@example.com a/Sample Address #00-00`
+2. **Add details:** `edit 1 e/careers@google.com a/Sample Address #00-00`
 3. **Apply:** `edit 1 t/frontend s/applied r/Applied via website`
 4. **View info** `find CompanyName`
 5. **Interview:** `edit 1 s/tech-interview`
@@ -109,7 +109,7 @@ Summary of fields available for a Company and their valid values.
 |------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|-------------------------------------------------------------|
 | **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                 |
 | **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, <code>+65 9123&nbsp;&nbsp;&nbsp;4567</code> (extra spaces),<br>`91+234567`      |
-| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `john.doe@example.com`              | `john..doe@example.com`, `@test`                            |
+| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `careers@company.com`              | `john..doe@example.com`, `@test`                            |
 | **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
 | **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
 | **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: `BACKEND` is treated the same as `backend`. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
