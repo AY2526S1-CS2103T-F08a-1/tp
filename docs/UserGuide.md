@@ -354,7 +354,7 @@ Removes one or more companies from Cerebro permanently.
 
 **Examples:**
 ```
-delete 2  → Deleted Company 2: [company details]
+delete 2  → Deletes Company 2
 ```
 
 **Batch Delete:** Delete multiple companies in one operation
