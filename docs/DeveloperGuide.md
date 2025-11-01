@@ -151,7 +151,7 @@ Each `Company` object contains the following fields:
 * `Email` (required wrapper; value may be null) - Contact email address (absent email is represented as `new Email(null)`)
 * `Address` (required wrapper; value may be null) - Company address (absent address is represented as `new Address(null)`)
 * `Tags` (required, but can be empty) - Set of tags for categorization
-* `Remark` (required wrapper; value may be null or empty) - Additional notes about the company
+* `Remark` (required wrapper; value may be null or empty) - Additional notes about the company (absent remark is represented as `new Remark(null)`)
 * `Status` (required) - Application status (e.g., Applied, Interview, Offered, Rejected)
 
 Why always-present wrappers? Optional user input (e.g., phone) is modeled as a non-null wrapper object whose internal value may be null. This keeps model associations at multiplicity “1” and allows commands (especially `EditCommand`) to distinguish between “leave unchanged” and “clear value”. See the design note below for details.
