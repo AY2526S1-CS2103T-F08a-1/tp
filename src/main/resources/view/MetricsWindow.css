@@ -19,6 +19,16 @@
     -fx-border-color: #555555;
 }
 
+.metrics-status {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-padding: 5 0 5 0;
+    -fx-min-width: 250px;
+    -fx-pref-width: 250px;
+    -fx-max-width: 250px;
+}
+
 .metrics-no-data {
     -fx-font-family: "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
     -fx-font-size: 14px;
