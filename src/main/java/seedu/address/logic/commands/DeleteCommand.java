@@ -99,7 +99,7 @@ public class DeleteCommand extends Command {
 
         // Build user feedback: comma-separated formatted names
         String formatted = companiesToDelete.stream()
-                .map(Messages::format)
+                .map(c -> c.getName().toString())
                 .collect(Collectors.joining(", "));
 
         return new CommandResult(String.format(MESSAGE_DELETE_COMPANY_SUCCESS, formatted));

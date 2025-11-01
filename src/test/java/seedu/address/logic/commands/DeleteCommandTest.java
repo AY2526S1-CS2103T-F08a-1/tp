@@ -58,7 +58,8 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_COMPANY));
 
         String expectedMessage = String.format(
-                DeleteCommand.MESSAGE_DELETE_COMPANY_SUCCESS, Messages.format(companyToDelete));
+                DeleteCommand.MESSAGE_DELETE_COMPANY_SUCCESS,
+                companyToDelete.getName().toString());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteCompany(companyToDelete);
@@ -73,7 +74,9 @@ public class DeleteCommandTest {
         Company c2 = model.getFilteredCompanyList().get(INDEX_SECOND_COMPANY.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_COMPANY, INDEX_SECOND_COMPANY));
 
-        String joined = Stream.of(c1, c2).map(Messages::format).collect(Collectors.joining(", "));
+        String joined = Stream.of(c1, c2)
+                .map(c -> c.getName().toString())
+                .collect(Collectors.joining(", "));
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_COMPANY_SUCCESS, joined);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -101,7 +104,7 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(List.of(INDEX_FIRST_COMPANY));
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_COMPANY_SUCCESS,
-                Messages.format(companyToDelete));
+                companyToDelete.getName().toString());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteCompany(companyToDelete);
@@ -195,7 +198,7 @@ public class DeleteCommandTest {
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_COMPANY_SUCCESS,
                 // message should list in ascending index order: 1, 3
                 Stream.of(first, third)
-                        .map(Messages::format)
+                        .map(c -> c.getName().toString())
                         .collect(Collectors.joining(", ")));
 
         assertCommandSuccess(cmd, model, expectedMessage, expected);
