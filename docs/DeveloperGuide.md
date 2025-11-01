@@ -589,15 +589,14 @@ testers are expected to do more *exploratory* testing.
 
    1. **Test case: Missing data file on startup**<br>
       Prerequisites: Delete or rename the file `data/Cerebro.json` before launching the application.<br>
-      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. A log message appears: "Data file not found. Will be starting with a sample AddressBook."
-
+      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. 
    1. **Test case: Corrupted data file with invalid JSON syntax**<br>
       Prerequisites: Replace the contents of `data/Cerebro.json` with plain text (e.g., "not json format!" or any non-JSON content).<br>
       Expected: Application starts successfully with an empty address book (no companies loaded). A warning is logged indicating the data file could not be loaded. The corrupted file is not overwritten or deleted.
 
    1. **Test case: Valid JSON but invalid company data**<br>
       Prerequisites: Edit `data/Cerebro.json` to contain valid JSON structure but with invalid data values. For example, set a company's phone field to `"invalidPhone123!@#"` or set a company's name to empty/whitespace-only string.<br>
-      Expected: Application starts successfully with an empty address book. A log message appears indicating "Illegal values found in data file". The file is not modified.
+      Expected: Application starts successfully with an empty address book. The file is not modified.
 
 1. Saving data automatically after commands
 
