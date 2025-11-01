@@ -85,10 +85,16 @@ All operations are permanent! No undo available.
 
 <div markdown="block" class="alert alert-primary">
 :bulb: **Power Tip: Escaping prefixes with backslash (`\`)**
-* Use a backslash `\` to escape command prefixes in any parameter
-  * e.g. `add n/Company r/This is a remark with a \r/ for some reason` -> Remark: "This is a remark with a r/ for some reason"
-* Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
-  * `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
+
+You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
+
+**Example:**
+
+`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's \s/o"
+
+Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
+
+`add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 </div>
 
 **Typical Workflow:**
