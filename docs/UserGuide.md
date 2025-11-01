@@ -270,17 +270,17 @@ Start with just the company name for quick entry when you're researching compani
 
 Updates one or more companies in Cerebro.
 
-**Format:** `edit <INDEX|START-END> [INDEX]… [START-END]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​`
+**Single Edit:** Edit an existing company in the list by updating one or more of its fields
 
-**Edit Types:**
-
-**Single Edit:** `edit INDEX [fields]`
+**Format:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​`
 ```
 edit 1 p/91234567 e/careers@google.com
 → Edited Company 1: Phone: 91234567; Email: careers@google.com; ...
 ```
 
-**Batch Edit:** Edit multiple companies with the same changes
+**Batch Edit:**: Edit multiple companies with the same changes
+
+**Format:** `edit <INDEX|START-END> [INDEX]… [START-END]… [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​`
 
 | Method | Format | Requirements           | Example | Result |
 |--------|--------|------------------------|---------|--------|
@@ -305,13 +305,6 @@ All fields are **REPLACED**, not added to existing values:
 - `edit 1 t/` → Clears all tags
 </div>
 
-**Rules:**
-- At least 1 field must be specified
-- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
-- Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
-- Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
-- Single editing: All fields allowed
-- Batch editing: All fields allowed except Name (prevents creating duplicate company names)
 
 <div markdown="block" class="alert alert-danger">
 **:exclamation: Important - Index Reference:**<br>
@@ -322,6 +315,14 @@ Indices refer to the numbers shown in the **current displayed list**. After usin
 - `list` → `edit 2` (edits 2nd company from full list)
 - `find Goog` → `edit 1` (edits 1st company from search results)
 - `filter applied` → `edit 1-3` (edits 1st company from filtered results)
+
+**Rules:**
+- At least 1 field must be specified
+- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
+- Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
+- Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
+- Single editing: All fields allowed
+- Batch editing: All fields allowed except Name (prevents creating duplicate company names)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use batch editing after applying: `edit 1-10 s/applied` updates all at once!
@@ -335,17 +336,18 @@ Use batch editing after applying: `edit 1-10 s/applied` updates all at once!
 
 Removes one or more companies from Cerebro permanently.
 
-**Format:** `delete <INDEX|START-END> [INDEX]… [START-END]…`
+**Single Delete:** Deletes 1 company
 
-**Delete Types:**
+**Format:** `delete INDEX`
 
-**Single Delete:** `delete INDEX`
 ```
 delete 2
 → Deleted Company 2: [company details]
 ```
 
-**Batch Delete:** Remove multiple companies in one operation
+**Batch Delete:** Delete multiple companies in one operation
+
+**Format:** `delete <INDEX|START-END> [INDEX]… [START-END]…`
 
 | Method | Format | Requirements                | Example | Result |
 |--------|--------|-----------------------------|---------|--------|
@@ -355,11 +357,6 @@ delete 2
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can combine both methods! Use `delete 1,3,6-8,10` to delete companies 1, 3, 6, 7, 8, and 10 all at once.
 </div>
-
-**Rules:**
-- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
-- Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
-- Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`)
 
 
 <div markdown="block" class="alert alert-danger">
@@ -371,6 +368,11 @@ Indices refer to the numbers shown in the **current displayed list**. After usin
 - `list` → `delete 2` (deletes 2nd company from full list)
 - `find Goog` → `delete 1` (deletes 1st company from search results)
 - `filter applied` → `delete 1` (deletes 1st company from filtered results)
+
+**Rules:**
+- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
+- Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
+- Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`)
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 This action cannot be undone! Company data will be permanently deleted.
