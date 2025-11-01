@@ -24,7 +24,7 @@ import seedu.address.logic.commands.FindCommand;
  */
 public class HelpWindow extends ClosableWindow {
 
-    public static final String USERGUIDE_URL = "https://nus-cs2103-ay2526s1.github.io/tp/UserGuide.html";
+    public static final String USERGUIDE_URL = "https://ay2526s1-cs2103t-f08a-1.github.io/tp/UserGuide.html";
     public static final String HELP_MESSAGE = "Refer to the full user guide at: " + USERGUIDE_URL;
     public static final String COMMAND_OVERVIEW = String.format("""
                                 Commands Overview:

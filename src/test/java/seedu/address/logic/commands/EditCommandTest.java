@@ -209,8 +209,6 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
-    // Batch edit tests
-
     @Test
     public void execute_batchEditAllInvalidIndicesUnfilteredList_failure() {
         Index outOfBound1 = Index.fromOneBased(model.getFilteredCompanyList().size() + 1);

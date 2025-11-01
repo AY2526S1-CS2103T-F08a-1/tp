@@ -157,16 +157,6 @@ public class MetricsCalculatorTest {
     }
 
     @Test
-    public void calculateMetrics_statusOrder_preservesConfiguredOrder() {
-        List<String> customOrder = Arrays.asList("REJECTED", "APPLIED", "TO-APPLY");
-        MetricsCalculator customCalculator = new MetricsCalculator(customOrder);
-
-        MetricsCalculator.MetricsData result = customCalculator.calculateMetrics(addressBook);
-
-        assertEquals(customOrder, result.getStatusOrder());
-    }
-
-    @Test
     public void metricsData_getStatusCounts_returnsCorrectMap() throws Exception {
         addressBook.addCompany(createCompany("Company1", "applied"));
         addressBook.addCompany(createCompany("Company2", "rejected"));

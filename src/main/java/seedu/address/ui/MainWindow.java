@@ -152,18 +152,10 @@ public class MainWindow extends ClosableWindow {
         if (!helpWindow.isShowing()) {
             helpWindow.show();
         } else {
-            // Save current size before restoring (in case it gets corrupted)
-            Stage stage = helpWindow.getRoot();
-            double savedWidth = stage.getWidth();
-            double savedHeight = stage.getHeight();
-
-            // Restore from minimized
-            stage.setIconified(false);
-
-            // Ensure the size is maintained and center it
-            stage.setWidth(savedWidth);
-            stage.setHeight(savedHeight);
-            stage.centerOnScreen();
+            // Check if the window is minimized (iconified)
+            if (helpWindow.getRoot().isIconified()) {
+                helpWindow.getRoot().setIconified(false);
+            }
         }
         helpWindow.focus();
     }
@@ -184,8 +176,8 @@ public class MainWindow extends ClosableWindow {
             }
             // Update data before focusing
             metricsWindow.setData(logic.getAddressBook());
-            metricsWindow.focus();
         }
+        metricsWindow.focus();
     }
 
     void show() {
@@ -218,6 +210,11 @@ public class MainWindow extends ClosableWindow {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+
+            // Auto-update metrics window if it's showing as split screen
+            if (metricsWindow.isShowing()) {
+                metricsWindow.setData(logic.getAddressBook());
+            }
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
