@@ -592,11 +592,11 @@ testers are expected to do more *exploratory* testing.
       Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. 
    1. **Test case: Corrupted data file with invalid JSON syntax**<br>
       Prerequisites: Replace the contents of `data/Cerebro.json` with plain text (e.g., "not json format!" or any non-JSON content).<br>
-      Expected: Application starts successfully with an empty address book (no companies loaded). A warning is logged indicating the data file could not be loaded. The corrupted file is not overwritten or deleted.
+      Expected: Application starts successfully with an empty address book (no companies loaded). The corrupted file is not overwritten or deleted unless new companies are added in the app, in which case the corrupted file is overwritten with the new addition(s).
 
    1. **Test case: Valid JSON but invalid company data**<br>
       Prerequisites: Edit `data/Cerebro.json` to contain valid JSON structure but with invalid data values. For example, set a company's phone field to `"invalidPhone123!@#"` or set a company's name to empty/whitespace-only string.<br>
-      Expected: Application starts successfully with an empty address book. The file is not modified.
+      Expected: Application starts successfully with an empty address book. The data file is not overwritten or deleted unless new companies are added in the app, in which case the data file is overwritten with the new addition(s).
 
 1. Saving data automatically after commands
 
