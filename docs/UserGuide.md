@@ -89,10 +89,10 @@ All operations are permanent! No undo available.
 
 1. **Research:** `add n/CompanyName` (quick entry)
 2. **Add details:** `edit 1 e/contact_email@example.com a/Sample Address #00-00`
-3. **Apply:** `edit 1 s/applied r/Applied via website`
+3. **Apply:** `edit 1 t/frontend s/applied r/Applied via website`
 4. **View info** `find CompanyName`
 5. **Interview:** `edit 1 s/tech-interview`
-6. **Overview:** `filter s/SUBSTRING` to filter by status, `list` to see all
+6. **Overview:** `filter s/STATUS` to filter by status, `list` to see all
 
 <div markdown="span" class="alert alert-primary">:bulb: **Power Tips:**
 **Batch edit/delete:** `delete 1,2,5-7` (indices 1, 2, 5, 6, 7)<br>
@@ -105,15 +105,15 @@ All operations are permanent! No undo available.
 
 Summary of fields available for a Company and their valid values.
 
-| Field      | Requirements                                                                                                     | Valid Examples                      | Invalid Examples                                              |
-|------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|---------------------------------------------------------------|
-| **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                   |
-| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, `+65 9123  4567` (double-spaced),<br>`91+234567`        |
-| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `john.doe@example.com`              | `john..doe@example.com`, `@test`                              |
-| **Address**| Free text                                                                                                       | `123 Main St, #01-01`               | -                                                             |
-| **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                             |
+| Field      | Requirements                                                                                                     | Valid Examples                      | Invalid Examples                                            |
+|------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|-------------------------------------------------------------|
+| **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                 |
+| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, `+65 9123  4567` (double-spaced),<br>`91+234567`      |
+| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `john.doe@example.com`              | `john..doe@example.com`, `@test`                            |
+| **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
+| **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
 | **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: `BACKEND` is treated the same as `backend`. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
-| **Remark** | Free text                                                                                                       | `Met at career fair`                | -                                                             |
+| **Remark** | Free text                                                                                                       | `Met at career fair`                |                                                             |
 
 ## Commands
 
@@ -155,27 +155,28 @@ Finds companies by status and/or tag values. Case-insensitive, lists all compani
 
 **Format:** `filter <s/STATUS|t/TAG> [t/TAG]…`
 
-**Filter Types:**
+**Filter Types**
 
 **Status Filter:** `filter s/STATUS`
+
+**Examples:**
 ```
-filter s/applied
-→ Shows all companies with "applied" status
+filter s/applied  → Shows all companies with "applied" status
 ```
 
 **Tag Filter:** `filter t/TAG [t/MORE_TAGS]...`
-```
-filter t/rem
-→ Shows companies with tags containing "rem" (e.g. "remote-work")
 
-filter t/rem t/good
-→ Shows companies with tags containing "rem" OR "good"
+**Examples:**
+```
+filter t/rem  → Shows companies with tags containing "rem" (e.g. "remote-work")
+filter t/rem t/good  → Shows companies with tags containing "rem" OR "good"
 ```
 
 **Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
+
+**Examples:**
 ```
-filter s/applied t/rem t/good
-→ Shows companies with "applied" status AND (tags containing "rem" OR "good")
+filter s/applied t/rem t/good  → Shows companies with "applied" status AND (tags containing "rem" OR "good")
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -189,7 +190,7 @@ filter s/applied t/rem t/good
 
 **Result for `filter s/applied t/cl t/og`:**
 
-<img src="images/FilterAppliedResult.png" alt="result for 'filter applied" width="450"/>
+<img src="images/FilterAppliedResult.png" alt="result for 'filter s/applied" width="450"/>
 
 [↑ Back to Top](#table-of-contents)
 
@@ -210,9 +211,10 @@ Finds companies by matching name substring. Case-insensitive, lists all companie
 </div>
 
 **Examples:**
-
-* `find Google TikTok` → `Google Inc`, `Google Singapore`, `TikTok`
-* `find goOgl iktO` → `Google Inc`, `Google Singapore`, `TikTok`
+```
+find Google TikTok  → Google Inc, Google Singapore, TikTok
+find goOgl iktO  → Google Inc, Google Singapore, TikTok
+```
 
 **Result for `find digital pacific`:**
 
@@ -244,6 +246,13 @@ Adds a company to Cerebro.
 
 **Format:** `add n/NAME [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…`
 
+**Examples:**
+```
+add n/Google Inc  → Creates entry with just the name and other fields empty
+add n/Meta e/careers@meta.com s/applied  → Adds name, email, and status only
+add n/ByteDance p/12345678 e/recruit@bytedance.com a/Singapore Science Park r/Fast-growing s/tech-interview t/backend t/remote  → Adds complete entry with all details
+```
+
 <div markdown="block" class="alert alert-success">
 **Usage:**
 * **Required:** Company name only
@@ -251,12 +260,6 @@ Adds a company to Cerebro.
 * **Default status:** `to-apply`
 * **Tags:** Multiple allowed
 </div>
-
-**Examples:**
-
-* `add n/Google Inc` - Creates entry with just the name and other fields empty
-* `add n/Meta e/careers@meta.com s/applied` - Adds name, email, and status only
-* `add n/ByteDance p/12345678 e/recruit@bytedance.com a/Singapore Science Park r/Fast-growing s/tech-interview t/tech t/remote-friendly` - Adds complete entry with all details
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Start with just the company name for quick entry when you're researching companies, then update details later with the `edit` command!
@@ -273,9 +276,10 @@ Updates one or more companies in Cerebro.
 **Single Edit:** Edit an existing company in the list by updating one or more of its fields
 
 **Format:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​`
+
+**Examples:**
 ```
-edit 1 p/91234567 e/careers@google.com
-→ Edited Company 1: Phone: 91234567; Email: careers@google.com; ...
+edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567 and email to careers@google.com
 ```
 
 **Batch Edit:**: Edit multiple companies with the same changes
@@ -292,17 +296,23 @@ You can combine both methods in one command! Use `edit 1,3,6-8,10 s/applied` to 
 </div>
 
 **Clear any field:** Use empty value to clear
+
+**Examples:**
 ```
-edit 3 t/           → All tags cleared
-edit 3 r/           → Remark cleared
-edit 3 t/ r/        → Both tags and remark cleared
+edit 3 t/  → All tags cleared
+edit 3 r/  → Remark cleared
+edit 3 t/ r/  → Both tags and remark cleared
 ```
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Important - Field Replacement:**
 All fields are **REPLACED**, not added to existing values:
-- `edit 1 t/tech` → Removes all existing tags, sets only "tech"
-- `edit 1 r/New remark` → Completely replaces existing remark
-- `edit 1 t/` → Clears all tags
+
+**Examples:**
+```
+edit 1 t/tech  → Removes all existing tags, sets only "tech"
+edit 1 r/New remark  → Completely replaces existing remark
+edit 1 t/  → Clears all tags
+```
 </div>
 
 
@@ -311,10 +321,12 @@ All fields are **REPLACED**, not added to existing values:
 Indices refer to the numbers shown in the **current displayed list**. After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
 </div>
 
-**Context Examples:**
-- `list` → `edit 2` (edits 2nd company from full list)
-- `find Goog` → `edit 1` (edits 1st company from search results)
-- `filter applied` → `edit 1-3` (edits 1st company from filtered results)
+**Examples:**
+```
+list  → edit 2 (edits 2nd company from full list)
+find Goog  → edit 1 (edits 1st company from search results)
+filter s/applied  → edit 1-3 (edits 1st, 2nd, 3rd company from filtered results)
+```
 
 **Rules:**
 - At least 1 field must be specified
@@ -340,9 +352,9 @@ Removes one or more companies from Cerebro permanently.
 
 **Format:** `delete INDEX`
 
+**Examples:**
 ```
-delete 2
-→ Deleted Company 2: [company details]
+delete 2  → Deleted Company 2: [company details]
 ```
 
 **Batch Delete:** Delete multiple companies in one operation
@@ -364,10 +376,12 @@ You can combine both methods! Use `delete 1,3,6-8,10` to delete companies 1, 3, 
 Indices refer to the numbers shown in the **current displayed list**. After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
 </div>
 
-**Context Examples:**
-- `list` → `delete 2` (deletes 2nd company from full list)
-- `find Goog` → `delete 1` (deletes 1st company from search results)
-- `filter applied` → `delete 1` (deletes 1st company from filtered results)
+**Examples:**
+```
+list  → delete 2 (deletes 2nd company from full list)
+find Goog  → delete 1 (deletes 1st company from search results)
+filter s/applied  → delete 1 (deletes 1st company from filtered results)
+```
 
 **Rules:**
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
