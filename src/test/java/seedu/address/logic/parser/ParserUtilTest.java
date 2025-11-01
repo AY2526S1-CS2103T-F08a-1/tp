@@ -292,6 +292,14 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseTag_mixedCase_convertsToLowercase() throws Exception {
+        // ParserUtil should return a Tag whose internal name is lowercased by Tag constructor
+        String mixedCaseTag = "FrIend";
+        Tag expectedTag = new Tag(VALID_TAG_1); // "friend"
+        assertEquals(expectedTag, ParserUtil.parseTag(mixedCaseTag));
+    }
+
+    @Test
     public void parseTags_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseTags(null));
     }
