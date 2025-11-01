@@ -108,7 +108,7 @@ Summary of fields available for a Company and their valid values.
 | Field      | Requirements                                                                                                     | Valid Examples                      | Invalid Examples                                            |
 |------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|-------------------------------------------------------------|
 | **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                 |
-| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, `+65 9123  4567` (double-spaced),<br>`91+234567`      |
+| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, <code>+65 9123&nbsp;&nbsp;&nbsp;4567</code> (extra spaces),<br>`91+234567`      |
 | **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `john.doe@example.com`              | `john..doe@example.com`, `@test`                            |
 | **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
 | **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
@@ -494,6 +494,5 @@ Action | Format | Examples
 Action | Format | Examples
 --------|--------|----------
 **[Help](#viewing-help--help)** | `help` | `help`
-
 **[Metrics](#viewing-companies-metrics-metrics)** | `metrics` | `metrics`
 **[Exit](#exiting-the-program--exit)** | `exit` | `exit`
