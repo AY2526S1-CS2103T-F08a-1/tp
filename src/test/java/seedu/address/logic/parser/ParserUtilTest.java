@@ -190,6 +190,13 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseName_extraSpacesInName_truncatedSuccessfully() throws Exception {
+        String nameWithExtraSpaces = "  Rachel   Walker  ";
+        Name expectedName = new Name("Rachel Walker");
+        assertEquals(expectedName, ParserUtil.parseName(nameWithExtraSpaces));
+    }
+
+    @Test
     public void parsePhone_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parsePhone((String) null));
     }
