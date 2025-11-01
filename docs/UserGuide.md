@@ -103,42 +103,14 @@ All operations are permanent! No undo available.
 
 ## Company Fields
 
-<table>
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Field</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="left" markdown="1">First column **fields**</td>
-<td align="left" markdown="1">Some descriptive text. This is a markdown link to [Google](http://google.com). Or see [some link][mydoc_tags].</td>
-</tr>
-<tr>
-<td align="left" markdown="1">Second column **fields**</td>
-<td align="left" markdown="1">Some more descriptive text. Here we have a Markdown-formatted list:
-
-* first item
-* second item
-* third item
-</td>
-</tr>
-</tbody>
-</table>
-
 Summary of fields available for a Company and their valid values.
 
-<table>
+<table style="table-layout: fixed; width: 100%;">
   <colgroup>
-    <col width="10%"/>
-    <col width="70%"/> <!-- Wider Requirements column -->
-    <col width="10%"/>
-    <col width="10%"/>
+    <col width="15%"/>
+    <col width="45%"/> <!-- Wider Requirements column -->
+    <col width="20%"/>
+    <col width="20%"/>
   </colgroup>
   <thead>
     <tr>
