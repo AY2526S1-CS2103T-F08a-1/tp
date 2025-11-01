@@ -259,7 +259,6 @@ The `MetricsCommand` works as follows:
 The metrics window shows:
 * Distribution of applications across different status categories
 * Total number of applications
-* Visual representation of application progress
 
 ### \[Proposed\] Undo/redo feature
 
