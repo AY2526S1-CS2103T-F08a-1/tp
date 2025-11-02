@@ -73,8 +73,6 @@ Command format and important information about using Cerebro's command line inte
   * e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-* Use a backslash `\` to escape command prefixes e.g. in your remark
-  * e.g. `add n/Company r/This is a remark with a \r/ for some reason` -> Remark: This is a remark with a r/ for some reason
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
 </div>
@@ -83,6 +81,20 @@ Command format and important information about using Cerebro's command line inte
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
+</div>
+
+<div markdown="block" class="alert alert-primary">
+:bulb: **Power Tip: Escaping prefixes with backslash (`\`)**
+
+You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
+
+**Example:**
+
+`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+
+Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
+
+`add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 </div>
 
 **Typical Workflow:**
@@ -112,7 +124,7 @@ Summary of fields available for a Company and their valid values.
 | **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `careers@company.com`              | `john..doe@example.com`, `@test`                            |
 | **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
 | **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
-| **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: `BACKEND` is treated the same as `backend`. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
+| **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words.  Tags are coerced to lowercase on input and stored in lowercase. | `remote-work`, `BACKEND`, `bAcKEnD` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
 | **Remark** | Free text                                                                                                       | `Met at career fair`                |                                                             |
 
 ## Commands
@@ -258,7 +270,7 @@ add n/ByteDance p/12345678 e/recruit@bytedance.com a/Singapore Science Park r/Fa
 * **Required:** Company name only
 * **Optional:** All other fields
 * **Default status:** `to-apply`
-* **Tags:** Multiple allowed
+* **Tags:** Multiple allowed. Tags are coerced to lowercase on saving (e.g. `Client` becomes `client`).
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -335,6 +347,7 @@ filter s/applied  → edit 1-3 (edits 1st, 2nd, 3rd company from filtered result
 - Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
 - Single editing: All fields allowed
 - Batch editing: All fields allowed except Name (prevents creating duplicate company names)
+- Tags provided during add or edit are coerced to lowercase and stored in lowercase.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use batch editing after applying: `edit 1-10 s/applied` updates all at once!

@@ -210,6 +210,29 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_batchEditWithMixedCaseTags_convertedToLowercase() {
+        List<Index> indices = Arrays.asList(INDEX_FIRST_COMPANY, INDEX_SECOND_COMPANY);
+        // provide mixed-case tags in descriptor
+        EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withTags("ApPlied", "InTERView").build();
+        EditCommand editCommand = new EditCommand(indices, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
+        Company secondCompany = model.getFilteredCompanyList().get(INDEX_SECOND_COMPANY.getZeroBased());
+
+        // expected companies use lowercase tag names
+        Company editedFirstCompany = new CompanyBuilder(firstCompany).withTags("applied", "interview").build();
+        Company editedSecondCompany = new CompanyBuilder(secondCompany).withTags("applied", "interview").build();
+
+        expectedModel.setCompany(firstCompany, editedFirstCompany);
+        expectedModel.setCompany(secondCompany, editedSecondCompany);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_batchEditAllInvalidIndicesUnfilteredList_failure() {
         Index outOfBound1 = Index.fromOneBased(model.getFilteredCompanyList().size() + 1);
         Index outOfBound2 = Index.fromOneBased(model.getFilteredCompanyList().size() + 2);
