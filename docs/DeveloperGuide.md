@@ -507,6 +507,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * New users shall be able to complete core tasks (add, list, find) after < 10 minutes of onboarding using the User Guide.
 * The interface shall support CLI-first workflow, and screen reader compatibility.
 
+#### Error Handling & Robustness
+* The application shall remain operational without unexpected termination for both valid and invalid user inputs.
+* The application shall display clear, actionable error messages to help users understand and correct invalid inputs.
+* All command parsing errors shall be caught and presented to the user with the correct command format.
+* Invalid data in storage files (corrupted JSON, invalid field values) shall not cause the application to crash; the application shall start with an empty data set or sample data instead.
+
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
