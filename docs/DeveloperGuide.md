@@ -593,7 +593,27 @@ Use case ends.
 
 ---
 
+**Use case: UC08 - View application metric**
 
+**MSS**
+
+1.	User requests to view application metrics.
+2.  Cerebro computes metrics (e.g., counts per application status) and displays them.
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+  * 1a1. Cerebro ignores the extra parameters.
+
+  Use case resumes at step 2.
+
+* 1a. There are no companies.
+
+    * 1a1. Cerebro would not display anything except no companies message
+
+  Use case ends.
 
 ### Non-Functional Requirements
 
