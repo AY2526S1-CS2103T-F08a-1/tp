@@ -3,19 +3,20 @@
 
 ![Ui](docs/images/Ui.png)
 
-**Cerebro** is a desktop app for tracking a CS student’s **internship progress**. It’s designed to be **keyboard-driven** and fast for power users.
+**Cerebro** is a desktop CLI app for CS students managing **multiple internship applications efficiently**. Built for users who type fast, prefer structure, and value productivity over point-and-click workflows.
 
-**Example usages:**
-  - Track all internship applications in one place (company, role, status, calendar, notes).
-  - Plan and prioritise upcoming deadlines by sorting/filtering entries.
-  - Review progress over time for reflections or career-advising meetings.
-  - Update and search quickly using keyboard-friendly commands.
+**Key Features:**
+  - Track internship applications (company details, application status, tags, remarks)
+  - Filter companies by status (`applied`, `tech-interview`, `offered`, etc.) and tags
+  - Batch operations: update or delete multiple entries at once (`edit 1,3,5-7`, `delete 1-4`)
+  - Quick search by company name with flexible substring matching
+  - Status distribution metrics dashboard for application progress overview
+  - Comprehensive CLI with keyboard shortcuts and command history navigation
 
 The project simulates an ongoing software project for a desktop application (called _Cerebro_) used for **managing internship progress**.
   * It is **written in OOP fashion**. It provides a **reasonably well-written** code base.
-  * It comes with a reasonable level of **user** and **developer** documentation.
-* It is named `Cerebro` the way it was built in COM2 Cerebra garage like how Steve Jobs creates apple in a garage
-* For the detailed documentation of this project, see the **[Cerebro Product Website](https://ay2526s1-cs2103t-f08a-1.github.io/tp/)**.
-* This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+  * It comes with a reasonable level of **user** and **developer** documentation. 
+  * For the detailed documentation of this project, see the **[Cerebro Product Website](https://ay2526s1-cs2103t-f08a-1.github.io/tp/)**. 
+  * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
 
 
