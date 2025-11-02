@@ -612,7 +612,7 @@ testers are expected to do more *exploratory* testing.
 
    1. **Test case: Missing data file on startup**<br>
       Prerequisites: Delete or rename the file `data/Cerebro.json` before launching the application.<br>
-      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. 
+      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data.
    1. **Test case: Corrupted data file with invalid JSON syntax**<br>
       Prerequisites: Replace the contents of `data/Cerebro.json` with plain text (e.g., "not json format!" or any non-JSON content).<br>
       Expected: Application starts successfully with an empty address book (no companies loaded). The corrupted file is not overwritten or deleted unless new companies are added in the app, in which case the corrupted file is overwritten with the new addition(s).
@@ -638,4 +638,13 @@ testers are expected to do more *exploratory* testing.
    1. **Test case: Read-only data file**<br>
       Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
       Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
+      Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
       Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
