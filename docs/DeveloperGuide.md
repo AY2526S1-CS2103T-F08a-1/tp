@@ -638,7 +638,7 @@ testers are expected to do more *exploratory* testing.
    1. **Test case: Read-only data file**<br>
       Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
       Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
-      Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
+      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
 
 --------------------------------------------------------------------------------------------------------------------
 
