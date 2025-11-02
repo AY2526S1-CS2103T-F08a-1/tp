@@ -508,11 +508,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM
+* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship. Each application has an associated Status that tracks its current stage.
+* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage.
+* **Command Prefix**: Prefixes like n/, s/, t/ used to specify field types in CLI commands.
+* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at. Company names must be unique (case-insensitive).
+* **GUI**: Graphical User Interface - The visual interface components built with JavaFX, as opposed to the command-line interface.
 * **Mainstream OS**: Windows, Linux, MacOS
-* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage
-* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at
-* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship
+* **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM.
+* **Status**: Application stage enum (TO-APPLY, APPLIED, OA, TECH-INTERVIEW, HR-INTERVIEW, IN-PROCESS, OFFERED, ACCEPTED, REJECTED).
+* **Tag**: Alphanumeric labels with single hyphens to separate words (max 30 chars) used for categorizing companies, stored in lowercase.
 
 --------------------------------------------------------------------------------------------------------------------
 
