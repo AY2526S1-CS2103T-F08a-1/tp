@@ -420,33 +420,34 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Use case: UC01 - Delete company/companies**
 
+**Preconditions**: a company list is currently displayed and the user can see the target indices
+
 **MSS**
 
-1.  User requests to list companies
-2.  Cerebro displays the list
-3.  User requests to delete one or more company/companies in the list by index/indices
-4.  Cerebro asks the user to confirm the deletion
-5.  User Confirms
-6.  Cerebro deletes the specified company/companies
+1.  User requests to delete one or more company/companies in the list by index/indices
+2.  Cerebro asks the user to confirm the deletion
+3.  User Confirms
+4.  Cerebro deletes the specified company/companies
 
     Use case ends.
 
 **Extensions**
 
-* 3a. The given index/indices is invalid (non-numeric, zero, negative, or out of range).
+* 1a. The given index/indices are invalid (non-numeric, zero, negative, or out of range).
 
-  * 3a1. Cerebro shows an error message indicating invalid index/indices.
+  * 1a1. Cerebro shows an error message indicating invalid index/indices.
 
-    Use case resumes at step 2.
+    Use case resumes at step 1.
 
-* 3b. The index/indices is missing.
+* 1b. The index/indices is missing.
 
-  * 3b1. Cerebro shows the correct command formatting.
+  * 1b1. Cerebro shows the correct command formatting.
 
-    Use case resumes at step 2.
+    Use case resumes at step 1.
 
-* 4a. User cancels the confirmation.
-  * 4a1. Cerebro reports that deletion was cancelled.
+* 2a. User cancels the confirmation.
+
+  * 2a1. Cerebro reports that deletion was cancelled.
 
     Use case ends.
 
@@ -525,45 +526,47 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Use case: UC05 - Edit company/companies details**
 
+**Preconditions**: a company list is currently displayed and the user can see the target indices
+
 **MSS**
 
-1.	User requests to list companies.
-2.  Cerebro displays the list.
-3.	User requests to edit one or more companies by index/indices, supplying new field values (e.g., status, remark, tags).
-4.  Cerebro validates the input and applies the updates.
-5.  Cerebro records the update(s).
+1.  User requests to edit one or more companies by index/indices, supplying new field values (e.g., status, remark, tags).
+2.  Cerebro validates the input and applies the updates.
+3.  Cerebro records the update(s).
 
    Use case ends.
 
 **Extensions**
 
-* 3a. No editable field is provided.
+* 1a. No editable field is provided.
 
-    * 3a1. Cerebro shows an error message the correct command format.
+    * 1a1. Cerebro shows an error message the correct command format.
 
-  Use case resumes at step 3.
+  Use case resumes at step 1.
 
-* 3b. Some field values are invalid (e.g., unsupported status value, malformed phone number).
+* 1b. Some field values are invalid (e.g., unsupported status value, malformed phone number).
 
-    * 3b1. Cerebro shows an error indicating the invalid field(s).
+    * 1b1. Cerebro shows an error indicating the invalid field(s).
 
-* 3c. Any provided index/indices is invalid.
+  Use case resumes at step 1.
 
-    * 3c1. Cerebro shows an error indicating invalid index/indices.
+* 1c. Any provided index/indices is invalid.
+
+    * 1c1. Cerebro shows an error indicating invalid index/indices.
   
-  Use case resumes at step 2.
+  Use case resumes at step 1.
 
-* 3d. For a (single-company) edit, the new NAME duplicates an existing company’s name.
+* 1d. For a (single-company) edit, the new NAME duplicates an existing company’s name.
 
-    * 3d1. Cerebro rejects the command and shows a duplicate-company error.
+    * 1d1. Cerebro rejects the command and shows a duplicate-company error.
 
-    Use case resumes at step 3.
+    Use case resumes at step 1.
 
-* 3e. The request attempts a batch edit (multiple indices) that includes the NAME field.
+* 1e. The request attempts a batch edit (multiple indices) that includes the NAME field.
 
-    * 3e1. Cerebro rejects the command and shows an error stating that batch editing the NAME field is not allowed.
+    * 1e1. Cerebro rejects the command and shows an error stating that batch editing the NAME field is not allowed.
 
-    Use case resumes at step 3.
+    Use case resumes at step 1.
 
 ---
 
