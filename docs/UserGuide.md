@@ -124,7 +124,7 @@ Summary of fields available for a Company and their valid values.
 | **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `careers@company.com`              | `john..doe@example.com`, `@test`                            |
 | **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
 | **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
-| **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words.  Tags are coerced to lowercase on input and stored in lowercase. | `remote-work`, `BACKEND`, `bAcKEnD` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
+| **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Tags are coerced to lowercase on input and stored in lowercase. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
 | **Remark** | Free text                                                                                                       | `Met at career fair`                |                                                             |
 
 ## Commands
