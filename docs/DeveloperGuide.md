@@ -603,12 +603,12 @@ testers are expected to do more *exploratory* testing.
    1. **Test case: Data persists after adding a company**<br>
       Prerequisites: Launch application with existing data.<br>
       Steps: Execute `add n/NewCompany p/91234567 e/new@company.com a/123 Street` and wait for success message. Close the application and relaunch it.<br>
-      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json`.
+      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json` upon execution of the command.
 
    1. **Test case: Data persists after deleting companies**<br>
       Prerequisites: List has at least 3 companies.<br>
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
-      Expected: The deleted companies do not appear in the list upon relaunch. The remaining companies are preserved with their data intact.
+      Expected: The deleted companies are deleted from data/Cerebro.json upon execution of command. The remaining companies are preserved with their data intact.
 
 1. Data file permissions and access
 
