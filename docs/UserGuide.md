@@ -436,6 +436,7 @@ filter s/applied  → edit 1-3 (edits 1st, 2nd, 3rd company from filtered result
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
 - Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
 - Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
+- Maximum of 10,000 companies can be edited in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq)
 - Single editing: All fields allowed
 - Batch editing: All fields allowed except Name (prevents creating duplicate company names)
 - Tags provided during add or edit are coerced to lowercase and stored in lowercase.
@@ -491,6 +492,7 @@ filter s/applied  → delete 1 (deletes 1st company from filtered results)
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
 - Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
 - Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`)
+- Maximum of 10,000 companies can be deleted in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq)
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 This action cannot be undone! Company data will be permanently deleted.
@@ -563,6 +565,15 @@ Common questions and troubleshooting for using Cerebro.
 
 **Q: How do I transfer my data to another computer?**
 **A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
+
+<a id="batch-limit-faq"></a>
+**Q: Why is there a limit of 10,000 companies for batch edit and delete operations?**
+**A**: This limit balances performance and usability considerations:
+- **Performance**: Large batch operations can cause significant lag or memory issues that may crash the application due to Java's memory limitations
+- **Safety**: Prevents accidental large-scale edits or deletions that could unintentionally affect your entire dataset
+- **Practicality**: It's extremely rare for users to legitimately need to edit or delete 10,000+ companies at once in typical internship tracking scenarios, as most users would never have more than 10,000 internship applications
+
+In the rare case whereby you need to perform operations on more than 10,000 companies, consider breaking them into smaller batches.
 
 **Q: Can I edit the JSON file directly?**
 **A**: Yes, advanced users can edit `Cerebro.json` directly. **Always backup first** - invalid format will cause Cerebro to discard all data.
