@@ -52,9 +52,13 @@ After running `java -jar cerebro.jar`, you should see a window similar to below,
 
 <img src="images/Ui.png" alt="Ui" width="450"/>
 
-### CLI Tutorial
+### Command Format
 
 Command format and important information about using Cerebro's command line interface.
+
+<div markdown="span" class="alert alert-primary">:bulb: **CLI Power User Tip:**
+Cerebro is designed for speed and efficiency, just like your favorite terminal! Press `↑` and `↓` to navigate through your command history - perfect for quickly repeating or tweaking recent operations. Most operations in Cerebro are designed to be easy to type and work with partial matches and case-insensitivity.
+</div>
 
 <div markdown="block" class="alert alert-info">
 
@@ -79,20 +83,9 @@ Command format and important information about using Cerebro's command line inte
 
 </div>
 
-**Command Structure:** `command [index] [parameters]` with prefixes like `n/NAME`, `s/STATUS`, `t/TAG`
-
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
 </div>
-
-**Typical Workflow:**
-
-1. **Research:** `add n/CompanyName` (quick entry)
-2. **Add details:** `edit 1 e/careers@google.com a/Sample Address #00-00`
-3. **Apply:** `edit 1 t/frontend s/applied r/Applied via website`
-4. **View info** `find CompanyName`
-5. **Interview:** `edit 1 s/tech-interview`
-6. **Overview:** `filter s/STATUS` to filter by status, `list` to see all
 
 <div markdown="span" class="alert alert-primary">:bulb: **Power Tips:**
 **Batch edit/delete:** `delete 1,2,5-7` (indices 1, 2, 5, 6, 7)<br>
@@ -101,7 +94,7 @@ All operations are permanent! No undo available.
 
 ---
 
-## Company Fields
+### Company Fields
 
 Summary of fields available for a Company and their valid values.
 
@@ -114,6 +107,49 @@ Summary of fields available for a Company and their valid values.
 | **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
 | **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: `BACKEND` is treated the same as `backend`. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
 | **Remark** | Free text                                                                                                       | `Met at career fair`                |                                                             |
+
+---
+
+### Your First Commands
+
+Let's try some basic operations to get you started with managing your internship applications:
+
+**Quick Company Entry**
+```
+add n/Meta
+```
+
+**Add Complete Company Details**
+```
+edit 1 p/98765432 e/careers@meta.com a/1 Hacker Way, Menlo Park s/applied t/tech t/remote
+```
+
+**Search for Companies**
+```
+find Meta
+```
+
+**Filter by Application Status**
+```
+filter s/applied
+```
+
+**Update Application Progress**
+```
+edit 1 s/tech-interview r/Scheduled for next Tuesday
+```
+
+**View Your Application Overview**
+```
+metrics
+```
+
+**Reset to See Everything**
+```
+list
+```
+
+---
 
 ## Commands
 
@@ -168,15 +204,15 @@ filter s/applied  → Shows all companies with "applied" status
 
 **Examples:**
 ```
-filter t/rem  → Shows companies with tags containing "rem" (e.g. "remote-work")
-filter t/rem t/good  → Shows companies with tags containing "rem" OR "good"
+filter t/tech  → Shows companies with tags containing "tech" (e.g. "fintech", "tech-startup")
+filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ (matches "fintech", "tech-startup", "remote-work", "premium")
 ```
 
 **Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
 
 **Examples:**
 ```
-filter s/applied t/rem t/good  → Shows companies with "applied" status AND (tags containing "rem" OR "good")
+filter s/applied t/rem t/good  → Shows companies with "applied" status AND​ tags containing "rem" OR "good"
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -250,7 +286,7 @@ Adds a company to Cerebro.
 ```
 add n/Google Inc  → Creates entry with just the name and other fields empty
 add n/Meta e/careers@meta.com s/applied  → Adds name, email, and status only
-add n/ByteDance p/12345678 e/recruit@bytedance.com a/Singapore Science Park r/Fast-growing s/tech-interview t/backend t/remote  → Adds complete entry with all details
+add n/ByteDance p/12345678 e/recruit@bytedance.com​ a/Singapore Science Park r/Fast-growing​ s/tech-interview t/backend t/remote  → Adds complete entry with all details
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -279,7 +315,7 @@ Updates one or more companies in Cerebro.
 
 **Examples:**
 ```
-edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567 and email to careers@google.com
+edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ and email to careers@google.com
 ```
 
 **Batch Edit:**: Edit multiple companies with the same changes
@@ -485,7 +521,7 @@ Action | Format | Examples
 Action | Format | Examples
 --------|--------|----------
 **[Add](#adding-a-company-add)** | `add n/NAME [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `add n/Google Inc`,<br>`add n/Meta p/65432100 e/careers@meta.com`,<br>`add n/Apple r/Great benefits s/applied`
-**[Edit](#editing-a-company--edit)** | `edit <INDEX|START-END> [INDEX]… [START-END]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `edit 1 p/91234567 e/googlehr@gmail.com s/applied`, `edit 1,2,4-8 p/91234567 e/googlehr@gmail.com a/70 Pasir Panjang Rd, #03-71 Mapletree Business City II, Singapore 117371 s/applied t/FAANG`
+**[Edit](#editing-a-company--edit)** | `edit <INDEX|START-END> [INDEX]… [START-END]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `edit 1 p/91234567 e/googlehr@gmail.com s/applied`,<br>`edit 1,2,4-8 s/applied t/tech`
 **[Delete](#deleting-a-company--delete)** | `delete  <INDEX|START-END> [INDEX]… [START-END]…` | `delete 3`, `delete 1,3,5-8`
 **[Clear](#clearing-all-entries--clear)** | `clear` | `clear`
 
