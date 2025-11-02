@@ -487,13 +487,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 #### Performance
 * The system shall respond to any command operation within 3 seconds when managing up to 100 internship applications.
-* A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the GUI.
-* The system shall launch within 3 seconds on standard hardware.
+* A user with above average typing speed, typically around 50–60 words per minute (WPM), for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks (e.g. adding, deleting, finding) faster using commands than using the mouse.
+* The system shall launch within 3 seconds on _standard hardware_.
 
 #### Reliability & Availability
-* Should work on any _mainstream OS_ as long as it has Java '17' or above installed
+* Should work on any _mainstream OS_ as long as it has Java '17' or above installed.
 * The app shall operate offline with full feature availability.
-* Data consistency shall be maintained at all times across features (name, phone, email, address, tags, remarks, status).
 
 #### Security & Privacy
 * User data must only be stored locally and accessible through the host OS file system — no external server transmission.
@@ -509,9 +508,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
+* **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM
 * **Mainstream OS**: Windows, Linux, MacOS
 * **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage
-* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at; a company can have any number of applications
+* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at
 * **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship
 
 --------------------------------------------------------------------------------------------------------------------
