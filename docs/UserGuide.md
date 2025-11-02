@@ -83,8 +83,6 @@ Cerebro is designed for speed and efficiency, just like your favorite terminal! 
 
 </div>
 
-**Command Structure:** `COMMAND [INDEX] [PARAMETERS]` with prefixes like `n/NAME`, `s/STATUS`, `t/TAG`
-
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
 </div>
