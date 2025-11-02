@@ -52,9 +52,13 @@ After running `java -jar cerebro.jar`, you should see a window similar to below,
 
 <img src="images/Ui.png" alt="Ui" width="450"/>
 
-### CLI Tutorial
+### Command Format
 
 Command format and important information about using Cerebro's command line interface.
+
+<div markdown="span" class="alert alert-primary">:bulb: **CLI Power User Tip:**
+Cerebro is designed for speed and efficiency, just like your favorite terminal! Press `↑` and `↓` to navigate through your command history - perfect for quickly repeating or tweaking recent operations. Most operations in Cerebro are designed to be easy to type and work with partial matches and case-insensitivity.
+</div>
 
 <div markdown="block" class="alert alert-info">
 
@@ -77,8 +81,6 @@ Command format and important information about using Cerebro's command line inte
 
 </div>
 
-**Command Structure:** `command [index] [parameters]` with prefixes like `n/NAME`, `s/STATUS`, `t/TAG`
-
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
 </div>
@@ -97,15 +99,6 @@ Note that parameter prefixes are only registered if they appear immediately afte
 `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 </div>
 
-**Typical Workflow:**
-
-1. **Research:** `add n/CompanyName` (quick entry)
-2. **Add details:** `edit 1 e/careers@google.com a/Sample Address #00-00`
-3. **Apply:** `edit 1 t/frontend s/applied r/Applied via website`
-4. **View info** `find CompanyName`
-5. **Interview:** `edit 1 s/tech-interview`
-6. **Overview:** `filter s/STATUS` to filter by status, `list` to see all
-
 <div markdown="span" class="alert alert-primary">:bulb: **Power Tips:**
 **Batch edit/delete:** `delete 1,2,5-7` (indices 1, 2, 5, 6, 7)<br>
 **Flexible input:** Parameters work in any order
@@ -113,7 +106,7 @@ Note that parameter prefixes are only registered if they appear immediately afte
 
 ---
 
-## Company Fields
+### Company Fields
 
 Summary of fields available for a Company and their valid values.
 
@@ -180,6 +173,49 @@ We use the [Apache Commons Validator](https://commons.apache.org/proper/commons-
   </tbody>
 </table>
 
+---
+
+### Your First Commands
+
+Let's try some basic operations to get you started with managing your internship applications:
+
+**Quick Company Entry**
+```
+add n/Meta
+```
+
+**Add Complete Company Details**
+```
+edit 1 p/98765432 e/careers@meta.com a/1 Hacker Way, Menlo Park s/applied t/tech t/remote
+```
+
+**Search for Companies**
+```
+find Meta
+```
+
+**Filter by Application Status**
+```
+filter s/applied
+```
+
+**Update Application Progress**
+```
+edit 1 s/tech-interview r/Scheduled for next Tuesday
+```
+
+**View Your Application Overview**
+```
+metrics
+```
+
+**Reset to See Everything**
+```
+list
+```
+
+---
+
 ## Commands
 
 Complete command reference for all Cerebro features.
@@ -233,15 +269,15 @@ filter s/applied  → Shows all companies with "applied" status
 
 **Examples:**
 ```
-filter t/rem  → Shows companies with tags containing "rem" (e.g. "remote-work")
-filter t/rem t/good  → Shows companies with tags containing "rem" OR "good"
+filter t/tech  → Shows companies with tags containing "tech" (e.g. "fintech", "tech-startup")
+filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ (matches "fintech", "tech-startup", "remote-work", "premium")
 ```
 
 **Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
 
 **Examples:**
 ```
-filter s/applied t/rem t/good  → Shows companies with "applied" status AND (tags containing "rem" OR "good")
+filter s/applied t/rem t/good  → Shows companies with "applied" status AND​ tags containing "rem" OR "good"
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -317,7 +353,7 @@ Adds a company to Cerebro.
 ```
 add n/Google Inc  → Creates entry with just the name and other fields empty
 add n/Meta e/careers@meta.com s/applied  → Adds name, email, and status only
-add n/ByteDance p/12345678 e/recruit@bytedance.com a/Singapore Science Park r/Fast-growing s/tech-interview t/backend t/remote  → Adds complete entry with all details
+add n/ByteDance p/12345678 e/recruit@bytedance.com​ a/Singapore Science Park r/Fast-growing​ s/tech-interview t/backend t/remote  → Adds complete entry with all details
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -346,7 +382,7 @@ Updates one or more companies in Cerebro.
 
 **Examples:**
 ```
-edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567 and email to careers@google.com
+edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ and email to careers@google.com
 ```
 
 **Batch Edit:**: Edit multiple companies with the same changes
@@ -400,6 +436,7 @@ filter s/applied  → edit 1-3 (edits 1st, 2nd, 3rd company from filtered result
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
 - Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
 - Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
+- Maximum of 10,000 companies can be edited in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq)
 - Single editing: All fields allowed
 - Batch editing: All fields allowed except Name (prevents creating duplicate company names)
 - Tags provided during add or edit are coerced to lowercase and stored in lowercase.
@@ -455,6 +492,7 @@ filter s/applied  → delete 1 (deletes 1st company from filtered results)
 - Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
 - Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
 - Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`)
+- Maximum of 10,000 companies can be deleted in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq)
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 This action cannot be undone! Company data will be permanently deleted.
@@ -528,6 +566,15 @@ Common questions and troubleshooting for using Cerebro.
 **Q: How do I transfer my data to another computer?**
 **A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
 
+<a id="batch-limit-faq"></a>
+**Q: Why is there a limit of 10,000 companies for batch edit and delete operations?**
+**A**: This limit balances performance and usability considerations:
+- **Performance**: Large batch operations can cause significant lag or memory issues that may crash the application due to Java's memory limitations
+- **Safety**: Prevents accidental large-scale edits or deletions that could unintentionally affect your entire dataset
+- **Practicality**: It's extremely rare for users to legitimately need to edit or delete 10,000+ companies at once in typical internship tracking scenarios, as most users would never have more than 10,000 internship applications
+
+In the rare case whereby you need to perform operations on more than 10,000 companies, consider breaking them into smaller batches.
+
 **Q: Can I edit the JSON file directly?**
 **A**: Yes, advanced users can edit `Cerebro.json` directly. **Always backup first** - invalid format will cause Cerebro to discard all data.
 
@@ -553,7 +600,7 @@ Action | Format | Examples
 Action | Format | Examples
 --------|--------|----------
 **[Add](#adding-a-company-add)** | `add n/NAME [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `add n/Google Inc`,<br>`add n/Meta p/65432100 e/careers@meta.com`,<br>`add n/Apple r/Great benefits s/applied`
-**[Edit](#editing-a-company--edit)** | `edit <INDEX|START-END> [INDEX]… [START-END]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `edit 1 p/91234567 e/googlehr@gmail.com s/applied`, `edit 1,2,4-8 p/91234567 e/googlehr@gmail.com a/70 Pasir Panjang Rd, #03-71 Mapletree Business City II, Singapore 117371 s/applied t/FAANG`
+**[Edit](#editing-a-company--edit)** | `edit <INDEX|START-END> [INDEX]… [START-END]… [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​` | `edit 1 p/91234567 e/googlehr@gmail.com s/applied`,<br>`edit 1,2,4-8 s/applied t/tech`
 **[Delete](#deleting-a-company--delete)** | `delete  <INDEX|START-END> [INDEX]… [START-END]…` | `delete 3`, `delete 1,3,5-8`
 **[Clear](#clearing-all-entries--clear)** | `clear` | `clear`
 
