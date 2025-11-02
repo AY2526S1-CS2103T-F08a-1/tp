@@ -611,7 +611,7 @@ Use case ends.
 
 * 1b. There are no companies.
 
-    * 1b1. Cerebro would not display anything except no companies message
+    * 1b1. Cerebro displays a message indicating there are no companies to show
 
   Use case ends.
 
