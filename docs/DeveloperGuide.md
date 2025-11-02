@@ -609,9 +609,9 @@ Use case ends.
 
   Use case resumes at step 2.
 
-* 1a. There are no companies.
+* 1b. There are no companies.
 
-    * 1a1. Cerebro would not display anything except no companies message
+    * 1b1. Cerebro would not display anything except no companies message
 
   Use case ends.
 
