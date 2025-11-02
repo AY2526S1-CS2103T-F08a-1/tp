@@ -499,9 +499,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     * 1b1. Cerebro shows an error about duplicates.
   
-    Use case ends
+    Use case ends.
 ---
 
+**Use case: UC04 - Clear all companies**
+
+**MSS**
+
+1. User requests to clear all companies.
+2. Cerebro ask to confirm the action.
+3. User confirms.
+4. Cerebro clears all companies and shows a success message.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+    * 1a1. Cerebro ignores the extra parameters and proceeds to step 2.
+
+  Use case resumes at step 2.
+
+* 2a. User cancels the confirmation.
+
+    * 2a1. Cerebro reports that clearing was cancelled.
+
+  Use case ends.
+
+---
 
 ### Non-Functional Requirements
 
