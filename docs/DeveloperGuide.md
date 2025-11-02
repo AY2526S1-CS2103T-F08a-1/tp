@@ -626,12 +626,12 @@ testers are expected to do more *exploratory* testing.
    1. **Test case: Data persists after adding a company**<br>
       Prerequisites: Launch application with existing data.<br>
       Steps: Execute `add n/NewCompany p/91234567 e/new@company.com a/123 Street` and wait for success message. Close the application and relaunch it.<br>
-      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json`.
+      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json` upon execution of the command.
 
    1. **Test case: Data persists after deleting companies**<br>
       Prerequisites: List has at least 3 companies.<br>
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
-      Expected: The deleted companies do not appear in the list upon relaunch. The remaining companies are preserved with their data intact.
+      Expected: The deleted companies are deleted from data/Cerebro.json upon execution of command. The remaining companies are preserved with their data intact.
 
 1. Data file permissions and access
 
@@ -647,3 +647,4 @@ testers are expected to do more *exploratory* testing.
 Team size: 5
 
 1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
+      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
