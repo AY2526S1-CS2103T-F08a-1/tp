@@ -547,11 +547,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     * 3b1. Cerebro shows an error indicating the invalid field(s).
 
-* 3c. Any provided index is invalid.
+* 3c. Any provided index/indices is invalid.
 
     * 3c1. Cerebro shows an error indicating invalid index/indices.
   
   Use case resumes at step 2.
+
+* 3d. For a (single-company) edit, the new NAME duplicates an existing company’s name.
+
+    * 3d1. Cerebro rejects the command and shows a duplicate company error.
+
+    Use case resumes at step 3.
+
+* 3e. The request attempts a batch edit (multiple indices) that includes the NAME field.
+
+    * 3e1. Cerebro rejects the command and shows an error stating that batch editing the NAME field is not allowed.
+
+    Use case resumes at step 3.
 
 ---
 
