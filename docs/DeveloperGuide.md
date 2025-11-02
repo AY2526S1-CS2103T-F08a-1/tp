@@ -433,12 +433,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 2a. The list is empty.
-
-  * 2a1. Cerebro shows a message indicating no companies to delete.
-
-    Use case ends.
-
 * 3a. The given index/indices is invalid (non-numeric, zero, negative, or out of range).
 
   * 3a1. Cerebro shows an error message indicating invalid index/indices.
@@ -528,6 +522,78 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   Use case ends.
 
 ---
+
+**Use case: UC05 - Edit company/companies details**
+
+**MSS**
+
+1.	User requests to list companies.
+2.  Cerebro displays the list.
+3.	User requests to edit one or more companies by index/indices with new field values (e.g., status, remark, tags).
+4.  Cerebro validates the input and applies the updates.
+5.  Cerebro confirms that the company/companies were updated.
+
+   Use case ends.
+
+**Extensions**
+
+* 3a. No editable field is provided.
+
+    * 3a1. Cerebro shows an error message the correct command format.
+
+  Use case resumes at step 3.
+
+* 3b. Some field values are invalid (e.g., unsupported status value, malformed phone number).
+
+    * 3b1. Cerebro shows an error indicating the invalid field(s).
+
+* 3c. Any provided index is invalid.
+
+    * 3c1. Cerebro shows an error indicating invalid index/indices.
+  
+  Use case resumes at step 2.
+
+---
+
+**Use case: UC06 - Filter companies by status**
+
+**MSS**
+
+1.	User requests to filter companies, supplying one or more criteria (status and/or tag).
+2.	Cerebro shows the list of companies filtered by that criteria.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. A required value is missing or malformed (e.g., invalid STATUS, empty t/).
+
+    * 3a1. Cerebro shows the correct command format and the set of valid values for each criterion.
+
+  Use case resumes at step 1.
+
+---
+
+**Use case: UC07 - Find companies by keyword(s)**
+
+**MSS**
+
+1.	User requests to find companies by keyword(s).
+2.  Cerebro shows companies whose names match the keyword(s).
+
+Use case ends.
+
+**Extensions**
+
+* 1a. The keyword list is empty or blank.
+
+    * 1a1. Cerebro shows the correct command format.
+
+  Use case resumes at step 1.
+
+---
+
+
 
 ### Non-Functional Requirements
 
