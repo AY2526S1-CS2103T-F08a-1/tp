@@ -529,7 +529,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1.	User requests to list companies.
 2.  Cerebro displays the list.
-3.	User requests to edit one or more companies by index/indices with new field values (e.g., status, remark, tags).
+3.	User requests to edit one or more companies by index/indices, supplying new field values (e.g., status, remark, tags).
 4.  Cerebro validates the input and applies the updates.
 5.  Cerebro confirms that the company/companies were updated.
 
