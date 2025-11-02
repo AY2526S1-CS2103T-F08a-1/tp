@@ -58,56 +58,59 @@ After running `java -jar cerebro.jar`, you should see a window similar to below,
 
 Important information about using Cerebro's command line interface.
 
-<div markdown="span" class="alert alert-primary">:bulb: **CLI Power User Tip:**
+**Command History:** 
+
 Cerebro is designed for speed and efficiency, just like your favorite terminal! Press `↑` and `↓` to navigate through your command history - perfect for quickly repeating or tweaking recent operations. Most operations in Cerebro are designed to be easy to type and work with partial matches and case-insensitivity.
-</div>
 
-<div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
-All operations are permanent! No undo available.
-</div>
+**Escaping prefixes with backslash (`\`):** 
 
-<div markdown="block" class="alert alert-primary">
-:bulb: **Power Tip: Escaping prefixes with backslash (`\`)**
 
 You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
 
-**Example:**
-
-`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+- `add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
 
 Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
 
-`add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
-</div>
+- `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 
-<div markdown="span" class="alert alert-primary">:bulb: **Power Tips:**
-**Batch edit/delete:** `delete 1,2,5-7` (indices 1, 2, 5, 6, 7)<br>
-**Flexible input:** Parameters work in any order
+<div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
+All operations are permanent! No undo available.
 </div>
 
 ---
 
 ### Command Format
 
-<div markdown="block" class="alert alert-info">
+**UPPER_CASE**
 
-**:information_source: Notes about the command format:**<br>
+Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+* e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/Google Inc`.
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  * e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/Google Inc`.
-* For items in angle brackets, and separated by a pipe `|`, exactly one of the items are required.<br>
-  * e.g `<INDEX|START-END>` can be used as `1` or as `1-2`.
-  * e.g `<s/STATUS|t/TAG>` can be used as `s/applied` or as `t/good-pay`.
-* Items in square brackets are optional.<br>
-  * e.g `n/NAME [t/TAG]` can be used as `n/Google Inc t/tech` or as `n/Google Inc`.
-* Items with `…` after them can be used multiple times including zero times.<br>
-  * e.g. `[t/TAG]…` can be used as ` ` (i.e. 0 times), `t/tech`, `t/tech t/remote` etc.
-* Parameters can be in any order.<br>
-  * e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+**<ANGLED BRACKETS \| AND PIPE>**
 
+For items in angle brackets, and separated by a pipe `|`, exactly one of the items are required.<br>
+* e.g `<INDEX|START-END>` can be used as `1` or as `1-2`.
+* e.g `<s/STATUS|t/TAG>` can be used as `s/applied` or as `t/good-pay`.
+
+**[SQUARE_BRACKETS]**
+
+Items in square brackets are optional.<br>
+* e.g `n/NAME [t/TAG]` can be used as `n/Google Inc t/tech` or as `n/Google Inc`.
+
+**ELLIPSES…**
+
+Items with `…` after them can be used multiple times including zero times.<br>
+* e.g. `[t/TAG]…` can be used as ` ` (i.e. 0 times), `t/tech`, `t/tech t/remote` etc.
+
+**PARAMETERS**
+
+Parameters can be in any order.<br>
+* e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+
+<div markdown="span" class="alert alert-warning">⚠️ **Caution:**
+If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
 ---
