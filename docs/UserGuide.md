@@ -472,10 +472,10 @@ Common questions and troubleshooting for using Cerebro.
 
 **Prevention tip:** Regularly backup your `Cerebro.json` file before making major changes.
 
-**Q: How do I transfer my data to another computer?**  
+**Q: How do I transfer my data to another computer?**
 **A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
 
-**Q: Can I edit the JSON file directly?**  
+**Q: Can I edit the JSON file directly?**
 **A**: Yes, advanced users can edit `Cerebro.json` directly. **Always backup first** - invalid format will cause Cerebro to discard all data.
 
 **Q: How do I regenerate the dummy data?**
