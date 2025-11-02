@@ -647,4 +647,5 @@ testers are expected to do more *exploratory* testing.
 Team size: 5
 
 1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
-      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
+
+2. **Allow filtering within find results or finding within filter results.** Currently, users cannot apply a `filter` command after executing a `find` command, or vice versa. For example, running `find test` followed by `filter s/applied` does not filter within the found companies that match "test" - instead, it filters across all companies in the address book, ignoring the previous `find` results. This limitation prevents users from narrowing down their search progressively. Through this enhancement, users would be able to chain `find` and `filter` commands to progressively narrow their search results, allowing for more flexible and powerful querying of their internship applications.
