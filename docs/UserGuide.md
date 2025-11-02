@@ -135,7 +135,19 @@ Summary of fields available for a Company and their valid values.
     </tr>
     <tr>
       <td><strong>Email</strong></td>
-      <td>Format: local-part@domain. Local-part: alphanumeric + <code>+_.-</code>, no special chars at start/end. Domain: valid labels</td>
+      <!-- <td>Simple email format: `something@something.something`, where `something` should be alphanumeric + <code>+_.-</code>, with no special chars at start/end.</td> -->
+      <!-- <td>Valid email format complies with the following regex: <code>^[^\W_]+([+_.-][^\W_]+)*@([^\W_]+(-[^\W_]+)*\.)*([^\W_]+(-[^\W_]+)*){2,}$</code></td> -->
+<td markdown="1">
+Emails should be of the format `local-part@domain` and adhere to the following constraints:
+
+1. The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, `(+_.-)`.  
+   The local-part may not start or end with any special characters.
+
+The domain is made up of domain labels separated by periods. It must:
+- end with a domain label at least 2 characters long  
+- have each domain label start and end with alphanumeric characters  
+- have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
+</td> 
       <td><code>careers@company.com</code></td>
       <td><code>john..doe@example.com</code>, <code>@test</code></td>
     </tr>
