@@ -228,4 +228,15 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOEING + NAME_DESC_AIRBUS,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
     }
+
+    @Test
+    public void parse_nameWithExtraSpaces_truncatedSuccessfully() {
+        Company expectedCompany = new CompanyBuilder()
+                .withName("Boeing Corporation")
+                .build();
+
+        assertParseSuccess(parser,
+                " " + PREFIX_NAME + "  Boeing   Corporation  ",
+                new AddCommand(expectedCompany));
+    }
 }
