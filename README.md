@@ -18,5 +18,6 @@ The project simulates an ongoing software project for a desktop application (cal
   * It comes with a reasonable level of **user** and **developer** documentation. 
   * For the detailed documentation of this project, see the **[Cerebro Product Website](https://ay2526s1-cs2103t-f08a-1.github.io/tp/)**. 
   * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+  * It is named `Cerebro` the way it was built in COM2 Cerebro garage, like how Steve Jobs created Apple in a garage
 
 
