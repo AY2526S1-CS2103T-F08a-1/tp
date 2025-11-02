@@ -159,7 +159,7 @@ The domain is made up of domain labels separated by periods. It must:
     </tr>
     <tr>
       <td><strong>Status</strong></td>
-      <td>One of: <code>TO-APPLY</code>, <code>APPLIED</code>, <code>OA</code>, <code>TECH-INTERVIEW</code>, <code>HR-INTERVIEW</code>, <code>IN-PROCESS</code>, <code>OFFERED</code>, <code>ACCEPTED</code>, <code>REJECTED</code>. Case-insensitive: accepts <code>TO-APPLY</code>, <code>to-apply</code>, <code>To-Apply</code>, etc.</td>
+      <td>One of: <code>TO-APPLY</code>, <code>APPLIED</code>, <code>OA</code> (Online Assessment), <code>TECH-INTERVIEW</code>, <code>HR-INTERVIEW</code>, <code>IN-PROCESS</code>, <code>OFFERED</code>, <code>ACCEPTED</code>, <code>REJECTED</code>. Case-insensitive: accepts <code>TO-APPLY</code>, <code>to-apply</code>, <code>To-Apply</code>, etc.</td>
       <td><code>APPLIED</code>, <code>offered</code></td>
       <td><code>pending</code>, <code>done</code></td>
     </tr>
