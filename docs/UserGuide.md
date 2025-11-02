@@ -198,6 +198,8 @@ filter s/applied t/rem t/good  → Shows companies with "applied" status AND (ta
 * **Substring matching for tags** - `rem` matches `remote-work`, `premium`
 * **OR logic for multiple tags** - Any matching tag qualifies
 * **AND logic between status and tags** - Must match status AND at least one tag
+* **Only 1 status to filter by is allowed** - `filter s/applied s/to-apply` is not allowed
+* **Input validation logic follows the same field requirements** - `remote-` although is a substring of `remote-work`, won't be accepted due to the trailing `-`
 </div>
 
 **Result for `filter s/applied t/cl t/og`:**
