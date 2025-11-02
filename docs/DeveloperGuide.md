@@ -568,7 +568,7 @@ Use case ends.
 
 * 1a. A required value is missing or malformed (e.g., invalid STATUS, empty t/).
 
-    * 3a1. Cerebro shows the correct command format and the set of valid values for each criterion.
+    * 1a1. Cerebro shows the correct command format and the set of valid values for each criterion.
 
   Use case resumes at step 1.
 
