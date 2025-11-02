@@ -90,7 +90,7 @@ You may sometimes want to use slashes in fields like the Remark field, which cou
 
 **Example:**
 
-`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's \s/o"
+`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
 
 Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
 
