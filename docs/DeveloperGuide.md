@@ -426,8 +426,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2.  Cerebro displays the list
 3.  User requests to delete one or more company/companies in the list by index/indices
 4.  Cerebro asks the user to confirm the deletion
-5.  User Confirm
-6.  Cerebro deletes the specified company/companies and shows a success message
+5.  User Confirms
+6.  Cerebro deletes the specified company/companies
 
     Use case ends.
 
@@ -475,9 +475,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to add a company with required field.
+1. User requests to add a company with required field(s).
 2. Cerebro validates the input and creates the company entry.
-3. Cerebro confirms that the company was added.
+3. Cerebro records the new company.
 
    Use case ends.
 
@@ -485,13 +485,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. Required field missing or invalid (e.g., malformed phone numbers, tag too long).
 
-    * 1a1. Cerebro shows an error indicating the invalid/missing field(s)
+    * 1a1. Cerebro reports the invalid/missing field(s).
 
     Use case ends.
   
 * 1b. Duplicate would not be created
 
-    * 1b1. Cerebro shows an error about duplicates.
+    * 1b1. Cerebro reports a duplicate-company error.
   
     Use case ends.
 ---
@@ -503,7 +503,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. User requests to clear all companies.
 2. Cerebro ask to confirm the action.
 3. User confirms.
-4. Cerebro clears all companies and shows a success message.
+4. Cerebro removes all companies.
 
    Use case ends.
 
@@ -511,7 +511,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. Extra parameters are supplied to a command that takes none.
 
-    * 1a1. Cerebro ignores the extra parameters and proceeds to step 2.
+    * 1a1. Cerebro ignores the extra parameters.
 
   Use case resumes at step 2.
 
@@ -531,7 +531,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 2.  Cerebro displays the list.
 3.	User requests to edit one or more companies by index/indices, supplying new field values (e.g., status, remark, tags).
 4.  Cerebro validates the input and applies the updates.
-5.  Cerebro confirms that the company/companies were updated.
+5.  Cerebro records the update(s).
 
    Use case ends.
 
@@ -555,7 +555,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3d. For a (single-company) edit, the new NAME duplicates an existing company’s name.
 
-    * 3d1. Cerebro rejects the command and shows a duplicate company error.
+    * 3d1. Cerebro rejects the command and shows a duplicate-company error.
 
     Use case resumes at step 3.
 
@@ -572,7 +572,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.	User requests to filter companies, supplying one or more criteria (status and/or tag).
-2.	Cerebro shows the list of companies filtered by that criteria.
+2.	Cerebro displays the list of companies that match the criteria.
 
 Use case ends.
 
@@ -610,7 +610,8 @@ Use case ends.
 **MSS**
 
 1.	User requests to view application metrics.
-2.  Cerebro computes metrics (e.g., counts per application status) and displays them.
+2.  Cerebro computes metrics (e.g., counts per application status) and makes the available to user.
+
 Use case ends.
 
 **Extensions**
@@ -634,7 +635,7 @@ Use case ends.
 **MSS**
 
 1.	User requests help.
-2.	Cerebro displays usage information.
+2.	Cerebro provide usage information.
 
 Use case ends.
 
@@ -642,7 +643,7 @@ Use case ends.
 
 * 1a. Extra parameters are supplied to a command that takes none.
 
-    *  1a1. Cerebro ignores the extra parameters and proceeds to step 2.
+    *  1a1. Cerebro ignores the extra parameters.
   
     Use case ends.
 
