@@ -3,7 +3,7 @@
 
 ![Ui](docs/images/Ui.png)
 
-**Cerebro** is a desktop CLI app for Computer Science students managing **multiple internship applications efficiently**. Built for users who type fast, and prefer **keyboard-driven** workflows over point-and-click workflows.
+**Cerebro** is a desktop CLI app for Computer Science students to manage **multiple internship applications efficiently**. Built for users who type fast, and prefer **keyboard-driven** workflows over point-and-click workflows.
 
 **Key Features:**
   - Track internship applications (company details, application status, tags, remarks)
