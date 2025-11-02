@@ -615,6 +615,44 @@ Use case ends.
 
   Use case ends.
 
+---
+
+**Use case: UC09 - Help**
+
+**MSS**
+
+1.	User requests help.
+2.	Cerebro displays usage information.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+    *  1a1. Cerebro ignores the extra parameters and proceeds to step 2.
+  
+    Use case ends.
+
+---
+
+**Use case: UC09 - Exit application**
+
+**MSS**
+
+1.	User requests to exit the application (e.g., exit).
+2.  Cerebro performs shutdown tasks (flushes pending writes if any) and terminates.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied with exit.
+
+    *  1a1. Cerebro ignores the extra parameters and proceeds to exit.
+
+  Use case resumes at step 2.
+
 ### Non-Functional Requirements
 
 #### Performance
