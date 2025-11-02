@@ -1,5 +1,6 @@
 package seedu.address.model.tag;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.model.tag.Tag.MAX_TAG_LENGTH;
@@ -60,6 +61,12 @@ public class TagTest {
 
         // valid tag names
         assertTrue(Tag.isValidTagLength("a".repeat(MAX_TAG_LENGTH))); // exactly at max length (boundary test)
+    }
+
+    @Test
+    public void constructor_mixedCase_convertsToLowercase() {
+        Tag mixed = new Tag("Friend-TEST");
+        assertEquals("friend-test", mixed.tagName);
     }
 
 }

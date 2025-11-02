@@ -73,8 +73,6 @@ Command format and important information about using Cerebro's command line inte
   * e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-* Use a backslash `\` to escape command prefixes e.g. in your remark
-  * e.g. `add n/Company r/This is a remark with a \r/ for some reason` -> Remark: This is a remark with a r/ for some reason
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
 </div>
@@ -83,6 +81,20 @@ Command format and important information about using Cerebro's command line inte
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
+</div>
+
+<div markdown="block" class="alert alert-primary">
+:bulb: **Power Tip: Escaping prefixes with backslash (`\`)**
+
+You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
+
+**Example:**
+
+`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+
+Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
+
+`add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 </div>
 
 **Typical Workflow:**
@@ -105,78 +117,15 @@ All operations are permanent! No undo available.
 
 Summary of fields available for a Company and their valid values.
 
-<table style="table-layout: fixed; width: 100%;">
-  <colgroup>
-    <col width="15%"/>
-    <col width="45%"/> <!-- Wider Requirements column -->
-    <col width="20%"/>
-    <col width="20%"/>
-  </colgroup>
-  <thead>
-    <tr>
-      <th>Field</th>
-      <th>Requirements</th>
-      <th>Valid Examples</th>
-      <th>Invalid Examples</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Name</strong></td>
-      <td>All ASCII characters allowed, cannot be blank. Case-insensitive: <code>Google</code> is treated the same as <code>google</code></td>
-      <td><code>Google</code>, <code>J&amp;J</code>, <code>@Google</code>, <code>Meta!</code></td>
-      <td><code> </code>&nbsp;(blank)</td>
-    </tr>
-    <tr>
-      <td><strong>Phone</strong></td>
-      <td>At least 3 digits, may start with <code>+</code>, may contain single spaces between digits</td>
-      <td><code>98765432</code>, <br><code>+65 9123 4567</code></td>
-      <td><code>12</code>, <code>+65 9123&nbsp;&nbsp;&nbsp;4567</code> (extra spaces),<br><code>91+234567</code></td>
-    </tr>
-    <tr>
-      <td><strong>Email</strong></td>
-      <!-- <td>Simple email format: `something@something.something`, where `something` should be alphanumeric + <code>+_.-</code>, with no special chars at start/end.</td> -->
-      <!-- <td>Valid email format complies with the following regex: <code>^[^\W_]+([+_.-][^\W_]+)*@([^\W_]+(-[^\W_]+)*\.)*([^\W_]+(-[^\W_]+)*){2,}$</code></td> -->
-<td markdown="1">
-Emails should be of the format `local-part@domain` and adhere to the following constraints:
-
-1. The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, `(+_.-)`.  
-   The local-part may not start or end with any special characters.
-
-The domain is made up of domain labels separated by periods. It must:
-- end with a domain label at least 2 characters long  
-- have each domain label start and end with alphanumeric characters  
-- have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
-</td> 
-      <td><code>careers@company.com</code></td>
-      <td><code>john..doe@example.com</code>, <code>@test</code></td>
-    </tr>
-    <tr>
-      <td><strong>Address</strong></td>
-      <td>Free text</td>
-      <td><code>123 Main St, #01-01</code></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><strong>Status</strong></td>
-      <td>One of: <code>TO-APPLY</code>, <code>APPLIED</code>, <code>OA</code> (Online Assessment), <code>TECH-INTERVIEW</code>, <code>HR-INTERVIEW</code>, <code>IN-PROCESS</code>, <code>OFFERED</code>, <code>ACCEPTED</code>, <code>REJECTED</code>. Case-insensitive: accepts <code>TO-APPLY</code>, <code>to-apply</code>, <code>To-Apply</code>, etc.</td>
-      <td><code>APPLIED</code>, <code>offered</code></td>
-      <td><code>pending</code>, <code>done</code></td>
-    </tr>
-    <tr>
-      <td><strong>Tag</strong></td>
-      <td>Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: <code>BACKEND</code> is treated the same as <code>backend</code>.</td>
-      <td><code>remote-work</code>, <code>BACKEND</code>, <code>backend</code></td>
-      <td><code>remote work</code>, <code>tech--role</code>, <code>this-is-way-too-long-for-a-tag</code></td>
-    </tr>
-    <tr>
-      <td><strong>Remark</strong></td>
-      <td>Free text</td>
-      <td><code>Met at career fair</code></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+| Field      | Requirements                                                                                                     | Valid Examples                      | Invalid Examples                                            |
+|------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|-------------------------------------------------------------|
+| **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                 |
+| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, <code>+65 9123&nbsp;&nbsp;&nbsp;4567</code> (extra spaces),<br>`91+234567`      |
+| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `careers@company.com`              | `john..doe@example.com`, `@test`                            |
+| **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
+| **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
+| **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Tags are coerced to lowercase on input and stored in lowercase. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
+| **Remark** | Free text                                                                                                       | `Met at career fair`                |                                                             |
 
 ## Commands
 
@@ -249,6 +198,8 @@ filter s/applied t/rem t/good  → Shows companies with "applied" status AND (ta
 * **Substring matching for tags** - `rem` matches `remote-work`, `premium`
 * **OR logic for multiple tags** - Any matching tag qualifies
 * **AND logic between status and tags** - Must match status AND at least one tag
+* **Only 1 status to filter by is allowed** - `filter s/applied s/to-apply` is not allowed
+* **Input validation logic follows the same field requirements** - `remote-` although is a substring of `remote-work`, won't be accepted due to the trailing `-`
 </div>
 
 **Result for `filter s/applied t/cl t/og`:**
@@ -321,7 +272,7 @@ add n/ByteDance p/12345678 e/recruit@bytedance.com a/Singapore Science Park r/Fa
 * **Required:** Company name only
 * **Optional:** All other fields
 * **Default status:** `to-apply`
-* **Tags:** Multiple allowed
+* **Tags:** Multiple allowed. Tags are coerced to lowercase on saving (e.g. `Client` becomes `client`).
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -398,6 +349,7 @@ filter s/applied  → edit 1-3 (edits 1st, 2nd, 3rd company from filtered result
 - Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
 - Single editing: All fields allowed
 - Batch editing: All fields allowed except Name (prevents creating duplicate company names)
+- Tags provided during add or edit are coerced to lowercase and stored in lowercase.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use batch editing after applying: `edit 1-10 s/applied` updates all at once!
@@ -520,10 +472,10 @@ Common questions and troubleshooting for using Cerebro.
 
 **Prevention tip:** Regularly backup your `Cerebro.json` file before making major changes.
 
-**Q: How do I transfer my data to another computer?**  
+**Q: How do I transfer my data to another computer?**
 **A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
 
-**Q: Can I edit the JSON file directly?**  
+**Q: Can I edit the JSON file directly?**
 **A**: Yes, advanced users can edit `Cerebro.json` directly. **Always backup first** - invalid format will cause Cerebro to discard all data.
 
 **Q: How do I regenerate the dummy data?**

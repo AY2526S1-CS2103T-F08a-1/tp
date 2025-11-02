@@ -25,6 +25,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_DECENT_LOCA
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -375,6 +376,16 @@ public class EditCommandParserTest {
         Index targetIndex = INDEX_FIRST_COMPANY;
         String userInput = targetIndex.getOneBased() + " " + PREFIX_ADDRESS;
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withAddress(null).build();
+        EditCommand expectedCommand = new EditCommand(List.of(targetIndex), descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_nameWithExtraSpaces_truncatedSuccessfully() {
+        Index targetIndex = INDEX_FIRST_COMPANY;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_NAME + "  Airbus   Corporation  ";
+        EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withName("Airbus Corporation").build();
         EditCommand expectedCommand = new EditCommand(List.of(targetIndex), descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
