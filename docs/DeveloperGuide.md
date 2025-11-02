@@ -125,7 +125,7 @@ The following commands are currently supported:
 * `EditCommand` - Edits an existing company's details
 * `DeleteCommand` - Deletes a company from the address book
 * `FindCommand` - Finds companies by name keywords
-* `FilterCommand` - Filters companies by status
+* `FilterCommand` - Filters companies by status and/or tags
 * `ListCommand` - Lists all companies
 * `ClearCommand` - Clears all companies from the address book
 * `MetricsCommand` - Displays statistics about the companies
@@ -210,15 +210,17 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Filter feature
 
-The filter feature allows users to filter companies by their application status. This is implemented through the `FilterCommand` class.
+The filter feature allows users to filter companies by their application status and/or tags. This is implemented through the `FilterCommand` class.
 
 #### Implementation
 
 The `FilterCommand` works as follows:
 
-1. The user executes `filter s/STATUS` (e.g., `filter s/in-process`)
-2. The `FilterCommandParser` parses the status parameter and creates a `FilterCommand` object
-3. The `FilterCommand` updates the filtered company list in the model using a predicate that matches companies with the specified status
+1. The user executes `filter <s/STATUS|t/TAG> [t/TAG]...` (e.g., `filter s/in-process`, `filter t/remote-friendly`, or `filter s/applied t/tech`)
+2. The `FilterCommandParser` parses the status and/or tag parameters and creates a `FilterCommand` object
+3. The `FilterCommand` updates the filtered company list in the model using a predicate that matches companies with:
+   - The specified status (if provided), AND
+   - Any of the specified tags as substrings (if provided)
 4. The UI automatically updates to display only companies matching the filter
 
 The supported status values are:
@@ -538,8 +540,6 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting a company
 
 1. Deleting a company while all companies are being shown
@@ -555,13 +555,12 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
 
-### Filtering companies by status
+### Filtering companies by status and/or tags
 
 1. Filtering companies by application status
 
-   1. Prerequisites: Have companies with various statuses in the list. Use `list` to see all companies.
+   1. Prerequisites: Have companies with various statuses and tags in the list. Use `list` to see all companies.
 
    1. Test case: `filter s/applied`<br>
       Expected: Only companies with status "applied" are shown. Number of companies displayed shown in the status message.
@@ -572,7 +571,29 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `filter s/invalid-status`<br>
       Expected: Error message shown indicating invalid status. List remains unchanged.
 
-   1. Test case: `filter` (missing status parameter)<br>
+2. Filtering companies by tags
+
+   1. Prerequisites: Have companies with various tags in the list. Use `list` to see all companies.
+
+   1. Test case: `filter t/remote`<br>
+      Expected: Only companies with tags containing "remote" (e.g., "remote-friendly", "remote-work") are shown.
+
+   1. Test case: `filter t/remote t/tech`<br>
+      Expected: Companies with tags containing "remote" OR "tech" are shown.
+
+3. Filtering companies by both status and tags
+
+   1. Prerequisites: Have companies with various statuses and tags in the list. Use `list` to see all companies.
+
+   1. Test case: `filter s/applied t/tech`<br>
+      Expected: Only companies with status "applied" AND tags containing "tech" are shown.
+
+   1. Test case: `filter s/in-process t/remote t/good`<br>
+      Expected: Companies with status "in-process" AND tags containing "remote" OR "good" are shown.
+
+4. Error cases
+
+   1. Test case: `filter` (missing parameters)<br>
       Expected: Error message showing correct command format.
 
 ### Viewing metrics
@@ -589,6 +610,32 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. **Test case: Missing data file on startup**<br>
+      Prerequisites: Delete or rename the file `data/Cerebro.json` before launching the application.<br>
+      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. 
+   1. **Test case: Corrupted data file with invalid JSON syntax**<br>
+      Prerequisites: Replace the contents of `data/Cerebro.json` with plain text (e.g., "not json format!" or any non-JSON content).<br>
+      Expected: Application starts successfully with an empty address book (no companies loaded). The corrupted file is not overwritten or deleted unless new companies are added in the app, in which case the corrupted file is overwritten with the new addition(s).
 
-1. _{ more test cases …​ }_
+   1. **Test case: Valid JSON but invalid company data**<br>
+      Prerequisites: Edit `data/Cerebro.json` to contain valid JSON structure but with invalid data values. For example, set a company's phone field to `"invalidPhone123!@#"` or set a company's name to empty/whitespace-only string.<br>
+      Expected: Application starts successfully with an empty address book. The data file is not overwritten or deleted unless new companies are added in the app, in which case the data file is overwritten with the new addition(s).
+
+1. Saving data automatically after commands
+
+   1. **Test case: Data persists after adding a company**<br>
+      Prerequisites: Launch application with existing data.<br>
+      Steps: Execute `add n/NewCompany p/91234567 e/new@company.com a/123 Street` and wait for success message. Close the application and relaunch it.<br>
+      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json`.
+
+   1. **Test case: Data persists after deleting companies**<br>
+      Prerequisites: List has at least 3 companies.<br>
+      Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
+      Expected: The deleted companies do not appear in the list upon relaunch. The remaining companies are preserved with their data intact.
+
+1. Data file permissions and access
+
+   1. **Test case: Read-only data file**<br>
+      Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
+      Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
+      Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
