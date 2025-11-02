@@ -117,15 +117,68 @@ Note that parameter prefixes are only registered if they appear immediately afte
 
 Summary of fields available for a Company and their valid values.
 
-| Field      | Requirements                                                                                                     | Valid Examples                      | Invalid Examples                                            |
-|------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------|-------------------------------------------------------------|
-| **Name**   | All ASCII characters allowed, cannot be blank. Case-insensitive: `Google` is treated the same as `google`      | `Google`, `J&J`, `@Google`, `Meta!` | ` ` (blank)                                                 |
-| **Phone**  | At least 3 digits, may start with `+`, may contain single spaces between digits                                  | `98765432`, <br>`+65 9123 4567`     | `12`, <code>+65 9123&nbsp;&nbsp;&nbsp;4567</code> (extra spaces),<br>`91+234567`      |
-| **Email**  | Format: local-part@domain. Local-part: alphanumeric + `+_.-`, no special chars at start/end. Domain: valid labels | `careers@company.com`              | `john..doe@example.com`, `@test`                            |
-| **Address**| Free text                                                                                                       | `123 Main St, #01-01`               |                                                             |
-| **Status** | One of: `TO-APPLY`, `APPLIED`, `OA`, `TECH-INTERVIEW`, `HR-INTERVIEW`, `IN-PROCESS`, `OFFERED`, `ACCEPTED`, `REJECTED`. Case-insensitive: accepts `TO-APPLY`, `to-apply`, `To-Apply`, etc. | `APPLIED`, `offered`                | `pending`, `done`                                           |
-| **Tag**    | Max 30 characters, alphanumeric characters only, single hyphens to separate words. Tags are coerced to lowercase on input and stored in lowercase. | `remote-work`, `BACKEND`, `backend` | `remote work`, `tech--role`, `this-is-way-too-long-for-a-tag` |
-| **Remark** | Free text                                                                                                       | `Met at career fair`                |                                                             |
+<table style="table-layout: fixed; width: 100%;">
+  <colgroup>
+    <col width="15%"/>
+    <col width="45%"/> <!-- Wider Requirements column -->
+    <col width="20%"/>
+    <col width="20%"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Requirements</th>
+      <th>Valid Examples</th>
+      <th>Invalid Examples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Name</strong></td>
+      <td>All ASCII characters allowed, cannot be blank. Case-insensitive: <code>Google</code> is treated the same as <code>google</code></td>
+      <td><code>Google</code>, <code>J&amp;J</code>, <code>@Google</code>, <code>Meta!</code></td>
+      <td><code> </code>&nbsp;(blank)</td>
+    </tr>
+    <tr>
+      <td><strong>Phone</strong></td>
+      <td>At least 3 digits, may start with <code>+</code>, may contain single spaces between digits</td>
+      <td><code>98765432</code>, <br><code>+65 9123 4567</code></td>
+      <td><code>12</code>, <code>+65 9123&nbsp;&nbsp;&nbsp;4567</code> (extra spaces),<br><code>91+234567</code></td>
+    </tr>
+    <tr>
+      <td><strong>Email</strong></td>
+<td markdown="1">
+We use the [Apache Commons Validator](https://commons.apache.org/proper/commons-validator/) for email validation, which provides email address validation according to RFC 822 standards.
+</td> 
+      <td><code>careers@company.com</code></td>
+      <td><code>john..doe@example.com</code>, <code>@test</code></td>
+    </tr>
+    <tr>
+      <td><strong>Address</strong></td>
+      <td>Free text</td>
+      <td><code>123 Main St, #01-01</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><strong>Status</strong></td>
+      <td>One of: <code>TO-APPLY</code>, <code>APPLIED</code>, <code>OA</code> (Online Assessment), <code>TECH-INTERVIEW</code>, <code>HR-INTERVIEW</code>, <code>IN-PROCESS</code>, <code>OFFERED</code>, <code>ACCEPTED</code>, <code>REJECTED</code>. Case-insensitive: accepts <code>TO-APPLY</code>, <code>to-apply</code>, <code>To-Apply</code>, etc.</td>
+      <td><code>APPLIED</code>, <code>offered</code></td>
+      <td><code>pending</code>, <code>done</code></td>
+    </tr>
+    <tr>
+      <td><strong>Tag</strong></td>
+      <td>Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: <code>BACKEND</code> is treated the same as <code>backend</code>.</td>
+      <td><code>remote-work</code>, <code>BACKEND</code>, <code>backend</code></td>
+      <td><code>remote work</code>, <code>tech--role</code>, <code>this-is-way-too-long-for-a-tag</code></td>
+    </tr>
+    <tr>
+      <td><strong>Remark</strong></td>
+      <td>Free text</td>
+      <td><code>Met at career fair</code></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 
 ## Commands
 

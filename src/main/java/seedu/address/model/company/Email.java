@@ -2,6 +2,8 @@ package seedu.address.model.company;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 /**
  * Represents a Company's email in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidEmail(String)}
@@ -9,6 +11,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Email {
 
+    private static final EmailValidator validator = EmailValidator.getInstance();
     private static final String SPECIAL_CHARACTERS = "+_.-";
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format local-part@domain "
             + "and adhere to the following constraints:\n"
@@ -49,7 +52,7 @@ public class Email {
      * Returns if a given string is a valid email.
      */
     public static boolean isValidEmail(String email) {
-        return email != null && email.matches(VALIDATION_REGEX);
+        return email != null && validator.isValid(email);
     }
 
     @Override
