@@ -32,4 +32,11 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, " \n Apple \n \t Bayer  \t", expectedFindCommand);
     }
 
+    @Test
+    public void parse_extraSpacesInInput_ignoredSuccessfully() {
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Google", "Microsoft")));
+        assertParseSuccess(parser, "  Google   Microsoft  ", expectedFindCommand);
+    }
+
 }

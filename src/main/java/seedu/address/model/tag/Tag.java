@@ -30,7 +30,7 @@ public class Tag {
         checkArgument(isValidTagLength(tagName),
                 String.format(MESSAGE_LENGTH_EXCEEDED_FORMAT,
                         MAX_TAG_LENGTH, tagName, MAX_TAG_LENGTH, tagName.length()));
-        this.tagName = tagName;
+        this.tagName = tagName.toLowerCase();
     }
 
     /**

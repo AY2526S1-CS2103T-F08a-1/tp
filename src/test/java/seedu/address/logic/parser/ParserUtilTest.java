@@ -190,6 +190,13 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseName_extraSpacesInName_truncatedSuccessfully() throws Exception {
+        String nameWithExtraSpaces = "  Rachel   Walker  ";
+        Name expectedName = new Name("Rachel Walker");
+        assertEquals(expectedName, ParserUtil.parseName(nameWithExtraSpaces));
+    }
+
+    @Test
     public void parsePhone_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parsePhone((String) null));
     }
@@ -289,6 +296,14 @@ public class ParserUtilTest {
         String tagWithWhitespace = WHITESPACE + VALID_TAG_1 + WHITESPACE;
         Tag expectedTag = new Tag(VALID_TAG_1);
         assertEquals(expectedTag, ParserUtil.parseTag(tagWithWhitespace));
+    }
+
+    @Test
+    public void parseTag_mixedCase_convertsToLowercase() throws Exception {
+        // ParserUtil should return a Tag whose internal name is lowercased by Tag constructor
+        String mixedCaseTag = "FrIend";
+        Tag expectedTag = new Tag(VALID_TAG_1); // "friend"
+        assertEquals(expectedTag, ParserUtil.parseTag(mixedCaseTag));
     }
 
     @Test

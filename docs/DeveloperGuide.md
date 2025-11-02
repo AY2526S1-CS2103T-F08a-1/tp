@@ -509,7 +509,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Mainstream OS**: Windows, Linux, MacOS
 * **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage
 * **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at; a company can have any number of applications
 * **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship
@@ -612,7 +612,7 @@ testers are expected to do more *exploratory* testing.
 
    1. **Test case: Missing data file on startup**<br>
       Prerequisites: Delete or rename the file `data/Cerebro.json` before launching the application.<br>
-      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data. 
+      Expected: Application starts successfully with 8 sample companies pre-loaded (Acme Corporation, TechVision Solutions, Global Logistics Pte Ltd, Sunrise Manufacturing, Digital Innovations Hub, Pacific Trading Co, Nexus Robotics, and Orion Analytics). A new `data/Cerebro.json` file is created with the sample data.
    1. **Test case: Corrupted data file with invalid JSON syntax**<br>
       Prerequisites: Replace the contents of `data/Cerebro.json` with plain text (e.g., "not json format!" or any non-JSON content).<br>
       Expected: Application starts successfully with an empty address book (no companies loaded). The corrupted file is not overwritten or deleted unless new companies are added in the app, in which case the corrupted file is overwritten with the new addition(s).
@@ -626,12 +626,12 @@ testers are expected to do more *exploratory* testing.
    1. **Test case: Data persists after adding a company**<br>
       Prerequisites: Launch application with existing data.<br>
       Steps: Execute `add n/NewCompany p/91234567 e/new@company.com a/123 Street` and wait for success message. Close the application and relaunch it.<br>
-      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json`.
+      Expected: The newly added company "NewCompany" appears in the list upon relaunch. The data has been automatically saved to `data/Cerebro.json` upon execution of the command.
 
    1. **Test case: Data persists after deleting companies**<br>
       Prerequisites: List has at least 3 companies.<br>
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
-      Expected: The deleted companies do not appear in the list upon relaunch. The remaining companies are preserved with their data intact.
+      Expected: The deleted companies are deleted from data/Cerebro.json upon execution of command. The remaining companies are preserved with their data intact.
 
 1. Data file permissions and access
 
@@ -639,3 +639,12 @@ testers are expected to do more *exploratory* testing.
       Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
       Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
       Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
+      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
