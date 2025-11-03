@@ -476,7 +476,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to add a company with required field(s).
+1. User requests to add a company with specified field(s).
 2. Cerebro validates the input and creates the company entry.
 3. Cerebro records the new company.
 
@@ -484,9 +484,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-* 1a. Required field missing or invalid (e.g., malformed phone numbers, tag too long).
+* 1a. Missing name/invalid field input(s) (e.g., malformed phone numbers, tag too long).
 
-    * 1a1. Cerebro reports the invalid/missing field(s).
+    * 1a1. Cerebro reports the missing name/invalid field(s).
 
     Use case ends.
   
