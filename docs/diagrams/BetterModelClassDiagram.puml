@@ -19,8 +19,8 @@ Company -up-> "*" Tag
 Company -up-> "1" Status
 
 Company *--> "1" Name
-Company *--> "0..1" Phone
-Company *--> "0..1" Email
-Company *--> "0..1" Address
+Company *--> "1" Phone
+Company *--> "1" Email
+Company *--> "1" Address
 Company *--> "1" Remark
 @enduml
