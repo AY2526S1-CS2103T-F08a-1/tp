@@ -1,11 +1,10 @@
 package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +64,8 @@ public class MetricsCalculatorTest {
     /**
      * Helper method to assert status percentages match expected values.
      */
-    private void assertStatusPercentages(MetricsCalculator.MetricsData result, Map<String, Double> expectedPercentages) {
+    private void assertStatusPercentages(MetricsCalculator.MetricsData result,
+                                        Map<String, Double> expectedPercentages) {
         for (Map.Entry<String, Double> entry : expectedPercentages.entrySet()) {
             assertEquals(entry.getValue(), result.getStatusPercentage(entry.getKey()), 0.01,
                 "Status " + entry.getKey() + " should have " + entry.getValue() + "% of companies");
@@ -99,31 +99,25 @@ public class MetricsCalculatorTest {
 
     @Test
     public void calculateMetrics_multipleCompaniesVariousStatuses_returnsCorrectCounts() throws Exception {
-        // Add companies with different statuses
-        addressBook.addCompany(createCompany("Google", "applied"));
-        addressBook.addCompany(createCompany("Meta", "applied"));
-        addressBook.addCompany(createCompany("Microsoft", "to-apply"));
-        addressBook.addCompany(createCompany("Apple", "offered"));
-        addressBook.addCompany(createCompany("Netflix", "rejected"));
+        addCompaniesToAddressBook("applied", "applied", "to-apply", "offered", "rejected");
 
         MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
 
-        assertEquals(5, result.getTotalCompanies());
-        assertTrue(result.hasData());
-
-        // Verify counts
-        assertEquals(2L, result.getStatusCount("APPLIED"));
-        assertEquals(1L, result.getStatusCount("TO-APPLY"));
-        assertEquals(1L, result.getStatusCount("OFFERED"));
-        assertEquals(1L, result.getStatusCount("REJECTED"));
-        assertEquals(0L, result.getStatusCount("OA"));
-
-        // Verify percentages
-        assertEquals(40.0, result.getStatusPercentage("APPLIED"), 0.01);
-        assertEquals(20.0, result.getStatusPercentage("TO-APPLY"), 0.01);
-        assertEquals(20.0, result.getStatusPercentage("OFFERED"), 0.01);
-        assertEquals(20.0, result.getStatusPercentage("REJECTED"), 0.01);
-        assertEquals(0.0, result.getStatusPercentage("OA"), 0.01);
+        assertBasicMetrics(result, 5, true);
+        assertStatusCounts(result, Map.of(
+            "APPLIED", 2L,
+            "TO-APPLY", 1L,
+            "OFFERED", 1L,
+            "REJECTED", 1L,
+            "OA", 0L
+        ));
+        assertStatusPercentages(result, Map.of(
+            "APPLIED", 40.0,
+            "TO-APPLY", 20.0,
+            "OFFERED", 20.0,
+            "REJECTED", 20.0,
+            "OA", 0.0
+        ));
     }
 
     @Test
@@ -133,55 +127,47 @@ public class MetricsCalculatorTest {
                 .map(Status::toUserInputString)
                 .toArray(String[]::new);
 
-        for (int i = 0; i < allStatuses.length; i++) {
-            addressBook.addCompany(createCompany("Company" + i, allStatuses[i]));
-        }
+        addCompaniesToAddressBook(allStatuses);
 
         MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
 
         int totalStatusTypes = Status.Stage.values().length;
-        assertEquals(totalStatusTypes, result.getTotalCompanies());
-        assertTrue(result.hasData());
+        assertBasicMetrics(result, totalStatusTypes, true);
 
-        // Each status should have exactly 1 company
-        List<String> allStatusesUppercase = Arrays.stream(Status.Stage.values())
+        // Build expected counts and percentages maps
+        Map<String, Long> expectedCounts = new HashMap<>();
+        Map<String, Double> expectedPercentages = new HashMap<>();
+        double expectedPercentage = 100.0 / totalStatusTypes;
+
+        Arrays.stream(Status.Stage.values())
                 .map(Status::toUserInputString)
                 .map(String::toUpperCase)
-                .collect(java.util.stream.Collectors.toList());
+                .forEach(status -> {
+                    expectedCounts.put(status, 1L);
+                    expectedPercentages.put(status, expectedPercentage);
+                });
 
-        for (String statusUpper : allStatusesUppercase) {
-            assertEquals(1L, result.getStatusCount(statusUpper),
-                "Status " + statusUpper + " should have exactly 1 company");
-        }
-
-        // Each should have equal percentage
-        double expectedPercentage = 100.0 / totalStatusTypes;
-        for (String statusUpper : allStatusesUppercase) {
-            assertEquals(expectedPercentage, result.getStatusPercentage(statusUpper), 0.01,
-                "Status " + statusUpper + " should have " + expectedPercentage + "% of companies");
-        }
+        assertStatusCounts(result, expectedCounts);
+        assertStatusPercentages(result, expectedPercentages);
     }
 
     @Test
     public void calculateMetrics_duplicateStatuses_aggregatesCorrectly() throws Exception {
-        // Add multiple companies with same status
-        for (int i = 0; i < 3; i++) {
-            addressBook.addCompany(createCompany("Applied" + i, "applied"));
-        }
-        for (int i = 0; i < 2; i++) {
-            addressBook.addCompany(createCompany("Rejected" + i, "rejected"));
-        }
+        addCompaniesToAddressBook("applied", "applied", "applied", "rejected", "rejected");
 
         MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
 
-        assertEquals(5, result.getTotalCompanies());
-        assertEquals(3L, result.getStatusCount("APPLIED"));
-        assertEquals(2L, result.getStatusCount("REJECTED"));
-        assertEquals(0L, result.getStatusCount("TO-APPLY"));
-
-        assertEquals(60.0, result.getStatusPercentage("APPLIED"));
-        assertEquals(40.0, result.getStatusPercentage("REJECTED"));
-        assertEquals(0.0, result.getStatusPercentage("TO-APPLY"));
+        assertBasicMetrics(result, 5, true);
+        assertStatusCounts(result, Map.of(
+            "APPLIED", 3L,
+            "REJECTED", 2L,
+            "TO-APPLY", 0L
+        ));
+        assertStatusPercentages(result, Map.of(
+            "APPLIED", 60.0,
+            "REJECTED", 40.0,
+            "TO-APPLY", 0.0
+        ));
     }
 
 
