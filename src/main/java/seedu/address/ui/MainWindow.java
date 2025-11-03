@@ -32,7 +32,6 @@ public class MainWindow extends ClosableWindow {
 
     // Independent Ui parts residing in this Ui container
     private CompanyListPanel companyListPanel;
-    private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
     private MetricsWindow metricsWindow;
 
@@ -117,9 +116,6 @@ public class MainWindow extends ClosableWindow {
     void fillInnerParts() {
         companyListPanel = new CompanyListPanel(logic.getFilteredCompanyList());
         companyListPanelPlaceholder.getChildren().add(companyListPanel.getRoot());
-
-        resultDisplay = new ResultDisplay();
-        resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
         StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
@@ -209,7 +205,7 @@ public class MainWindow extends ClosableWindow {
         try {
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
-            resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
+            companyListPanel.setFeedbackToUser(commandResult.getFeedbackToUser());
 
             // Auto-update metrics window if it's showing as split screen
             if (metricsWindow.isShowing()) {
@@ -231,7 +227,7 @@ public class MainWindow extends ClosableWindow {
             return commandResult;
         } catch (CommandException | ParseException e) {
             logger.info("An error occurred while executing command: " + commandText);
-            resultDisplay.setFeedbackToUser(e.getMessage());
+            companyListPanel.setFeedbackToUser(e.getMessage());
             throw e;
         }
     }

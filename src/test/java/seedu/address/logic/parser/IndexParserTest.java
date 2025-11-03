@@ -23,6 +23,36 @@ import seedu.address.logic.parser.exceptions.ParseIndicesException;
 public class IndexParserTest {
 
     // ================================================================
+    // HELPER METHODS
+    // ================================================================
+
+    /**
+     * Helper method to assert that parsing the given input throws a ParseIndicesException
+     * with the expected message.
+     */
+    private void assertParseIndicesThrows(String input, String expectedMessage) {
+        assertThrows(ParseIndicesException.class, expectedMessage, () ->
+                IndexParser.parseIndices(input));
+    }
+
+    /**
+     * Helper method to assert that parsing the given input throws a ParseException
+     * with the expected message.
+     */
+    private void assertParseThrows(String input, String expectedMessage) {
+        assertThrows(ParseException.class, expectedMessage, () ->
+                IndexParser.parseIndices(input));
+    }
+
+    /**
+     * Helper method to assert that parsing the given input throws a ParseIndicesException
+     * with a formatted duplicate message.
+     */
+    private void assertDuplicateThrows(String input, String duplicates) {
+        assertParseIndicesThrows(input, String.format(MESSAGE_DUPLICATE_INDICES, duplicates));
+    }
+
+    // ================================================================
     // POSITIVE CASES (SUCCESSFUL PARSING)
     // ================================================================
 
@@ -81,57 +111,27 @@ public class IndexParserTest {
     // ================================================================
 
     @Test
-    public void parseIndices_duplicate_throwsParseIndicesException() {
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "1"), () ->
-                IndexParser.parseIndices("1,2,1"));
+    public void parseIndices_simpleDuplicates_throwsParseIndicesException() {
+        assertDuplicateThrows("1,2,1", "1");
+        assertDuplicateThrows("3,1,2,3,1", "1, 3");
     }
 
     @Test
-    public void parseIndices_multipleDuplicates_reportsAscendingOrder() {
-        // duplicates: 1, 3
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "1, 3"), () ->
-                IndexParser.parseIndices("3,1,2,3,1"));
+    public void parseIndices_rangeOverlaps_throwsParseIndicesException() {
+        assertDuplicateThrows("1-3,2-4", "2, 3");
+        assertDuplicateThrows("1-3,1-3", "1, 2, 3");
+        assertDuplicateThrows("1-5,2-4", "2, 3, 4");
     }
 
     @Test
-    public void parseIndices_overlappingRanges_throwsParseIndicesException() {
-        // overlap between 1-3 and 2-4 => duplicates 2,3
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "2, 3"), () ->
-                IndexParser.parseIndices("1-3,2-4"));
+    public void parseIndices_rangeAndSingleOverlaps_throwsParseIndicesException() {
+        assertDuplicateThrows("1-3,2", "2");
+        assertDuplicateThrows("3-3,3", "3");
     }
 
     @Test
-    public void parseIndices_identicalRanges_throwsParseIndicesException() {
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "1, 2, 3"), () ->
-                IndexParser.parseIndices("1-3,1-3"));
-    }
-
-    @Test
-    public void parseIndices_rangeAndSingleOverlap_throwsParseIndicesException() {
-        // 1-3 creates 1,2,3 then 2 repeats
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "2"), () ->
-                IndexParser.parseIndices("1-3,2"));
-    }
-
-    @Test
-    public void parseIndices_complexMixedDuplicates_reportsAllAscending() {
-        // 1,2-4,3,5-7,6 => duplicates 3,6
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "3, 6"), () ->
-                IndexParser.parseIndices("1,2-4,3,5-7,6"));
-    }
-
-    @Test
-    public void parseIndices_rangeContainedInAnother_throwsParseIndicesException() {
-        // 1-5 and 2-4 overlap => duplicates 2,3,4
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "2, 3, 4"), () ->
-                IndexParser.parseIndices("1-5,2-4"));
-    }
-
-    @Test
-    public void parseIndices_singleElementRangeWithDuplicate_throwsParseIndicesException() {
-        // 3-3 creates 3, then 3 repeats
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_DUPLICATE_INDICES, "3"), () ->
-                IndexParser.parseIndices("3-3,3"));
+    public void parseIndices_complexMixedDuplicates_throwsParseIndicesException() {
+        assertDuplicateThrows("1,2-4,3,5-7,6", "3, 6");
     }
 
     // ================================================================
@@ -139,104 +139,117 @@ public class IndexParserTest {
     // ================================================================
 
     @Test
-    public void parseIndices_emptyString_throwsParseIndicesException() {
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices(""));
-    }
-
-    @Test
-    public void parseIndices_onlySpaces_throwsParseIndicesException() {
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("   "));
+    public void parseIndices_emptyAndWhitespace_throwsParseIndicesException() {
+        assertParseIndicesThrows("", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("   ", MESSAGE_INVALID_INDICES);
     }
 
     @Test
     public void parseIndices_invalidCharacters_throwsParseIndicesException() {
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("a"));
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1-a"));
+        assertParseIndicesThrows("a", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("1-a", MESSAGE_INVALID_INDICES);
     }
 
     @Test
     public void parseIndices_incompleteRanges_throwsParseIndicesException() {
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("3-"));
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("-3"));
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1--3"));
+        assertParseIndicesThrows("3-", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("-3", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("1--3", MESSAGE_INVALID_INDICES);
+    }
+
+    @Test
+    public void parseIndices_zeroAndNegativeIndices_throwsParseIndicesException() {
+        assertParseIndicesThrows("0", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("-1", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("1,0,2", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("1,-3,4", MESSAGE_INVALID_INDICES);
+    }
+
+    @Test
+    public void parseIndices_overflowValues_throwsParseIndicesException() {
+        assertParseIndicesThrows("999999999999", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("1-999999999999", MESSAGE_INVALID_INDICES);
+        assertParseIndicesThrows("1,2,999999999999", MESSAGE_INVALID_INDICES);
     }
 
     @Test
     public void parseIndices_reverseRange_throwsParseIndicesException() {
         // 5-2 (end < start) should be invalid
-        assertThrows(ParseIndicesException.class, String.format(MESSAGE_INVALID_RANGE_ORDER, 5, 2), () ->
-                IndexParser.parseIndices("5-2"));
+        assertParseIndicesThrows("5-2", String.format(MESSAGE_INVALID_RANGE_ORDER, 5, 2));
     }
 
     @Test
     public void parseIndices_leadingTrailingCommasAndSpaces_throwsParseException() {
-        assertThrows(ParseException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices(",1,2"));
-        assertThrows(ParseException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1,2,"));
-        assertThrows(ParseException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1,,2"));
-        assertThrows(ParseException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1, ,2"));
+        assertParseThrows(",1,2", MESSAGE_INVALID_INDICES);
+        assertParseThrows("1,2,", MESSAGE_INVALID_INDICES);
+        assertParseThrows("1,,2", MESSAGE_INVALID_INDICES);
+        assertParseThrows("1, ,2", MESSAGE_INVALID_INDICES);
     }
 
     @Test
     public void parseIndices_invalidThenDuplicate_reportsInvalidFirst() {
         // "abc" invalid => invalid should be prioritized over duplicates
-        assertThrows(ParseException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("abc,1,2,1"));
+        assertParseThrows("abc,1,2,1", MESSAGE_INVALID_INDICES);
+    }
+
+    // ================================================================
+    // EDGE CASES AND BOUNDARY VALUE TESTS
+    // ================================================================
+
+    @Test
+    public void parseIndices_largeValidSingleIndices_success() throws Exception {
+        // Test very large but valid single indices
+        List<Index> indices = IndexParser.parseIndices("2147483647"); // Integer.MAX_VALUE
+        assertEquals(1, indices.size());
+        assertEquals(Index.fromOneBased(2147483647), indices.get(0));
     }
 
     @Test
-    public void parseIndices_zeroIndex_throwsParseIndicesException() {
-        // Zero is invalid since indices are one-based
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("0"));
+    public void parseIndices_boundaryRangeValues_success() throws Exception {
+        // Test ranges with large boundary values that don't overflow
+        List<Index> indices = IndexParser.parseIndices("100-102");
+        assertEquals(3, indices.size());
+        assertEquals(Index.fromOneBased(100), indices.get(0));
+        assertEquals(Index.fromOneBased(101), indices.get(1));
+        assertEquals(Index.fromOneBased(102), indices.get(2));
     }
 
     @Test
-    public void parseIndices_negativeIndex_throwsParseIndicesException() {
-        // Negative index should be invalid
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("-1"));
+    public void parseIndices_largeValidRange_success() throws Exception {
+        // Test a moderately large range that should work fine
+        List<Index> indices = IndexParser.parseIndices("1-1000");
+        assertEquals(1000, indices.size());
+        assertEquals(Index.fromOneBased(1), indices.get(0));
+        assertEquals(Index.fromOneBased(1000), indices.get(999));
     }
 
     @Test
-    public void parseIndices_mixedValidAndZeroOrNegative_throwsParseIndicesException() {
-        // 0 and -1 mixed with valid indices
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1,0,2"));
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1,-3,4"));
-    }
+    public void parseIndices_performanceEdgeCase_manySmallRanges() throws Exception {
+        // Test parsing performance with many small ranges
+        StringBuilder input = new StringBuilder();
+        for (int i = 1; i <= 10; i += 2) {
+            if (i > 1) {
+                input.append(",");
+            }
+            input.append(i).append("-").append(i);
+        }
 
-    // Test overflow/large values
-    @Test
-    public void parseIndices_largeNumberOverflow_throwsParseIndicesException() {
-        // Larger than Integer.MAX_VALUE (~2.1 billion)
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("999999999999"));
-    }
-
-    @Test
-    public void parseIndices_largeNumberInRange_throwsParseIndicesException() {
-        // Overflow during range expansion (start or end too large)
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1-999999999999"));
+        List<Index> indices = IndexParser.parseIndices(input.toString());
+        assertEquals(5, indices.size()); // 5 ranges of size 1 each
     }
 
     @Test
-    public void parseIndices_mixedValidAndOverflow_throwsParseIndicesException() {
-        // Mixed valid small indices and overflowed large index
-        assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
-                IndexParser.parseIndices("1,2,999999999999"));
+    public void parseIndices_complexMixedValidScenario_success() throws Exception {
+        // Test complex but valid mixed scenario
+        List<Index> indices = IndexParser.parseIndices("1,5-10,15,20-25,100");
+        assertEquals(15, indices.size()); // 1 + 6 + 1 + 6 + 1 = 15
+
+        // Verify some key indices
+        assertEquals(Index.fromOneBased(1), indices.get(0));
+        assertEquals(Index.fromOneBased(5), indices.get(1));
+        assertEquals(Index.fromOneBased(10), indices.get(6));
+        assertEquals(Index.fromOneBased(15), indices.get(7));
+        assertEquals(Index.fromOneBased(100), indices.get(14));
     }
 
     // ================================================================
