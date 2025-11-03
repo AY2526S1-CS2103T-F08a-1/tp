@@ -67,11 +67,11 @@ Cerebro is designed for speed and efficiency, just like your favorite terminal! 
 
 You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
 
-- `add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+- `add n/Company r/Meet with Ollie's \s/o` → Remark: "Meet with Ollie's s/o"
 
 Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
 
-- `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
+- `add n/\r/Weird Company Name` → Name: "\r/Weird Company Name"
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
@@ -280,7 +280,8 @@ filter s/applied  → Shows all companies with "applied" status
 
 **Examples:**
 ```
-filter t/tech  → Shows companies with tags containing "tech" (e.g. "fintech", "tech-startup")
+filter t/tech  → Shows companies with tags containing "tech"
+                 (e.g. "fintech", "tech-startup")
 filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ 
                        (matches "fintech", "tech-startup", "remote-work", "premium")
 ```
@@ -289,7 +290,8 @@ filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​
 
 **Examples:**
 ```
-filter s/applied t/rem t/good  → Shows companies with "applied" status AND​ tags containing "rem" OR "good"
+filter s/applied t/rem t/good  → Shows companies with "applied" status AND​
+                                  tags containing "rem" OR "good"
 ```
 
 <div markdown="block" class="alert alert-success">
