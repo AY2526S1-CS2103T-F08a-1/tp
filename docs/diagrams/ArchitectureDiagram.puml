@@ -34,7 +34,7 @@ Shared utility classes
 end note
 
 note right of File
-cerebro.json
+Cerebro.json
 Stores data in JSON format
 end note
 
@@ -50,6 +50,7 @@ Main -down[hidden]-> Commons
 
 Storage -up[STORAGE_COLOR].> Model : Serializes
 Storage .right[STORAGE_COLOR].>File : Writes
+File .left[STORAGE_COLOR].>Storage : Reads
 User ..> UI : Inputs
 UI ..> User : Displays
 @enduml
