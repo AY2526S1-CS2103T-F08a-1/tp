@@ -208,7 +208,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Filter feature
+### Filter feature 
 
 The filter feature allows users to filter companies by their application status and/or tags. This is implemented through the `FilterCommand` class.
 
@@ -248,20 +248,78 @@ The supported status values are:
 
 ### Metrics feature
 
-The metrics feature provides users with statistics about their internship applications. This is implemented through the `MetricsCommand` and `MetricsWindow` classes.
+The metrics feature provides users with statistics of the status of all their applications. This is implemented through the `MetricsCommand`, `MetricsWindow`, and `MetricsCalculator` classes, with window lifecycle management handled by the `MainWindow`.
 
 #### Implementation
 
-The `MetricsCommand` works as follows:
+The metrics feature operates through a command-window interaction pattern with separation of concerns. The implementation involves four main components:
 
-1. The user executes the `metrics` command
-2. The `MetricsCommand` returns a `CommandResult` with `showMetrics` flag set to true
-3. The `MainWindow` detects this flag and opens/focuses the `MetricsWindow`
-4. The `MetricsWindow` retrieves data from the address book and displays statistics about application statuses
+1. **Command Execution**: `MetricsCommand` processes the user input and signals the UI
+2. **Window Management**: `MainWindow` handles the lifecycle of the `MetricsWindow`  
+3. **UI Display**: `MetricsWindow` manages the window state and data refresh
+4. **Data Processing**: `MetricsCalculator` performs calculations and UI rendering
 
-The metrics window shows:
-* Distribution of applications across different status categories
-* Total number of applications
+**Detailed Implementation Flow:**
+
+**Step 1: Command Processing**
+1. User executes `metrics` command
+2. `MetricsCommandParser` validates no parameters are provided
+3. `MetricsCommand#execute()` returns `CommandResult` with `showMetrics` flag set to `true`
+
+**Step 2: Window Lifecycle Management (MainWindow)**
+4. `MainWindow#executeCommand()` detects the `showMetrics` flag in `CommandResult`
+5. `MainWindow#handleMetrics()` is called, which:
+   - Checks if `MetricsWindow` instance exists and is showing
+   - If not showing: calls `metricsWindow.setData(logic.getAddressBook())` and `metricsWindow.show()`
+   - If already showing: restores from minimized state if needed, updates data, and focuses window
+   - Auto-updates metrics display after any command execution when window is visible
+
+**Step 3: Data Processing and UI Rendering**
+6. `MetricsWindow#setData()` triggers `refreshMetrics()`, which delegates to `MetricsCalculator` to:
+   - Calculate status distribution using Java streams grouping
+   - Generate `MetricsData` with counts, percentages, and display order
+   - Render JavaFX labels in the UI container with styling
+
+**Real-time Update Mechanism:**
+
+The metrics window automatically refreshes after every command execution if visible, eliminating the need for users to re-run the `metrics` command. This is implemented via a hook in `MainWindow#executeCommand()` that calls `metricsWindow.setData()` when `isShowing()` returns true, providing live statistics during data modification sessions.
+
+**Data Architecture:**
+
+The `MetricsCalculator.MetricsData` inner class encapsulates calculated metrics:
+- `totalCompanies`: Total count for percentage calculations
+- `statusCounts`: Map of status strings to occurrence counts  
+- `statusOrder`: Display order derived from `Arrays.stream(Status.Stage.values())` ensuring single source of truth
+- Helper methods: `getStatusCount()`, `getStatusPercentage()`, `hasData()`
+
+**Status Enum Integration:**
+
+The metrics feature maintains consistency by using `Status.Stage` enum as the single source of truth:
+- **Status ordering**: Display order derived from `Status.Stage.values()` array sequence
+- **Status extraction**: Companies grouped using canonical `toUserInputString()` method
+- **Display consistency**: Metrics always reflect authoritative status definitions from domain model
+
+#### Design considerations
+
+**Aspect: Data presentation method:**
+
+* **Alternative 1 (current choice):** Separate popup window
+  * Pros: Doesn't interfere with main workflow; can be kept open for reference; dedicated space for detailed statistics
+  * Cons: Additional window management complexity; potential for users to lose/forget the window
+
+* **Alternative 2:** Inline display in main window
+  * Pros: Simpler implementation; always visible; no window management needed
+  * Cons: Takes space away from company list; less detailed view possible; temporary display only
+
+**Aspect: Data refresh strategy:**
+
+* **Alternative 1 (current choice):** Multi-trigger refresh - updates after command execution (if visible), when window gains focus, and when restored from minimized state
+  * Pros: Always current data; immediate updates during active sessions; handles all window state changes; simple hook implementation
+  * Cons: Recalculation overhead on every command; unnecessary updates for non-data commands
+
+* **Alternative 2:** Refresh only when window gains focus or is shown
+  * Pros: Reduced computation overhead; updates only when needed
+  * Cons: Potential stale data if window remains open; users might not see latest changes
 
 ### \[Proposed\] Undo/redo feature
 
@@ -675,13 +733,12 @@ Use case ends.
 
 #### Performance
 * The system shall respond to any command operation within 3 seconds when managing up to 100 internship applications.
-* A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the GUI.
-* The system shall launch within 3 seconds on standard hardware.
+* A user with above average typing speed, typically around 50–60 words per minute (WPM), for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks (e.g. adding, deleting, finding) faster using commands than using the mouse.
+* The system shall launch within 3 seconds on _standard hardware_.
 
 #### Reliability & Availability
-* Should work on any _mainstream OS_ as long as it has Java '17' or above installed
+* Should work on any _mainstream OS_ as long as it has Java '17' or above installed.
 * The app shall operate offline with full feature availability.
-* Data consistency shall be maintained at all times across features (name, phone, email, address, tags, remarks, status).
 
 #### Security & Privacy
 * User data must only be stored locally and accessible through the host OS file system — no external server transmission.
@@ -703,10 +760,17 @@ Use case ends.
 
 ### Glossary
 
+* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship. Each application has an associated Status that tracks its current stage.
+* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage.
+* **Command Prefix**: Prefixes like n/, s/, t/ used to specify field types in CLI commands.
+* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at. Company names must be unique (case-insensitive).
+* **GUI**: Graphical User Interface - The visual interface components built with JavaFX, as opposed to the command-line interface.
 * **Mainstream OS**: Windows, Linux, MacOS
-* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage
-* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at; a company can have any number of applications
-* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship
+* **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM.
+* **Status**: Application stage enum defined in `Status.Stage` (TO_APPLY, APPLIED, OA, TECH_INTERVIEW, HR_INTERVIEW, IN_PROCESS, OFFERED, ACCEPTED, REJECTED).
+* **Tag**: Alphanumeric labels with single hyphens to separate words (max 30 chars) used for categorizing companies, stored in lowercase.
+* **OA**: Online Assessment - A digital evaluation typically containing coding challenges, technical questions, or aptitude tests that companies use to screen candidates early in the application process.
+
 
 --------------------------------------------------------------------------------------------------------------------
 
