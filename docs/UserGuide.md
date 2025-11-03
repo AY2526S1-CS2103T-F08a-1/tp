@@ -369,8 +369,9 @@ Adds a company to Cerebro.
 add n/Google Inc  → Creates entry with just the name and other fields empty
 add n/Meta e/careers@meta.com s/applied  → Adds name, email, and status only
 add n/ByteDance p/12345678 e/recruit@bytedance.com​ 
-    a/Singapore Science Park r/Fast-growing​ 
-    s/tech-interview t/backend t/remote  → Adds complete entry with all details
+    a/Singapore Science Park
+    r/Fast-growing​ s/tech-interview t/backend
+    t/remote  → Adds complete entry with all details
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -399,7 +400,8 @@ Updates one or more companies in Cerebro.
 
 **Examples:**
 ```
-edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ 
+edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1
+                                          to 91234567​
                                           and email to careers@google.com
 ```
 
@@ -429,11 +431,13 @@ edit 3 t/ r/  → Both tags and remark cleared
 All fields are **REPLACED**, not added to existing values.
 
 **Examples:**
+```
 edit 1 t/tech → Removes all existing tags, sets only "tech"
 
 edit 1 r/New remark → Completely replaces existing remark
 
 edit 1 t/ → Clears all tags
+```
 
 </div>
 
