@@ -4,37 +4,52 @@
 !include <office/Users/user>
 !include style.puml
 
+Class "<$user>" as User MODEL_COLOR_T2
+Class "<$documents>" as File UI_COLOR_T1
+
 Package " "<<Rectangle>>{
     Class UI UI_COLOR
     Class Logic LOGIC_COLOR
     Class Storage STORAGE_COLOR
     Class Model MODEL_COLOR
     Class Main #grey
+
     Class Commons LOGIC_COLOR_T2
+
+    UI -down[hidden]-> Commons
+    Logic -down[hidden]-> Commons
 }
 
-Class "<$user>" as User MODEL_COLOR_T2
-Class "<$documents>" as File UI_COLOR_T1
+note left of User
+Inputs text commands
+via CLI interface
+end note
 
 note top of Main
 Application entry point
 end note
 
-note top of Commons
+note bottom of Commons
 Shared utility classes
 end note
 
-UI -[#green]> Logic
-UI -right[#green]-> Model
-Logic -[#blue]-> Storage
-Logic -down[#blue]-> Model
-Main -[#grey]-> UI
-Main -[#grey]-> Logic
-Main -[#grey]-> Storage
-Main -up[#grey]-> Model
+note right of File
+cerebro.json
+Stores data in JSON format
+end note
+
+UI -[#green]> Logic : Invokes
+UI -right[#green]-> Model : Reads
+Logic -[#blue]-> Storage : Persists
+Logic -down[#blue]-> Model : Updates
+Main -[#grey]-> UI : Initializes
+Main -[#grey]-> Logic : Initializes
+Main -[#grey]-> Storage : Initializes
+Main -up[#grey]-> Model : Initializes
 Main -down[hidden]-> Commons
 
-Storage -up[STORAGE_COLOR].> Model
-Storage .right[STORAGE_COLOR].>File
-User ..> UI
+Storage -up[STORAGE_COLOR].> Model : Serializes
+Storage .right[STORAGE_COLOR].>File : Writes
+User ..> UI : Inputs
+UI ..> User : Displays
 @enduml
