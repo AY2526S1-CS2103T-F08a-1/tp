@@ -230,9 +230,10 @@ list
 
 Complete command reference for all Cerebro features.
 
-> ⚠️ **Caution:**  
-> Make sure you familiarise yourself with the [Command Format](#command-format) used in this User Guide first!
-{: .alert .alert-warning}
+<div markdown="span" class="alert alert-warning"> 
+⚠️ **Caution:** 
+Make sure you familiarise yourself with the [Command Format](#command-format) used in this User Guide first!
+</div>
 
 ### Viewing help : `help`
 
