@@ -9,8 +9,9 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* I, Bridget, used Claude Code to fix Checkstyle errors and improve code formatting across the codebase. All suggestions were reviewed before being applied.
-* I, Jeffrey, used Claude to prettify the Release Notes into a markdown format.
+* This project is based on the AddressBook-Level3 (AB3) project created by the [SE-EDU initiative](https://se-education.org).
+* This project uses the [Apache Commons Validator](https://commons.apache.org/proper/commons-validator/) library for email validation, licensed under the Apache License 2.0.
+* Claude AI was used to format the Release Notes into Markdown.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -23,7 +24,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 ## **Design**
 ### Architecture
 
-<img src="images/ArchitectureDiagram.png" width="280" />
+<img src="images/ArchitectureDiagram.png" width="560" />
 
 The ***Architecture Diagram*** given above explains the high-level design of the App.
 
