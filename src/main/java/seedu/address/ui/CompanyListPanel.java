@@ -19,8 +19,7 @@ import seedu.address.model.company.Company;
 public class CompanyListPanel extends UiPart<Region> {
     private static final String FXML = "CompanyListPanel.fxml";
 
-    @FXML
-    ResultDisplay resultDisplay;
+    private ResultDisplay resultDisplay;
 
     @FXML
     private ListView<Object> companyListView; // <— changed from <Company> to <Object>
