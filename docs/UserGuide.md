@@ -283,7 +283,8 @@ filter s/applied  → Shows all companies with "applied" status
 filter t/tech  → Shows companies with tags containing "tech"
                  (e.g. "fintech", "tech-startup")
 filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ 
-                       (matches "fintech", "tech-startup", "remote-work", "premium")
+                       (matches "fintech", "tech-startup",
+                        "remote-work", "premium")
 ```
 
 **Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
@@ -549,7 +550,8 @@ Cerebro data is saved in the hard disk automatically after any command that chan
 
 ### Editing the data file
 
-Cerebro data is saved automatically as a JSON file `[JAR file location]/data/Cerebro.json`. Advanced users are welcome to update data directly by editing that data file.
+Cerebro data is saved automatically as a JSON file 
+`[JAR file location]/data/Cerebro.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">⚠️ **Caution:**
 If your changes to the data file make its format invalid, **Cerebro will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.**
@@ -558,7 +560,7 @@ If your changes to the data file make its format invalid, **Cerebro will discard
 
 ### Upcoming Features
 - Undo changes: Quickly revert mistaken edits or deletions
-- Reminders: Stay on top of application deadlines
+- Reminders: Stay on top of application deadlines with a new deadline field for companies (`d/DEADLINE`) and a `remind` command to view upcoming deadlines and overdue applications
 
 ---
 
