@@ -148,11 +148,21 @@ public class EditCommand extends Command {
         // Validate that editing won't create duplicate companies
         validateNoDuplicateCompanies(model, lastShownList);
 
-        // All validations passed - perform batch edit
+        // Collect all companies to edit BEFORE making any modifications
+        // This prevents issues where modifying a company (e.g., changing status) causes
+        // the filtered list to update mid-loop, shifting indices and skipping companies
+        List<Company> companiesToEdit = new ArrayList<>();
+        List<Company> editedCompanies = new ArrayList<>();
         for (Index index : indices) {
             Company companyToEdit = lastShownList.get(index.getZeroBased());
             Company editedCompany = createEditedCompany(companyToEdit, editCompanyDescriptor);
-            model.setCompany(companyToEdit, editedCompany);
+            companiesToEdit.add(companyToEdit);
+            editedCompanies.add(editedCompany);
+        }
+
+        // Perform all edits after collecting all companies
+        for (int i = 0; i < companiesToEdit.size(); i++) {
+            model.setCompany(companiesToEdit.get(i), editedCompanies.get(i));
         }
 
         model.updateFilteredCompanyList(PREDICATE_SHOW_ALL_COMPANIES);
