@@ -285,7 +285,7 @@ Step 2. The user executes `delete 5` command to delete the 5th company in the ad
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new company. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/Meta …​` to add a new company. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
@@ -324,7 +324,7 @@ Step 5. The user then decides to execute the command `list`. Commands that do no
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/Meta …​` command. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -827,13 +827,6 @@ testers are expected to do more *exploratory* testing.
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
       Expected: The deleted companies are deleted from data/Cerebro.json upon execution of command. The remaining companies are preserved with their data intact.
 
-1. Data file permissions and access
-
-   1. **Test case: Read-only data file**<br>
-      Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
-      Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
-      Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Planned Enhancements**
@@ -841,4 +834,5 @@ testers are expected to do more *exploratory* testing.
 Team size: 5
 
 1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
-      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
+
+2. **Allow filtering within find results or finding within filter results.** Currently, users cannot apply a `filter` command after executing a `find` command, or vice versa. For example, running `find test` followed by `filter s/applied` does not filter within the found companies that match "test" - instead, it filters across all companies in the address book, ignoring the previous `find` results. This limitation prevents users from narrowing down their search progressively. Through this enhancement, users would be able to chain `find` and `filter` commands to progressively narrow their search results, allowing for more flexible and powerful querying of their internship applications.
