@@ -235,7 +235,7 @@ Complete command reference for all Cerebro features.
 Make sure you familiarise yourself with the [Command Format](#command-format) used in this User Guide first!
 </div>
 
-### Viewing help : `help`
+### Viewing help: `help`
 
 Shows a message explaining how to access the help page.
 
@@ -249,7 +249,7 @@ You can close the help window with the `ESC` key, `Ctrl/Cmd` + `W` or `alt` + `f
 
 ---
 
-### Listing all companies : `list`
+### Listing all companies: `list`
 
 Shows a list of all companies in Cerebro.
 
@@ -303,7 +303,7 @@ filter s/applied t/rem t/good  → Shows companies with "applied" status AND​
 * **OR logic for multiple tags** - Any matching tag qualifies
 * **AND logic between status and tags** - Must match status AND at least one tag
 * **Only 1 status to filter by is allowed** - `filter s/applied s/to-apply` is not allowed
-* **Input validation logic follows the same field requirements** - `remote-` although is a substring of `remote-work`, won't be accepted due to the trailing `-`
+* **Input validation logic follows the same field requirements** - although `remote-` is a substring of `remote-work`, it won't be accepted due to the trailing `-`
 </div>
 
 **Result for `filter s/applied t/cl t/og`:**
@@ -389,7 +389,7 @@ Start with just the company name for quick entry when you're researching compani
 
 ---
 
-### Editing a company : `edit`
+### Editing a company: `edit`
 
 Updates one or more companies in Cerebro.
 
@@ -469,7 +469,7 @@ Use batch editing after applying: `edit 1-10 s/applied` updates all at once!
 
 ---
 
-### Deleting a company : `delete`
+### Deleting a company: `delete`
 
 Removes one or more companies from Cerebro permanently.
 
@@ -522,7 +522,7 @@ This action cannot be undone! Company data will be permanently deleted.
 
 ---
 
-### Clearing all entries : `clear`
+### Clearing all entries: `clear`
 
 Clears all companies from Cerebro.
 
@@ -536,7 +536,7 @@ This action cannot be undone! All company data will be permanently deleted.
 
 ---
 
-### Exiting the program : `exit`
+### Exiting the program: `exit`
 
 Exits the program.
 
@@ -550,8 +550,7 @@ Cerebro data is saved in the hard disk automatically after any command that chan
 
 ### Editing the data file
 
-Cerebro data is saved automatically as a JSON file 
-`[JAR file location]/data/Cerebro.json`. Advanced users are welcome to update data directly by editing that data file.
+Cerebro data is saved automatically as a JSON file `[JAR file location]/data/Cerebro.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">⚠️ **Caution:**
 If your changes to the data file make its format invalid, **Cerebro will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.**
@@ -574,7 +573,7 @@ Common questions and troubleshooting for using Cerebro.
 
 **Q: How do I track multiple roles at the same company?**
 
-**A**: Use tags to differentiate positions (`add t/Google SWE` vs `add t/Google PM`) or/and add respective role details in remarks.
+**A**: Use tags to differentiate positions (`edit t/Google SWE` vs `edit t/Google PM`) or/and add respective role details in remarks.
 
 **Q: Can I undo a delete or clear operation?**
 
@@ -588,7 +587,7 @@ Common questions and troubleshooting for using Cerebro.
 
 **Q: How do I transfer my data to another computer?**
 
-**A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
+**A**: Install Cerebro on the new computer, then overwrite the empty data file with your<br>existing `[JAR location]/data/Cerebro.json`.
 
 <a id="batch-limit-faq"></a>
 **Q: Why is there a limit of 10,000 companies for batch edit and delete operations?**
