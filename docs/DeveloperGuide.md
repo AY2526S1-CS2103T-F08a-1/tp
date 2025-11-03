@@ -633,13 +633,6 @@ testers are expected to do more *exploratory* testing.
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
       Expected: The deleted companies are deleted from data/Cerebro.json upon execution of command. The remaining companies are preserved with their data intact.
 
-1. Data file permissions and access
-
-   1. **Test case: Read-only data file**<br>
-      Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
-      Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
-      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Planned Enhancements**
