@@ -162,7 +162,7 @@ We use the [Apache Commons Validator](https://commons.apache.org/proper/commons-
       <td><strong>Tag</strong></td>
       <td>Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: <code>BACKEND</code> is treated the same as <code>backend</code>.</td>
       <td><code>remote-work</code>, <code>BACKEND</code>, <code>backend</code></td>
-      <td><code>remote work</code>, <code>tech--role</code>, <code>this-is-way-too-long-for-a-tag</code></td>
+      <td><code>remote work</code>, <code>tech--role</code>, <code>this-is-way-too-long-to-act-as-a-tag</code></td>
     </tr>
     <tr>
       <td><strong>Remark</strong></td>
@@ -186,7 +186,8 @@ add n/Meta
 
 **Add Complete Company Details**
 ```
-edit 1 p/98765432 e/careers@meta.com a/1 Hacker Way, Menlo Park s/applied t/tech t/remote
+edit 1 p/98765432 e/careers@meta.com 
+       a/1 Hacker Way, Menlo Park s/applied t/tech t/remote
 ```
 
 **Search for Companies**
@@ -220,9 +221,9 @@ list
 
 Complete command reference for all Cerebro features.
 
-<div markdown="span" class="alert alert-warning">⚠️ **Caution:**
-Make sure you familiarise yourself with the [command format](#cli-tutorial) used in this User Guide first!
-</div>
+> ⚠️ **Caution:**  
+> Make sure you familiarise yourself with the [Command Format](#command-format) used in this User Guide first!
+{: .alert .alert-warning}
 
 ### Viewing help : `help`
 
@@ -243,7 +244,7 @@ You can close the help window with the `ESC` key, `Ctrl/Cmd` + `W` or `alt` + `f
 Shows a list of all companies in Cerebro.
 
 * Shows all your tracked companies along with their saved details
-* Resets any active filters from previous `find` commands
+* Resets any active filters from previous `find` and `filter` commands
 * Shows companies with their current index numbers
 
 [↑ Back to Top](#table-of-contents)
@@ -270,7 +271,8 @@ filter s/applied  → Shows all companies with "applied" status
 **Examples:**
 ```
 filter t/tech  → Shows companies with tags containing "tech" (e.g. "fintech", "tech-startup")
-filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ (matches "fintech", "tech-startup", "remote-work", "premium")
+filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ 
+                       (matches "fintech", "tech-startup", "remote-work", "premium")
 ```
 
 **Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
@@ -353,7 +355,9 @@ Adds a company to Cerebro.
 ```
 add n/Google Inc  → Creates entry with just the name and other fields empty
 add n/Meta e/careers@meta.com s/applied  → Adds name, email, and status only
-add n/ByteDance p/12345678 e/recruit@bytedance.com​ a/Singapore Science Park r/Fast-growing​ s/tech-interview t/backend t/remote  → Adds complete entry with all details
+add n/ByteDance p/12345678 e/recruit@bytedance.com​ 
+    a/Singapore Science Park r/Fast-growing​ 
+    s/tech-interview t/backend t/remote  → Adds complete entry with all details
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -382,10 +386,11 @@ Updates one or more companies in Cerebro.
 
 **Examples:**
 ```
-edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ and email to careers@google.com
+edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ 
+                                          and email to careers@google.com
 ```
 
-**Batch Edit:**: Edit multiple companies with the same changes
+**Batch Edit:** Edit multiple companies with the same changes
 
 **Format:** `edit <INDEX|START-END> [INDEX]… [START-END]… [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​`
 
@@ -407,21 +412,23 @@ edit 3 r/  → Remark cleared
 edit 3 t/ r/  → Both tags and remark cleared
 ```
 
-<div markdown="span" class="alert alert-danger">:exclamation: **Important - Field Replacement:**
-All fields are **REPLACED**, not added to existing values:
+<div markdown="block" class="alert alert-danger">:exclamation: **Important - Field Replacement:**
+All fields are **REPLACED**, not added to existing values.
 
 **Examples:**
-```
-edit 1 t/tech  → Removes all existing tags, sets only "tech"
-edit 1 r/New remark  → Completely replaces existing remark
-edit 1 t/  → Clears all tags
-```
+edit 1 t/tech → Removes all existing tags, sets only "tech"
+
+edit 1 r/New remark → Completely replaces existing remark
+
+edit 1 t/ → Clears all tags
+
 </div>
 
 
 <div markdown="block" class="alert alert-danger">
 **:exclamation: Important - Index Reference:**<br>
-Indices refer to the numbers shown in the **current displayed list**. After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
+Indices refer to the numbers shown in the **current displayed list**.<br>
+After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
 </div>
 
 **Examples:**
@@ -538,7 +545,6 @@ If your changes to the data file make its format invalid, **Cerebro will discard
 </div>
 
 ### Upcoming Features
-- Archiving & backing up data files
 - Undo changes: Quickly revert mistaken edits or deletions
 - Reminders: Stay on top of application deadlines
 
@@ -579,7 +585,7 @@ In the rare case whereby you need to perform operations on more than 10,000 comp
 **A**: Yes, advanced users can edit `Cerebro.json` directly. **Always backup first** - invalid format will cause Cerebro to discard all data.
 
 **Q: How do I regenerate the dummy data?**
-**A**: Delete the `/data` folder, then run the app again. **Make sure to backup any important information first!**
+**A**: Delete the `Cerebro.json` file in the `/data` folder, then run the app again. **Make sure to backup any important information first!**
 
 --------------------------------------------------------------------------------------------------------------------
 
