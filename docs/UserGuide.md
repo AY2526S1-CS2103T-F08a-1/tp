@@ -52,56 +52,65 @@ After running `java -jar cerebro.jar`, you should see a window similar to below,
 
 <img src="images/Ui.png" alt="Ui" width="450"/>
 
-### Command Format
+---
 
-Command format and important information about using Cerebro's command line interface.
+### CLI Details
 
-<div markdown="span" class="alert alert-primary">:bulb: **CLI Power User Tip:**
+Important information about using Cerebro's command line interface.
+
+**Command History:** 
+
 Cerebro is designed for speed and efficiency, just like your favorite terminal! Press `↑` and `↓` to navigate through your command history - perfect for quickly repeating or tweaking recent operations. Most operations in Cerebro are designed to be easy to type and work with partial matches and case-insensitivity.
-</div>
 
-<div markdown="block" class="alert alert-info">
+**Escaping prefixes with backslash (`\`):** 
 
-**:information_source: Notes about the command format:**<br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  * e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/Google Inc`.
-* For items in angle brackets, and separated by a pipe `|`, exactly one of the items are required.<br>
-  * e.g `<INDEX|START-END>` can be used as `1` or as `1-2`.
-  * e.g `<s/STATUS|t/TAG>` can be used as `s/applied` or as `t/good-pay`.
-* Items in square brackets are optional.<br>
-  * e.g `n/NAME [t/TAG]` can be used as `n/Google Inc t/tech` or as `n/Google Inc`.
-* Items with `…` after them can be used multiple times including zero times.<br>
-  * e.g. `[t/TAG]…` can be used as ` ` (i.e. 0 times), `t/tech`, `t/tech t/remote` etc.
-* Parameters can be in any order.<br>
-  * e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  * e.g. if the command specifies `help 123`, it will be interpreted as `help`.
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
 
-</div>
+- `add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+
+Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
+
+- `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
 </div>
 
-<div markdown="block" class="alert alert-primary">
-:bulb: **Power Tip: Escaping prefixes with backslash (`\`)**
+---
 
-You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
+### Command Format
 
-**Example:**
+**UPPER_CASE**
 
-`add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+* e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/Google Inc`.
 
-Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
+**<ANGLED BRACKETS \| AND PIPE>**
 
-`add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
-</div>
+For items in angle brackets, and separated by a pipe `|`, exactly one of the items are required.<br>
+* e.g `<INDEX|START-END>` can be used as `1` or as `1-2`.
+* e.g `<s/STATUS|t/TAG>` can be used as `s/applied` or as `t/good-pay`.
 
-<div markdown="span" class="alert alert-primary">:bulb: **Power Tips:**
-**Batch edit/delete:** `delete 1,2,5-7` (indices 1, 2, 5, 6, 7)<br>
-**Flexible input:** Parameters work in any order
+**[SQUARE_BRACKETS]**
+
+Items in square brackets are optional.<br>
+* e.g `n/NAME [t/TAG]` can be used as `n/Google Inc t/tech` or as `n/Google Inc`.
+
+**ELLIPSES…**
+
+Items with `…` after them can be used multiple times including zero times.<br>
+* e.g. `[t/TAG]…` can be used as ` ` (i.e. 0 times), `t/tech`, `t/tech t/remote` etc.
+
+**PARAMETERS**
+
+Parameters can be in any order.<br>
+* e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+
+<div markdown="span" class="alert alert-warning">⚠️ **Caution:**
+If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
 ---
@@ -179,37 +188,38 @@ We use the [Apache Commons Validator](https://commons.apache.org/proper/commons-
 
 Let's try some basic operations to get you started with managing your internship applications:
 
-**Quick Company Entry**
+1. **Quick Company Entry**
 ```
 add n/Meta
 ```
 
-**Add Complete Company Details**
+2. **Add Complete Company Details**
 ```
-edit 1 p/98765432 e/careers@meta.com a/1 Hacker Way, Menlo Park s/applied t/tech t/remote
+edit 1 p/98765432 e/careers@meta.com a/1 Hacker Way, Menlo Park
+  s/applied t/tech t/remote
 ```
 
-**Search for Companies**
+3. **Search for Companies**
 ```
 find Meta
 ```
 
-**Filter by Application Status**
+4. **Filter by Application Status**
 ```
 filter s/applied
 ```
 
-**Update Application Progress**
+5. **Update Application Progress**
 ```
 edit 1 s/tech-interview r/Scheduled for next Tuesday
 ```
 
-**View Your Application Overview**
+6. **View Your Application Overview**
 ```
 metrics
 ```
 
-**Reset to See Everything**
+7. **Reset to See Everything**
 ```
 list
 ```
@@ -549,12 +559,15 @@ If your changes to the data file make its format invalid, **Cerebro will discard
 Common questions and troubleshooting for using Cerebro.
 
 **Q: What happens if I add a company with the same name?**
+
 **A**: Company names must be unique (case-insensitive). Cerebro rejects duplicates and shows an error message.
 
 **Q: How do I track multiple roles at the same company?**
+
 **A**: Use tags to differentiate positions (`add t/Google SWE` vs `add t/Google PM`) or/and add respective role details in remarks.
 
 **Q: Can I undo a delete or clear operation?**
+
 **A**: No, deletions are permanent and cannot be undone within the app. To recover deleted data:
 1. Close Cerebro
 2. Navigate to `[JAR location]/data/` folder
@@ -564,6 +577,7 @@ Common questions and troubleshooting for using Cerebro.
 **Prevention tip:** Regularly backup your `Cerebro.json` file before making major changes.
 
 **Q: How do I transfer my data to another computer?**
+
 **A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
 
 <a id="batch-limit-faq"></a>
@@ -576,9 +590,11 @@ Common questions and troubleshooting for using Cerebro.
 In the rare case whereby you need to perform operations on more than 10,000 companies, consider breaking them into smaller batches.
 
 **Q: Can I edit the JSON file directly?**
+
 **A**: Yes, advanced users can edit `Cerebro.json` directly. **Always backup first** - invalid format will cause Cerebro to discard all data.
 
 **Q: How do I regenerate the dummy data?**
+
 **A**: Delete the `/data` folder, then run the app again. **Make sure to backup any important information first!**
 
 --------------------------------------------------------------------------------------------------------------------
