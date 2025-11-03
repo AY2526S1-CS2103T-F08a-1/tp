@@ -32,6 +32,13 @@ public class IndexParser {
     public static final String MESSAGE_INVALID_RANGE_ORDER =
             "Invalid range: start index (%1$d) cannot be greater than end index (%2$d).";
 
+    /**
+     * Maximum allowed size for an expanded range (inclusive). Prevents accidental OOM.
+     */
+    public static final int MAX_RANGE_SIZE = 10000;
+    public static final String MESSAGE_RANGE_TOO_LARGE = "Range too large: %1$d-%2$d (size %3$d). "
+            + "Please specify a smaller range or use fewer indices (max %4$d).";
+
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading
@@ -148,6 +155,14 @@ public class IndexParser {
         if (end < start) {
             throw new ParseIndicesException(String.format(IndexParser.MESSAGE_INVALID_RANGE_ORDER, start + 1, end + 1));
         }
+
+        // prevent expanding extremely large ranges which can cause OutOfMemoryError
+        long size = (long) end - (long) start + 1L;
+        if (size > MAX_RANGE_SIZE) {
+            throw new ParseIndicesException(String.format(MESSAGE_RANGE_TOO_LARGE,
+                    start + 1, end + 1, size, MAX_RANGE_SIZE));
+        }
+
         return new Range(start, end);
     }
 
