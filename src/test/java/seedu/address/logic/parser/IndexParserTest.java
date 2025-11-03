@@ -1,9 +1,11 @@
 package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static seedu.address.logic.parser.IndexParser.MAX_RANGE_SIZE;
 import static seedu.address.logic.parser.IndexParser.MESSAGE_DUPLICATE_INDICES;
 import static seedu.address.logic.parser.IndexParser.MESSAGE_INVALID_INDICES;
 import static seedu.address.logic.parser.IndexParser.MESSAGE_INVALID_RANGE_ORDER;
+import static seedu.address.logic.parser.IndexParser.MESSAGE_RANGE_TOO_LARGE;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.List;
@@ -235,6 +237,105 @@ public class IndexParserTest {
         // Mixed valid small indices and overflowed large index
         assertThrows(ParseIndicesException.class, MESSAGE_INVALID_INDICES, () ->
                 IndexParser.parseIndices("1,2,999999999999"));
+    }
+
+    // ================================================================
+    // MAX_RANGE_SIZE VALIDATION TESTS
+    // ================================================================
+
+    @Test
+    public void parseIndices_rangeExactlyAtMaxSize_success() throws Exception {
+        // Range of exactly MAX_RANGE_SIZE should be accepted (1-10000)
+        List<Index> indices = IndexParser.parseIndices("1-" + MAX_RANGE_SIZE);
+        assertEquals(MAX_RANGE_SIZE, indices.size());
+        assertEquals(Index.fromOneBased(1), indices.get(0));
+        assertEquals(Index.fromOneBased(MAX_RANGE_SIZE), indices.get(MAX_RANGE_SIZE - 1));
+    }
+
+    @Test
+    public void parseIndices_rangeExceedsMaxSizeByOne_throwsParseIndicesException() {
+        // Range of MAX_RANGE_SIZE + 1 should be rejected (1-10001)
+        int endIndex = MAX_RANGE_SIZE + 1;
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, 1, endIndex, endIndex, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices("1-" + endIndex));
+    }
+
+    @Test
+    public void parseIndices_veryLargeRange_throwsParseIndicesException() {
+        // Very large range like 1-1000000 should be rejected
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, 1, 1000000, 1000000, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices("1-1000000"));
+    }
+
+    @Test
+    public void parseIndices_largeRangeNotStartingAtOne_throwsParseIndicesException() {
+        // Large range not starting at 1 (e.g., 100-20100) should be rejected
+        int start = 100;
+        int end = start + MAX_RANGE_SIZE; // size = 10001
+        long size = (long) end - start + 1;
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, start, end, size, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices(start + "-" + end));
+    }
+
+    @Test
+    public void parseIndices_multipleSmallRangesWithinLimit_success() throws Exception {
+        // Multiple small ranges that total more than MAX_RANGE_SIZE should be accepted
+        // Each individual range is small (1-100, 200-300, 400-500)
+        List<Index> indices = IndexParser.parseIndices("1-100,200-300,400-500");
+        assertEquals(302, indices.size()); // 100 + 101 + 101 = 302
+    }
+
+    @Test
+    public void parseIndices_mixedWithOneLargeRange_throwsParseIndicesException() {
+        // Mixed input where one range exceeds MAX_RANGE_SIZE
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, 1, 20000, 20000, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices("1,2,3,1-20000"));
+    }
+
+    @Test
+    public void parseIndices_rangeWithLargeNumbers_throwsParseIndicesException() {
+        // Range with large numbers that exceeds MAX_RANGE_SIZE (1000000-1020000)
+        int start = 1000000;
+        int end = start + MAX_RANGE_SIZE; // size = 10001
+        long size = (long) end - start + 1;
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, start, end, size, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices(start + "-" + end));
+    }
+
+    @Test
+    public void parseIndices_edgeCaseRangeSizeCalculation_throwsParseIndicesException() {
+        // Test edge case where range size calculation is critical (5-10005)
+        // Size = 10005 - 5 + 1 = 10001 (exceeds MAX_RANGE_SIZE)
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, 5, 10005, 10001, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices("5-10005"));
+    }
+
+    @Test
+    public void parseIndices_rangeExactlyMaxSizeNotStartingAtOne_success() throws Exception {
+        // Range of exactly MAX_RANGE_SIZE not starting at 1 (e.g., 100-10099) should succeed
+        int start = 100;
+        int end = start + MAX_RANGE_SIZE - 1; // size = 10000
+        List<Index> indices = IndexParser.parseIndices(start + "-" + end);
+        assertEquals(MAX_RANGE_SIZE, indices.size());
+        assertEquals(Index.fromOneBased(start), indices.get(0));
+        assertEquals(Index.fromOneBased(end), indices.get(MAX_RANGE_SIZE - 1));
+    }
+
+    @Test
+    public void parseIndices_extremelyLargeRangeWithIntegerMaxValue_throwsParseIndicesException() {
+        // Test with very large numbers close to Integer.MAX_VALUE
+        int start = Integer.MAX_VALUE - 20000;
+        int end = Integer.MAX_VALUE - 1;
+        long size = (long) end - start + 1; // Should be 20000
+        assertThrows(ParseIndicesException.class,
+                String.format(MESSAGE_RANGE_TOO_LARGE, start, end, size, MAX_RANGE_SIZE), () ->
+                        IndexParser.parseIndices(start + "-" + end));
     }
 }
 
