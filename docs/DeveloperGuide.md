@@ -418,43 +418,38 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `Cerebro` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `Cerebro` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: UC01 - Delete a company**
+**Use case: UC01 - Delete company/companies**
+
+**Preconditions**: a company list is currently displayed and the user can see the target indices
 
 **MSS**
 
-1.  User requests to list companies
-2.  Cerebro shows a list of companies
-3.  User requests to delete a specific company in the list
-4.  Cerebro deletes the company
+1.  User requests to delete one or more company/companies in the list by index/indices
+2.  Cerebro asks the user to confirm the deletion
+3.  User Confirms
+4.  Cerebro deletes the specified company/companies
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. The given index/indices are invalid (non-numeric, zero, negative, or out of range).
 
-  * 2a1. Cerebro shows a message indicating no companies to delete.
+  * 1a1. Cerebro shows an error message indicating invalid index/indices.
 
-    Use case ends.
+    Use case resumes at step 1.
 
-* 3a. The given index is invalid (non-numeric, zero, negative, or out of range).
+* 1b. The index/indices is missing.
 
-  * 3a1. Cerebro shows an error message.
+  * 1b1. Cerebro shows the correct command formatting.
 
-    Use case resumes at step 2.
+    Use case resumes at step 1.
 
-* 3b. The index is missing.
+* 2a. User cancels the confirmation.
 
-  * 3b1. Cerebro shows the correct command format.
-
-    Use case resumes at step 2.
-
-* 3c. Multiple indices are provided.
-
-  * 3c1. Cerebro carries out deletion of multiple companies.
-  * 3c2. Cerebro shows success message for the deletion of multiple companies.
+  * 2a1. Cerebro reports that deletion was cancelled.
 
     Use case ends.
 
@@ -464,24 +459,217 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to view all companies
-2. Cerebro displays a numbered list of all companies with their application status and key details
-
+1. User requests to list all companies
+2. Cerebro displays a list of all companies.
+   
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. Extra parameters are provided with the list command.
 
-  * 2a1. Cerebro shows a message indicating no companies have been added yet.
-  * 2a2. Cerebro suggests using the add command to get started.
+  * 1a1. Cerebro ignores the extra parameter
 
     Use case ends.
 
-* 1a. Extra parameters are provided with the list command.
+---
 
-  * 1a1. Cerebro shows an error message with the correct command format.
+**Use case: UC03 - Add a company**
 
+**MSS**
+
+1. User requests to add a company with specified field(s).
+2. Cerebro validates the input and creates the company entry.
+3. Cerebro records the new company.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Missing name/invalid field input(s) (e.g., malformed phone numbers, tag too long).
+
+    * 1a1. Cerebro reports the missing name/invalid field(s).
+
+    Use case ends.
+  
+* 1b. Duplicate company name detected
+
+    * 1b1. Cerebro reports a duplicate-company error.
+  
+    Use case resumes at step 1.
+---
+
+**Use case: UC04 - Clear all companies**
+
+**MSS**
+
+1. User requests to clear all companies.
+2. Cerebro ask to confirm the action.
+3. User confirms.
+4. Cerebro removes all companies.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+    * 1a1. Cerebro ignores the extra parameters.
+
+  Use case resumes at step 2.
+
+* 2a. User cancels the confirmation.
+
+    * 2a1. Cerebro reports that clearing was cancelled.
+
+  Use case ends.
+
+---
+
+**Use case: UC05 - Edit company/companies details**
+
+**Preconditions**: a company list is currently displayed and the user can see the target indices
+
+**MSS**
+
+1.  User requests to edit one or more companies by index/indices, supplying new field values (e.g., status, remark, tags).
+2.  Cerebro validates the input and applies the updates.
+3.  Cerebro records the update(s).
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. No editable field is provided.
+
+    * 1a1. Cerebro shows an error message the correct command format.
+
+  Use case resumes at step 1.
+
+* 1b. Some field values are invalid (e.g., unsupported status value, malformed phone number).
+
+    * 1b1. Cerebro shows an error indicating the invalid field(s).
+
+  Use case resumes at step 1.
+
+* 1c. Any provided index/indices is invalid.
+
+    * 1c1. Cerebro shows an error indicating invalid index/indices.
+  
+  Use case resumes at step 1.
+
+* 1d. For a (single-company) edit, the new NAME duplicates an existing company’s name.
+
+    * 1d1. Cerebro rejects the command and shows a duplicate-company error.
+
+    Use case resumes at step 1.
+
+* 1e. The request attempts a batch edit (multiple indices) that includes the NAME field.
+
+    * 1e1. Cerebro rejects the command and shows an error stating that batch editing the NAME field is not allowed.
+
+    Use case resumes at step 1.
+
+---
+
+**Use case: UC06 - Filter companies by status**
+
+**MSS**
+
+1.	User requests to filter companies, supplying one or more criteria (status and/or tag).
+2.	Cerebro displays the list of companies that match the criteria.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. A required value is missing or malformed (e.g., invalid STATUS, empty t/).
+
+    * 1a1. Cerebro shows the correct command format and the set of valid values for each criterion.
+
+  Use case resumes at step 1.
+
+---
+
+**Use case: UC07 - Find companies by keyword(s)**
+
+**MSS**
+
+1.	User requests to find companies by keyword(s).
+2.  Cerebro shows companies whose names match the keyword(s).
+
+Use case ends.
+
+**Extensions**
+
+* 1a. The keyword list is empty or blank.
+
+    * 1a1. Cerebro shows the correct command format.
+
+  Use case resumes at step 1.
+
+---
+
+**Use case: UC08 - View application metric**
+
+**MSS**
+
+1.	User requests to view application metrics.
+2.  Cerebro computes metrics (e.g., counts per application status) and makes the available to user.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+  * 1a1. Cerebro ignores the extra parameters.
+
+  Use case resumes at step 2.
+
+* 1b. There are no companies.
+
+    * 1b1. Cerebro displays a message indicating there are no companies to show
+
+  Use case ends.
+
+---
+
+**Use case: UC09 - Help**
+
+**MSS**
+
+1.	User requests help.
+2.	Cerebro provide usage information.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+    *  1a1. Cerebro ignores the extra parameters.
+  
+    Use case ends.
+
+---
+
+**Use case: UC10 - Exit application**
+
+**MSS**
+
+1.	User requests to exit the application (e.g., exit).
+2.  Cerebro performs shutdown tasks (flushes pending writes if any) and terminates.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied with exit.
+
+    *  1a1. Cerebro ignores the extra parameters and proceeds to exit.
+
+  Use case resumes at step 2.
 
 ### Non-Functional Requirements
 
