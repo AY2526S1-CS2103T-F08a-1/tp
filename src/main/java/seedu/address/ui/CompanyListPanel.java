@@ -1,9 +1,8 @@
 package seedu.address.ui;
 
-import static java.util.Objects.requireNonNull;
-
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -13,33 +12,35 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import seedu.address.model.company.Company;
 
-/**
- * Panel containing the list of companies.
- */
 public class CompanyListPanel extends UiPart<Region> {
+
     private static final String FXML = "CompanyListPanel.fxml";
 
-    private ResultDisplay resultDisplay;
+    private final ResultDisplay resultDisplay;
 
     @FXML
-    private ListView<Object> companyListView; // <— changed from <Company> to <Object>
+    private ListView<Object> companyListView;
 
     @FXML
     private VBox emptyPlaceholder;
 
-    /**
-     * Creates a {@code CompanyListPanel} with the given {@code ObservableList}.
-     */
     public CompanyListPanel(ObservableList<Company> companyList) {
         super(FXML);
 
         // Create ResultDisplay component
         resultDisplay = new ResultDisplay();
 
-        // Combine it with your company list
+        // Create combined list with header
         ObservableList<Object> mixedItems = FXCollections.observableArrayList();
-        mixedItems.add(resultDisplay.getRoot()); // insert at top
+        mixedItems.add(resultDisplay.getRoot());
         mixedItems.addAll(companyList);
+
+        // Keep mixedItems in sync with companyList
+        companyList.addListener((ListChangeListener<Company>) change -> {
+            // Preserve header at index 0
+            mixedItems.setAll(resultDisplay.getRoot());
+            mixedItems.addAll(companyList);
+        });
 
         companyListView.setItems(mixedItems);
 
@@ -50,24 +51,20 @@ public class CompanyListPanel extends UiPart<Region> {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
-                    setText(null);
                 } else if (item instanceof Node node) {
-                    // Render UI components directly (e.g., ResultDisplay)
                     setGraphic(node);
                 } else if (item instanceof Company company) {
-                    // Render company cards
                     setGraphic(new CompanyCard(company, getIndex()).getRoot());
                 }
             }
         });
 
-        // Show placeholder only when there are no companies (ignore ResultDisplay)
+        // Show placeholder only when there are no companies
         emptyPlaceholder.visibleProperty().bind(Bindings.isEmpty(companyList));
         emptyPlaceholder.managedProperty().bind(emptyPlaceholder.visibleProperty());
     }
 
     public void setFeedbackToUser(String feedbackToUser) {
-        requireNonNull(feedbackToUser);
         resultDisplay.setFeedbackToUser(feedbackToUser);
     }
 }
