@@ -9,7 +9,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_REMARK_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_STATUS_AIRBUS;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_STATUS_BOEING;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_GOOD_PAY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -54,17 +53,17 @@ public class EditCommandTest {
     /**
      * Performs a batch edit test with the given parameters.
      */
-    private void performBatchEditTest(List<Index> indices, EditCompanyDescriptor descriptor, 
+    private void performBatchEditTest(List<Index> indices, EditCompanyDescriptor descriptor,
                                     String expectedMessage, CompanyBuilder... companyBuilders) {
         EditCommand editCommand = new EditCommand(indices, descriptor);
         Model expectedModel = createExpectedModel();
-        
+
         for (int i = 0; i < indices.size(); i++) {
             Company originalCompany = model.getFilteredCompanyList().get(indices.get(i).getZeroBased());
             Company editedCompany = companyBuilders[i].build();
             expectedModel.setCompany(originalCompany, editedCompany);
         }
-        
+
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
@@ -239,10 +238,10 @@ public class EditCommandTest {
         List<Index> indices = Arrays.asList(INDEX_FIRST_COMPANY, INDEX_SECOND_COMPANY);
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder().withTags("applied").build();
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
-        
+
         Company firstCompany = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
         Company secondCompany = model.getFilteredCompanyList().get(INDEX_SECOND_COMPANY.getZeroBased());
-        
+
         performBatchEditTest(indices, descriptor, expectedMessage,
             new CompanyBuilder(firstCompany).withTags("applied"),
             new CompanyBuilder(secondCompany).withTags("applied"));
@@ -429,26 +428,26 @@ public class EditCommandTest {
     public void execute_editAfterFilter_usesFilteredListIndices() {
         // Use showCompanyAtIndex to create a simple filtered list with only the first company
         showCompanyAtIndex(model, INDEX_FIRST_COMPANY);
-        
+
         // Verify filtered list has exactly 1 company
         assertEquals(1, model.getFilteredCompanyList().size());
-        
+
         // Get the company that should be at index 1 in the filtered list
         Company companyInFilteredList = model.getFilteredCompanyList().get(INDEX_FIRST_COMPANY.getZeroBased());
-        
+
         // Test editing using index 1 - should edit the first (and only) company in filtered list
         EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder()
             .withRemark("Edited after filtering").build();
         EditCommand editCommand = new EditCommand(List.of(INDEX_FIRST_COMPANY), descriptor);
-        
+
         String expectedMessage = EditCommand.MESSAGE_EDIT_SUCCESS_SINGLE;
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        
+
         // Create the expected edited company
         Company editedCompany = new CompanyBuilder(companyInFilteredList)
             .withRemark("Edited after filtering").build();
         expectedModel.setCompany(companyInFilteredList, editedCompany);
-        
+
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
@@ -457,36 +456,36 @@ public class EditCommandTest {
         // Apply a filter to show companies with "technology" tag (TechVision and Digital Innovations have this)
         FilterCommand filterCommand = new FilterCommand(Optional.empty(), List.of("technology"));
         filterCommand.execute(model);
-        
+
         // Check how many companies have "technology" tag
         int filteredSize = model.getFilteredCompanyList().size();
-        
+
         // If we have at least 2 companies, proceed with batch edit test
         if (filteredSize >= 2) {
-            // Get the first 2 companies in the filtered list 
-            Company firstInFiltered = model.getFilteredCompanyList().get(0);  
-            Company secondInFiltered = model.getFilteredCompanyList().get(1); 
-            
+            // Get the first 2 companies in the filtered list
+            Company firstInFiltered = model.getFilteredCompanyList().get(0);
+            Company secondInFiltered = model.getFilteredCompanyList().get(1);
+
             // Test: Edit indices 1,2 in filtered list - should edit the companies at filtered positions 1,2
             List<Index> indices = Arrays.asList(INDEX_FIRST_COMPANY, INDEX_SECOND_COMPANY);
             EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder()
                 .withRemark("Batch edited after filter").build();
             EditCommand editCommand = new EditCommand(indices, descriptor);
-            
+
             String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_SUCCESS_MULTIPLE, 2);
             Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-            
+
             // Apply same filter to expected model
             FilterCommand expectedFilterCommand = new FilterCommand(Optional.empty(), List.of("technology"));
             expectedFilterCommand.execute(expectedModel);
-            
+
             // Update the 2 companies that should be edited (the ones in filtered positions 1,2)
             Company editedFirst = new CompanyBuilder(firstInFiltered).withRemark("Batch edited after filter").build();
             Company editedSecond = new CompanyBuilder(secondInFiltered).withRemark("Batch edited after filter").build();
-            
+
             expectedModel.setCompany(firstInFiltered, editedFirst);
             expectedModel.setCompany(secondInFiltered, editedSecond);
-            
+
             assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
         } else {
             // Fall back to testing with single edit if not enough companies
@@ -495,16 +494,17 @@ public class EditCommandTest {
                 EditCompanyDescriptor descriptor = new EditCompanyDescriptorBuilder()
                     .withRemark("Single edited after filter").build();
                 EditCommand editCommand = new EditCommand(List.of(INDEX_FIRST_COMPANY), descriptor);
-                
+
                 String expectedMessage = EditCommand.MESSAGE_EDIT_SUCCESS_SINGLE;
                 Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-                
+
                 FilterCommand expectedFilterCommand = new FilterCommand(Optional.empty(), List.of("technology"));
                 expectedFilterCommand.execute(expectedModel);
-                
-                Company editedFirst = new CompanyBuilder(firstInFiltered).withRemark("Single edited after filter").build();
+
+                Company editedFirst = new CompanyBuilder(firstInFiltered)
+                    .withRemark("Single edited after filter").build();
                 expectedModel.setCompany(firstInFiltered, editedFirst);
-                
+
                 assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
             }
         }
