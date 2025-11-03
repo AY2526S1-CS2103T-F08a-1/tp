@@ -31,18 +31,33 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
-* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is the application entry point that is in charge of the app launch and shut down.
+* At app launch, it initializes the other components (UI, Logic, Storage, and Model) in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+
+**`User`** interacts with the application through the CLI interface.
+* The user inputs text commands via the command line interface.
+* The UI displays output and feedback back to the user.
 
 The bulk of the app's work is done by the following four components:
 
-* [**`UI`**](#ui-component): The UI of the App.
-* [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
-* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+* [**`UI`**](#ui-component): The UI of the App that handles user interaction.
+* [**`Logic`**](#logic-component): The command executor that invokes commands and processes business logic.
+* [**`Model`**](#model-component): Holds the data of the App in memory and is updated by Logic and read by UI.
+* [**`Storage`**](#storage-component): Persists data to and reads data from the hard disk in JSON format (Cerebro.json).
 
-[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
+[**`Commons`**](#common-classes) represents a collection of shared utility classes used by multiple other components.
+
+The relationships between components are as follows:
+
+* **User ↔ UI**: The user inputs commands through the CLI, and the UI displays output and feedback.
+* **UI → Logic**: The UI invokes command execution through the Logic component.
+* **UI → Model**: The UI reads data from the Model to display information to the user.
+* **Logic → Storage**: Logic persists data by requesting the Storage component to save/load data.
+* **Logic → Model**: Logic updates the Model with processed data from command execution.
+* **Storage ↔ Model**: Storage serializes Model objects to JSON format and deserializes JSON data back to Model objects.
+* **Storage ↔ File**: Storage writes to and reads from Cerebro.json, the JSON file that stores all application data.
+* **Main → All Components**: Main initializes all four main components (UI, Logic, Storage, Model) at application startup.
 
 **How the architecture components interact with each other**
 
