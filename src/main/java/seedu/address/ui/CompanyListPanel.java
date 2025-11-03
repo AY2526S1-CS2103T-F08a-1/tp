@@ -12,6 +12,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import seedu.address.model.company.Company;
 
+/**
+ * Panel containing the list of companies.
+ */
 public class CompanyListPanel extends UiPart<Region> {
 
     private static final String FXML = "CompanyListPanel.fxml";
@@ -24,6 +27,9 @@ public class CompanyListPanel extends UiPart<Region> {
     @FXML
     private VBox emptyPlaceholder;
 
+    /**
+     * Creates a {@code CompanyListPanel} with the given {@code ObservableList}.
+     */
     public CompanyListPanel(ObservableList<Company> companyList) {
         super(FXML);
 
