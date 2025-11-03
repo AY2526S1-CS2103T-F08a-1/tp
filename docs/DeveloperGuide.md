@@ -416,7 +416,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `Cerebro` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `Cerebro` and the **Actor** is the `user`, unless specified otherwise)
 
 **Use case: UC01 - Delete company/companies**
 
@@ -652,7 +652,7 @@ Use case ends.
 
 ---
 
-**Use case: UC09 - Exit application**
+**Use case: UC10 - Exit application**
 
 **MSS**
 
