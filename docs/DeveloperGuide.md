@@ -490,11 +490,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
   
-* 1b. Duplicate would not be created
+* 1b. Duplicate company name detected
 
     * 1b1. Cerebro reports a duplicate-company error.
   
-    Use case ends.
+    Use case resumes at step 1.
 ---
 
 **Use case: UC04 - Clear all companies**
