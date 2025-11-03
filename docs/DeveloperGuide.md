@@ -575,6 +575,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM.
 * **Status**: Application stage enum defined in `Status.Stage` (TO_APPLY, APPLIED, OA, TECH_INTERVIEW, HR_INTERVIEW, IN_PROCESS, OFFERED, ACCEPTED, REJECTED).
 * **Tag**: Alphanumeric labels with single hyphens to separate words (max 30 chars) used for categorizing companies, stored in lowercase.
+* **OA**: Online Assessment - A digital evaluation typically containing coding challenges, technical questions, or aptitude tests that companies use to screen candidates early in the application process.
+
 
 --------------------------------------------------------------------------------------------------------------------
 
