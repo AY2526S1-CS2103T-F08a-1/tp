@@ -909,3 +909,79 @@ Team size: 5
 1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
 
 2. **Allow filtering within find results or finding within filter results.** Currently, users cannot apply a `filter` command after executing a `find` command, or vice versa. For example, running `find test` followed by `filter s/applied` does not filter within the found companies that match "test" - instead, it filters across all companies in the address book, ignoring the previous `find` results. This limitation prevents users from narrowing down their search progressively. Through this enhancement, users would be able to chain `find` and `filter` commands to progressively narrow their search results, allowing for more flexible and powerful querying of their internship applications.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Appendix: Effort
+
+### Difficulty Level
+
+While AB3 deals with only one entity type (`Person`), Cerebro is significantly more complex as it transforms the simple contact management paradigm into a specialized internship application tracking system. The project required not just renaming fields, but reimagining the entire domain model, adding domain-specific features (9-stage status pipeline, batch operations, advanced filtering), and implementing strict validation rules appropriate for professional internship tracking.
+
+### Challenges and Effort Required
+
+**1. Batch Operations Architecture (~15-20% additional effort)**
+
+AB3 only supports single-entity operations (`edit 1`, `delete 2`). We implemented batch editing and deletion to handle high-volume internship applications (students typically manage 30-50+ companies):
+- **Challenge:** Engineering flexible index notation supporting comma-separated indices (`edit 1,3,5`), ranges (`edit 2-4`), and combinations (`edit 1,3,6-8,10`)
+- **Implementation:** Enhanced parser to handle multiple index formats, validate ranges, detect duplicate indices, and prevent name conflicts during batch edits
+- **Testing complexity:** Extensive edge case testing for invalid ranges, out-of-bounds indices, and referential integrity
+
+**2. Domain-Specific Entity Transformation (~20-25% additional effort)**
+
+- **Person → Company:** Completely reoriented the core entity from contact management to opportunity tracking. Added critical new fields: `Status` (9-stage application pipeline: TO-APPLY → APPLIED → OA → TECH-INTERVIEW → HR-INTERVIEW → IN-PROCESS → OFFERED → ACCEPTED/REJECTED) and `Remark` (for interview feedback, referral notes)
+- **Challenge:** Implementing case-insensitive company name handling, creating comprehensive validation logic for 9 distinct statuses, and ensuring data integrity
+- **Tag repurposing:** Reimagined tags from generic labels ("friend", "colleague") to internship-specific descriptors ("frontend", "backend", "remote-work") with strict validation (max 30 chars, alphanumeric with hyphens only, case-insensitive storage)
+
+**3. Advanced Filtering System (~10-15% additional effort)**
+
+AB3's `find` command only supports simple name-based searches with exact word matching. We implemented:
+- **Filter command:** `filter <s/STATUS|t/TAG> [t/TAG]…` supporting status filtering (exact match), tag filtering (substring match), and combined filtering with AND/OR logic
+- **Enhanced find:** Substring matching (`find Go` matches "Google"), case-insensitive search, and OR logic across multiple substrings
+- **Challenge:** Creating custom predicate classes, implementing substring matching logic, combining predicates with complex boolean logic, and maintaining filter state across UI updates
+
+**4. Metrics and Analytics (~10% additional effort)**
+
+AB3 has no analytics features. We implemented a `metrics` command that displays real-time distribution of applications across all 9 statuses in a separate window, helping users understand their application funnel at a glance.
+
+**5. Enhanced Field Validation (~10% additional effort)**
+
+Implemented stricter, domain-specific validation appropriate for professional internship tracking:
+- Upgraded email validation to Apache Commons Validator (RFC 822 standard)
+- Enhanced phone validation (min 3 digits, international format support with `+`, single spaces between digits)
+- Strict tag validation (max 30 chars, alphanumeric with single hyphens, case-insensitive storage)
+- Case-insensitive duplicate company name detection
+
+**6. Escape Character System (~5% additional effort)**
+
+Implemented backslash escaping (`add n/Company r/Meet with Ollie's \s/o`) to allow slash characters in fields without triggering parameter prefix parsing—a unique challenge requiring parser modifications and complex edge case handling.
+
+### Achievements
+
+- Successfully transformed AB3 from a generic contact manager into a specialized, production-ready internship tracking system tailored for CS students
+- Implemented batch operations that enable users to manage dozens of applications efficiently in a single command
+- Created a sophisticated 9-stage status pipeline that provides clear visibility into application progress
+- Designed an intuitive filtering system with flexible matching logic (substring, AND/OR combinations)
+- Achieved comprehensive test coverage despite significantly increased complexity
+
+### Reuse from AB3
+
+Significant effort (~15-20%) was saved by reusing AB3's foundation:
+- **Storage system:** JSON serialization/deserialization logic was largely reusable with minor adaptations for new fields (`Status`, `Remark`)—our work on adapting the storage system is contained in `JsonAdaptedCompany.java` and `JsonSerializableAddressBook.java`
+- **UI framework:** JavaFX structure and base components were reused, though heavily customized for displaying companies, status, and metrics window
+- **Command pattern:** AB3's command architecture provided a solid foundation for our enhanced commands with batch operations
+
+### Estimated Total Effort
+
+| Component | Effort Compared to AB3 Baseline |
+|-----------|---------------------------------|
+| Basic AB3 functionality | ~100%                           |
+| Domain transformation + Status pipeline | +25%                            |
+| Batch operations | +20%                            |
+| Advanced filtering | +15%                            |
+| Metrics + Enhanced validation + Escape system | +25%                            |
+| **Subtotal** | **~185%**                       |
+| **Reuse benefit** | **20%**                         |
+| **Total Estimated Effort** | **~165% of AB3 baseline**       |
+
+Cerebro required approximately **65% more effort** than baseline AB3, with the most significant challenges being batch operations, domain-specific entity transformation, and advanced filtering—all critical features for CS students managing high-volume internship applications.
