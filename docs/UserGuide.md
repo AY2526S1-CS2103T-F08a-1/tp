@@ -60,18 +60,18 @@ Important information about using Cerebro's command line interface.
 
 **Command History:** 
 
-Cerebro is designed for speed and efficiency, just like your favorite terminal! Press `↑` and `↓` to navigate through your command history - perfect for quickly repeating or tweaking recent operations. Most operations in Cerebro are designed to be easy to type and work with partial matches and case-insensitivity.
+Cerebro is designed for speed and efficiency, just like your favorite terminal! Press `↑` and `↓` to navigate through your command history. Most operations in Cerebro are designed to be easy to type and work with partial matches and case-insensitivity.
 
 **Escaping prefixes with backslash (`\`):** 
 
 
 You may sometimes want to use slashes in fields like the Remark field, which could be parsed as a parameter prefix. To work around this, use a backslash `\` to escape command prefixes in any parameter.
 
-- `add n/Company r/Meet with Ollie's \s/o` -> Remark: "Meet with Ollie's s/o"
+- `add n/Company r/Meet with Ollie's \s/o` → Remark: "Meet with Ollie's s/o"
 
 Note that parameter prefixes are only registered if they appear immediately after a space! As such, backslashes used in the following way will NOT be removed:
 
-- `add n/\r/Weird Company Name` -> Name: "\r/Weird Company Name"
+- `add n/\r/Weird Company Name` → Name: "\r/Weird Company Name"
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 All operations are permanent! No undo available.
@@ -171,7 +171,7 @@ We use the [Apache Commons Validator](https://commons.apache.org/proper/commons-
       <td><strong>Tag</strong></td>
       <td>Max 30 characters, alphanumeric characters only, single hyphens to separate words. Case-insensitive: <code>BACKEND</code> is treated the same as <code>backend</code>.</td>
       <td><code>remote-work</code>, <code>BACKEND</code>, <code>backend</code></td>
-      <td><code>remote work</code>, <code>tech--role</code>, <code>this-is-way-too-long-for-a-tag</code></td>
+      <td><code>remote work</code>, <code>tech--role</code>, <code>this-is-way-too-long-to-act-as-a-tag</code></td>
     </tr>
     <tr>
       <td><strong>Remark</strong></td>
@@ -230,11 +230,12 @@ list
 
 Complete command reference for all Cerebro features.
 
-<div markdown="span" class="alert alert-warning">⚠️ **Caution:**
-Make sure you familiarise yourself with the [command format](#cli-tutorial) used in this User Guide first!
+<div markdown="span" class="alert alert-warning"> 
+⚠️ **Caution:** 
+Make sure you familiarise yourself with the [Command Format](#command-format) used in this User Guide first!
 </div>
 
-### Viewing help : `help`
+### Viewing help: `help`
 
 Shows a message explaining how to access the help page.
 
@@ -248,12 +249,12 @@ You can close the help window with the `ESC` key, `Ctrl/Cmd` + `W` or `alt` + `f
 
 ---
 
-### Listing all companies : `list`
+### Listing all companies: `list`
 
 Shows a list of all companies in Cerebro.
 
 * Shows all your tracked companies along with their saved details
-* Resets any active filters from previous `find` commands
+* Resets any active filters from previous `find` and `filter` commands
 * Shows companies with their current index numbers
 
 [↑ Back to Top](#table-of-contents)
@@ -279,15 +280,19 @@ filter s/applied  → Shows all companies with "applied" status
 
 **Examples:**
 ```
-filter t/tech  → Shows companies with tags containing "tech" (e.g. "fintech", "tech-startup")
-filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ (matches "fintech", "tech-startup", "remote-work", "premium")
+filter t/tech  → Shows companies with tags containing "tech"
+                 (e.g. "fintech", "tech-startup")
+filter t/tech t/rem  → Shows companies with tags containing "tech" OR "rem"​ 
+                       (matches "fintech", "tech-startup",
+                        "remote-work", "premium")
 ```
 
 **Combined Filter:** `filter s/STATUS t/TAG [t/MORE_TAGS]...`
 
 **Examples:**
 ```
-filter s/applied t/rem t/good  → Shows companies with "applied" status AND​ tags containing "rem" OR "good"
+filter s/applied t/rem t/good  → Shows companies with "applied" status AND​
+                                  tags containing "rem" OR "good"
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -298,7 +303,7 @@ filter s/applied t/rem t/good  → Shows companies with "applied" status AND​ 
 * **OR logic for multiple tags** - Any matching tag qualifies
 * **AND logic between status and tags** - Must match status AND at least one tag
 * **Only 1 status to filter by is allowed** - `filter s/applied s/to-apply` is not allowed
-* **Input validation logic follows the same field requirements** - `remote-` although is a substring of `remote-work`, won't be accepted due to the trailing `-`
+* **Input validation logic follows the same field requirements** - although `remote-` is a substring of `remote-work`, it won't be accepted due to the trailing `-`
 </div>
 
 **Result for `filter s/applied t/cl t/og`:**
@@ -363,7 +368,9 @@ Adds a company to Cerebro.
 ```
 add n/Google Inc  → Creates entry with just the name and other fields empty
 add n/Meta e/careers@meta.com s/applied  → Adds name, email, and status only
-add n/ByteDance p/12345678 e/recruit@bytedance.com​ a/Singapore Science Park r/Fast-growing​ s/tech-interview t/backend t/remote  → Adds complete entry with all details
+add n/ByteDance p/12345678 e/recruit@bytedance.com​ 
+    a/Singapore Science Park r/Fast-growing​ 
+    s/tech-interview t/backend t/remote  → Adds complete entry with all details
 ```
 
 <div markdown="block" class="alert alert-success">
@@ -382,7 +389,7 @@ Start with just the company name for quick entry when you're researching compani
 
 ---
 
-### Editing a company : `edit`
+### Editing a company: `edit`
 
 Updates one or more companies in Cerebro.
 
@@ -392,10 +399,11 @@ Updates one or more companies in Cerebro.
 
 **Examples:**
 ```
-edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ and email to careers@google.com
+edit 1 p/91234567 e/careers@google.com  → Updates phone of company 1 to 91234567​ 
+                                          and email to careers@google.com
 ```
 
-**Batch Edit:**: Edit multiple companies with the same changes
+**Batch Edit:** Edit multiple companies with the same changes
 
 **Format:** `edit <INDEX|START-END> [INDEX]… [START-END]… [p/PHONE] [e/EMAIL] [a/ADDRESS] [r/REMARK] [s/STATUS] [t/TAG]…​`
 
@@ -417,21 +425,23 @@ edit 3 r/  → Remark cleared
 edit 3 t/ r/  → Both tags and remark cleared
 ```
 
-<div markdown="span" class="alert alert-danger">:exclamation: **Important - Field Replacement:**
-All fields are **REPLACED**, not added to existing values:
+<div markdown="block" class="alert alert-danger">:exclamation: **Important - Field Replacement:**
+All fields are **REPLACED**, not added to existing values.
 
 **Examples:**
-```
-edit 1 t/tech  → Removes all existing tags, sets only "tech"
-edit 1 r/New remark  → Completely replaces existing remark
-edit 1 t/  → Clears all tags
-```
+edit 1 t/tech → Removes all existing tags, sets only "tech"
+
+edit 1 r/New remark → Completely replaces existing remark
+
+edit 1 t/ → Clears all tags
+
 </div>
 
 
 <div markdown="block" class="alert alert-danger">
 **:exclamation: Important - Index Reference:**<br>
-Indices refer to the numbers shown in the **current displayed list**. After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
+Indices refer to the numbers shown in the **current displayed list**.<br>
+After using `find` or `filter`, indices 1,2,3 refer to the 1st, 2nd, 3rd companies in the filtered results, not the original full list.
 </div>
 
 **Examples:**
@@ -459,7 +469,7 @@ Use batch editing after applying: `edit 1-10 s/applied` updates all at once!
 
 ---
 
-### Deleting a company : `delete`
+### Deleting a company: `delete`
 
 Removes one or more companies from Cerebro permanently.
 
@@ -512,7 +522,7 @@ This action cannot be undone! Company data will be permanently deleted.
 
 ---
 
-### Clearing all entries : `clear`
+### Clearing all entries: `clear`
 
 Clears all companies from Cerebro.
 
@@ -526,7 +536,7 @@ This action cannot be undone! All company data will be permanently deleted.
 
 ---
 
-### Exiting the program : `exit`
+### Exiting the program: `exit`
 
 Exits the program.
 
@@ -548,9 +558,8 @@ If your changes to the data file make its format invalid, **Cerebro will discard
 </div>
 
 ### Upcoming Features
-- Archiving & backing up data files
 - Undo changes: Quickly revert mistaken edits or deletions
-- Reminders: Stay on top of application deadlines
+- Reminders: Stay on top of application deadlines with a new deadline field for companies (`d/DEADLINE`) and a `remind` command to view upcoming deadlines and overdue applications
 
 ---
 
@@ -564,7 +573,7 @@ Common questions and troubleshooting for using Cerebro.
 
 **Q: How do I track multiple roles at the same company?**
 
-**A**: Use tags to differentiate positions (`add t/Google SWE` vs `add t/Google PM`) or/and add respective role details in remarks.
+**A**: Use tags to differentiate positions (`edit t/Google SWE` vs `edit t/Google PM`) or/and add respective role details in remarks.
 
 **Q: Can I undo a delete or clear operation?**
 
@@ -578,7 +587,7 @@ Common questions and troubleshooting for using Cerebro.
 
 **Q: How do I transfer my data to another computer?**
 
-**A**: Install Cerebro on the new computer, then overwrite the empty data file with your existing `[JAR location]/data/Cerebro.json`.
+**A**: Install Cerebro on the new computer, then overwrite the empty data file with your<br>existing `[JAR location]/data/Cerebro.json`.
 
 <a id="batch-limit-faq"></a>
 **Q: Why is there a limit of 10,000 companies for batch edit and delete operations?**
@@ -595,7 +604,7 @@ In the rare case whereby you need to perform operations on more than 10,000 comp
 
 **Q: How do I regenerate the dummy data?**
 
-**A**: Delete the `/data` folder, then run the app again. **Make sure to backup any important information first!**
+**A**: Delete the `Cerebro.json` file in the `/data` folder, then run the app again. **Make sure to backup any important information first!**
 
 --------------------------------------------------------------------------------------------------------------------
 
