@@ -3,6 +3,7 @@ package seedu.address.ui;
 import java.util.Comparator;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
@@ -74,6 +75,8 @@ public class CompanyCard extends UiPart<Region> {
         company.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+
+        VBox.setMargin(status, new Insets(2, 0, 2, 0));
 
         String remarkText = company.getRemark().value;
         if (remarkText == null) {

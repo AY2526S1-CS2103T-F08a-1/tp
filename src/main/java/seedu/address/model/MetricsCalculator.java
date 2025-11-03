@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.layout.VBox;
 import seedu.address.model.company.Status;
 
 /**
@@ -55,70 +52,6 @@ public class MetricsCalculator {
         return new MetricsData(totalCompanies, statusCounts, statusOrder);
     }
 
-    /**
-     * Renders the metrics data into the provided VBox container.
-     * Clears existing content and populates with formatted metrics display.
-     *
-     * @param container The VBox container to render metrics into
-     * @param metricsData The calculated metrics data to display
-     */
-    public void renderMetrics(VBox container, MetricsData metricsData) {
-        container.getChildren().clear();
-
-        if (!metricsData.hasData()) {
-            renderNoDataMessage(container);
-            return;
-        }
-
-        renderTotalCount(container, metricsData.getTotalCompanies());
-        renderSeparator(container);
-        renderStatusMetrics(container, metricsData);
-    }
-
-    /**
-     * Renders a "no data" message when no companies are found.
-     */
-    private void renderNoDataMessage(VBox container) {
-        Label noDataLabel = new Label("No companies found");
-        noDataLabel.getStyleClass().add("metrics-no-data");
-        container.getChildren().add(noDataLabel);
-    }
-
-    /**
-     * Renders the total company count.
-     */
-    private void renderTotalCount(VBox container, long totalCompanies) {
-        Label totalLabel = new Label(String.format("Total Companies: %d", totalCompanies));
-        totalLabel.getStyleClass().add("metrics-total");
-        container.getChildren().add(totalLabel);
-    }
-
-    /**
-     * Renders a visual separator.
-     */
-    private void renderSeparator(VBox container) {
-        Separator separator = new Separator();
-        separator.getStyleClass().add("metrics-separator");
-        container.getChildren().add(separator);
-    }
-
-    /**
-     * Renders individual status metrics in the defined order.
-     */
-    private void renderStatusMetrics(VBox container, MetricsData metricsData) {
-        for (String status : metricsData.getStatusOrder()) {
-            long count = metricsData.getStatusCount(status);
-            double percentage = metricsData.getStatusPercentage(status);
-
-            String displayText = String.format("%s:  %d (%.1f%%)", status, count, percentage);
-
-            Label statusLabel = new Label(displayText);
-            String statusUpperCase = status.toUpperCase().replace('_', '-');
-            statusLabel.getStyleClass().addAll("metrics-status",
-                    "status-" + statusUpperCase, "status-color-" + statusUpperCase);
-            container.getChildren().add(statusLabel);
-        }
-    }
 
     /**
      * Data class containing calculated metrics.

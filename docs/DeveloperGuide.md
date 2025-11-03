@@ -21,12 +21,6 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Design**
-
-<div markdown="span" class="alert alert-primary">
-
-:bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
-</div>
-
 ### Architecture
 
 <img src="images/ArchitectureDiagram.png" width="280" />
@@ -37,18 +31,33 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
-* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is the application entry point that is in charge of the app launch and shut down.
+* At app launch, it initializes the other components (UI, Logic, Storage, and Model) in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+
+**`User`** interacts with the application through the CLI interface.
+* The user inputs text commands via the command line interface.
+* The UI displays output and feedback back to the user.
 
 The bulk of the app's work is done by the following four components:
 
-* [**`UI`**](#ui-component): The UI of the App.
-* [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
-* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+* [**`UI`**](#ui-component): The UI of the App that handles user interaction.
+* [**`Logic`**](#logic-component): The command executor that invokes commands and processes business logic.
+* [**`Model`**](#model-component): Holds the data of the App in memory and is updated by Logic and read by UI.
+* [**`Storage`**](#storage-component): Persists data to and reads data from the hard disk in JSON format (Cerebro.json).
 
-[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
+[**`Commons`**](#common-classes) represents a collection of shared utility classes used by multiple other components.
+
+The relationships between components are as follows:
+
+* **User ↔ UI**: The user inputs commands through the CLI, and the UI displays output and feedback.
+* **UI → Logic**: The UI invokes command execution through the Logic component.
+* **UI → Model**: The UI reads data from the Model to display information to the user.
+* **Logic → Storage**: Logic persists data by requesting the Storage component to save/load data.
+* **Logic → Model**: Logic updates the Model with processed data from command execution.
+* **Storage ↔ Model**: Storage serializes Model objects to JSON format and deserializes JSON data back to Model objects.
+* **Storage ↔ File**: Storage writes to and reads from Cerebro.json, the JSON file that stores all application data.
+* **Main → All Components**: Main initializes all four main components (UI, Logic, Storage, Model) at application startup.
 
 **How the architecture components interact with each other**
 
@@ -263,7 +272,7 @@ Contains utility classes that provide helper methods for common operations:
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Filter feature
+### Filter feature 
 
 The filter feature allows users to filter companies by their application status and/or tags. This is implemented through the `FilterCommand` class.
 
@@ -319,59 +328,78 @@ The supported status values are:
 
 ### Metrics feature
 
-The metrics feature provides users with statistics about their internship applications. This is implemented through the `MetricsCommand`, `MetricsWindow`, and `MetricsCalculator` classes.
+The metrics feature provides users with statistics of the status of all their applications. This is implemented through the `MetricsCommand`, `MetricsWindow`, and `MetricsCalculator` classes, with window lifecycle management handled by the `MainWindow`.
 
 #### Implementation
 
-The `MetricsCommand` works as follows:
+The metrics feature operates through a command-window interaction pattern with separation of concerns. The implementation involves four main components:
 
-1. The user executes the `metrics` command
-2. The `AddressBookParser` parses the command and creates a `MetricsCommand` object
-3. The `MetricsCommand` is executed and returns a `CommandResult` with the `showMetrics` flag set to true
-4. The `MainWindow` detects this flag in the command result and calls `handleMetrics()`
-5. The `MetricsWindow` is opened (or focused if already open) and retrieves the address book data
-6. The `MetricsCalculator` calculates statistics from the address book and renders them in the UI
+1. **Command Execution**: `MetricsCommand` processes the user input and signals the UI
+2. **Window Management**: `MainWindow` handles the lifecycle of the `MetricsWindow`  
+3. **UI Display**: `MetricsWindow` manages the window state and data refresh
+4. **Data Processing**: `MetricsCalculator` performs calculations and UI rendering
 
-The sequence diagram below illustrates the interactions within the `Logic`, `UI`, and `Model` components when executing the command `metrics`:
+**Detailed Implementation Flow:**
 
-![Metrics Sequence Diagram](images/MetricsSequenceDiagram.png)
+**Step 1: Command Processing**
+1. User executes `metrics` command
+2. `MetricsCommandParser` validates no parameters are provided
+3. `MetricsCommand#execute()` returns `CommandResult` with `showMetrics` flag set to `true`
 
-How the metrics mechanism works:
-1. The `MetricsCommand` is a simple command with no parameters - it directly returns a `CommandResult` with `showMetrics` set to true
-2. The `MainWindow` checks the `CommandResult` using `isShowMetrics()` and invokes `handleMetrics()`
-3. If the `MetricsWindow` is not already showing, it retrieves the address book from the model via `logic.getAddressBook()`
-4. The `MetricsWindow` calls `setData()` with the address book, which triggers `refreshMetrics()`
-5. `refreshMetrics()` uses `MetricsCalculator.calculateMetrics()` to compute statistics from the company list
-6. The calculated metrics are rendered in the UI using `MetricsCalculator.renderMetrics()`, which displays:
-   - Distribution of applications across different status categories (to-apply, applied, oa, tech-interview, hr-interview, in-process, offered, accepted, rejected)
-   - Total number of applications tracked
-7. The window is displayed using `show()` and centered on the screen
+**Step 2: Window Lifecycle Management (MainWindow)**
+4. `MainWindow#executeCommand()` detects the `showMetrics` flag in `CommandResult`
+5. `MainWindow#handleMetrics()` is called, which:
+   - Checks if `MetricsWindow` instance exists and is showing
+   - If not showing: calls `metricsWindow.setData(logic.getAddressBook())` and `metricsWindow.show()`
+   - If already showing: restores from minimized state if needed, updates data, and focuses window
+   - Auto-updates metrics display after any command execution when window is visible
 
-The `MetricsWindow` also includes automatic refresh functionality:
-* When the window regains focus after being minimized or moved to background
-* This ensures the displayed statistics are always current with the latest data
+**Step 3: Data Processing and UI Rendering**
+6. `MetricsWindow#setData()` triggers `refreshMetrics()`, which delegates to `MetricsCalculator` to:
+   - Calculate status distribution using Java streams grouping
+   - Generate `MetricsData` with counts, percentages, and display order
+   - Render JavaFX labels in the UI container with styling
+
+**Real-time Update Mechanism:**
+
+The metrics window automatically refreshes after every command execution if visible, eliminating the need for users to re-run the `metrics` command. This is implemented via a hook in `MainWindow#executeCommand()` that calls `metricsWindow.setData()` when `isShowing()` returns true, providing live statistics during data modification sessions.
+
+**Data Architecture:**
+
+The `MetricsCalculator.MetricsData` inner class encapsulates calculated metrics:
+- `totalCompanies`: Total count for percentage calculations
+- `statusCounts`: Map of status strings to occurrence counts  
+- `statusOrder`: Display order derived from `Arrays.stream(Status.Stage.values())` ensuring single source of truth
+- Helper methods: `getStatusCount()`, `getStatusPercentage()`, `hasData()`
+
+**Status Enum Integration:**
+
+The metrics feature maintains consistency by using `Status.Stage` enum as the single source of truth:
+- **Status ordering**: Display order derived from `Status.Stage.values()` array sequence
+- **Status extraction**: Companies grouped using canonical `toUserInputString()` method
+- **Display consistency**: Metrics always reflect authoritative status definitions from domain model
 
 #### Design considerations
 
-**Aspect: How to display metrics:**
+**Aspect: Data presentation method:**
 
-* **Alternative 1 (current choice):** Use a separate window to display metrics
-  * Pros: Provides a dedicated, distraction-free view of statistics; can remain open while user works with the main window
-  * Cons: Requires additional window management; takes up screen space
+* **Alternative 1 (current choice):** Separate popup window
+  * Pros: Doesn't interfere with main workflow; can be kept open for reference; dedicated space for detailed statistics
+  * Cons: Additional window management complexity; potential for users to lose/forget the window
 
-* **Alternative 2:** Display metrics in the main window (e.g., in a panel or dialog)
-  * Pros: Simpler implementation; no need for window management
-  * Cons: May clutter the main interface; harder to view metrics and company list simultaneously
+* **Alternative 2:** Inline display in main window
+  * Pros: Simpler implementation; always visible; no window management needed
+  * Cons: Takes space away from company list; less detailed view possible; temporary display only
 
-**Aspect: When to refresh metrics data:**
+**Aspect: Data refresh strategy:**
 
-* **Alternative 1 (current choice):** Refresh when window gains focus or is restored
-  * Pros: Ensures data is current when user views it; minimal performance impact
-  * Cons: Data may be slightly stale if window is open but not focused
+* **Alternative 1 (current choice):** Multi-trigger refresh - updates after command execution (if visible), when window gains focus, and when restored from minimized state
+  * Pros: Always current data; immediate updates during active sessions; handles all window state changes; simple hook implementation
+  * Cons: Recalculation overhead on every command; unnecessary updates for non-data commands
 
-* **Alternative 2:** Real-time updates using listeners
-  * Pros: Always shows current data
-  * Cons: More complex implementation; potential performance overhead from frequent updates
+* **Alternative 2:** Refresh only when window gains focus or is shown
+  * Pros: Reduced computation overhead; updates only when needed
+  * Cons: Potential stale data if window remains open; users might not see latest changes
 
 ### \[Proposed\] Undo/redo feature
 
@@ -395,7 +423,7 @@ Step 2. The user executes `delete 5` command to delete the 5th company in the ad
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
-Step 3. The user executes `add n/David …​` to add a new company. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `add n/Meta …​` to add a new company. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 ![UndoRedoState2](images/UndoRedoState2.png)
 
@@ -434,7 +462,7 @@ Step 5. The user then decides to execute the command `list`. Commands that do no
 
 ![UndoRedoState4](images/UndoRedoState4.png)
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/Meta …​` command. This is the behavior that most modern desktop applications follow.
 
 ![UndoRedoState5](images/UndoRedoState5.png)
 
@@ -454,6 +482,9 @@ The following activity diagram summarizes what happens when a user executes a ne
   itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the company being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
+
+_{more aspects and alternatives to be added}_
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -521,43 +552,38 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `Cerebro` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `Cerebro` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: UC01 - Delete a company**
+**Use case: UC01 - Delete company/companies**
+
+**Preconditions**: a company list is currently displayed and the user can see the target indices
 
 **MSS**
 
-1.  User requests to list companies
-2.  Cerebro shows a list of companies
-3.  User requests to delete a specific company in the list
-4.  Cerebro deletes the company
+1.  User requests to delete one or more company/companies in the list by index/indices
+2.  Cerebro asks the user to confirm the deletion
+3.  User Confirms
+4.  Cerebro deletes the specified company/companies
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. The given index/indices are invalid (non-numeric, zero, negative, or out of range).
 
-  * 2a1. Cerebro shows a message indicating no companies to delete.
+  * 1a1. Cerebro shows an error message indicating invalid index/indices.
 
-    Use case ends.
+    Use case resumes at step 1.
 
-* 3a. The given index is invalid (non-numeric, zero, negative, or out of range).
+* 1b. The index/indices is missing.
 
-  * 3a1. Cerebro shows an error message.
+  * 1b1. Cerebro shows the correct command formatting.
 
-    Use case resumes at step 2.
+    Use case resumes at step 1.
 
-* 3b. The index is missing.
+* 2a. User cancels the confirmation.
 
-  * 3b1. Cerebro shows the correct command format.
-
-    Use case resumes at step 2.
-
-* 3c. Multiple indices are provided.
-
-  * 3c1. Cerebro carries out deletion of multiple companies.
-  * 3c2. Cerebro shows success message for the deletion of multiple companies.
+  * 2a1. Cerebro reports that deletion was cancelled.
 
     Use case ends.
 
@@ -567,36 +593,228 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to view all companies
-2. Cerebro displays a numbered list of all companies with their application status and key details
-
+1. User requests to list all companies
+2. Cerebro displays a list of all companies.
+   
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. Extra parameters are provided with the list command.
 
-  * 2a1. Cerebro shows a message indicating no companies have been added yet.
-  * 2a2. Cerebro suggests using the add command to get started.
+  * 1a1. Cerebro ignores the extra parameter
 
     Use case ends.
 
-* 1a. Extra parameters are provided with the list command.
+---
 
-  * 1a1. Cerebro shows an error message with the correct command format.
+**Use case: UC03 - Add a company**
 
+**MSS**
+
+1. User requests to add a company with specified field(s).
+2. Cerebro validates the input and creates the company entry.
+3. Cerebro records the new company.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Missing name/invalid field input(s) (e.g., malformed phone numbers, tag too long).
+
+    * 1a1. Cerebro reports the missing name/invalid field(s).
+
+    Use case ends.
+  
+* 1b. Duplicate company name detected
+
+    * 1b1. Cerebro reports a duplicate-company error.
+  
+    Use case resumes at step 1.
+---
+
+**Use case: UC04 - Clear all companies**
+
+**MSS**
+
+1. User requests to clear all companies.
+2. Cerebro ask to confirm the action.
+3. User confirms.
+4. Cerebro removes all companies.
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+    * 1a1. Cerebro ignores the extra parameters.
+
+  Use case resumes at step 2.
+
+* 2a. User cancels the confirmation.
+
+    * 2a1. Cerebro reports that clearing was cancelled.
+
+  Use case ends.
+
+---
+
+**Use case: UC05 - Edit company/companies details**
+
+**Preconditions**: a company list is currently displayed and the user can see the target indices
+
+**MSS**
+
+1.  User requests to edit one or more companies by index/indices, supplying new field values (e.g., status, remark, tags).
+2.  Cerebro validates the input and applies the updates.
+3.  Cerebro records the update(s).
+
+   Use case ends.
+
+**Extensions**
+
+* 1a. No editable field is provided.
+
+    * 1a1. Cerebro shows an error message the correct command format.
+
+  Use case resumes at step 1.
+
+* 1b. Some field values are invalid (e.g., unsupported status value, malformed phone number).
+
+    * 1b1. Cerebro shows an error indicating the invalid field(s).
+
+  Use case resumes at step 1.
+
+* 1c. Any provided index/indices is invalid.
+
+    * 1c1. Cerebro shows an error indicating invalid index/indices.
+  
+  Use case resumes at step 1.
+
+* 1d. For a (single-company) edit, the new NAME duplicates an existing company’s name.
+
+    * 1d1. Cerebro rejects the command and shows a duplicate-company error.
+
+    Use case resumes at step 1.
+
+* 1e. The request attempts a batch edit (multiple indices) that includes the NAME field.
+
+    * 1e1. Cerebro rejects the command and shows an error stating that batch editing the NAME field is not allowed.
+
+    Use case resumes at step 1.
+
+---
+
+**Use case: UC06 - Filter companies by status**
+
+**MSS**
+
+1.	User requests to filter companies, supplying one or more criteria (status and/or tag).
+2.	Cerebro displays the list of companies that match the criteria.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. A required value is missing or malformed (e.g., invalid STATUS, empty t/).
+
+    * 1a1. Cerebro shows the correct command format and the set of valid values for each criterion.
+
+  Use case resumes at step 1.
+
+---
+
+**Use case: UC07 - Find companies by keyword(s)**
+
+**MSS**
+
+1.	User requests to find companies by keyword(s).
+2.  Cerebro shows companies whose names match the keyword(s).
+
+Use case ends.
+
+**Extensions**
+
+* 1a. The keyword list is empty or blank.
+
+    * 1a1. Cerebro shows the correct command format.
+
+  Use case resumes at step 1.
+
+---
+
+**Use case: UC08 - View application metric**
+
+**MSS**
+
+1.	User requests to view application metrics.
+2.  Cerebro computes metrics (e.g., counts per application status) and makes the available to user.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+  * 1a1. Cerebro ignores the extra parameters.
+
+  Use case resumes at step 2.
+
+* 1b. There are no companies.
+
+    * 1b1. Cerebro displays a message indicating there are no companies to show
+
+  Use case ends.
+
+---
+
+**Use case: UC09 - Help**
+
+**MSS**
+
+1.	User requests help.
+2.	Cerebro provide usage information.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied to a command that takes none.
+
+    *  1a1. Cerebro ignores the extra parameters.
+  
+    Use case ends.
+
+---
+
+**Use case: UC10 - Exit application**
+
+**MSS**
+
+1.	User requests to exit the application (e.g., exit).
+2.  Cerebro performs shutdown tasks (flushes pending writes if any) and terminates.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. Extra parameters are supplied with exit.
+
+    *  1a1. Cerebro ignores the extra parameters and proceeds to exit.
+
+  Use case resumes at step 2.
 
 ### Non-Functional Requirements
 
 #### Performance
 * The system shall respond to any command operation within 3 seconds when managing up to 100 internship applications.
-* A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the GUI.
-* The system shall launch within 3 seconds on standard hardware.
+* A user with above average typing speed, typically around 50–60 words per minute (WPM), for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks (e.g. adding, deleting, finding) faster using commands than using the mouse.
+* The system shall launch within 3 seconds on _standard hardware_.
 
 #### Reliability & Availability
-* Should work on any _mainstream OS_ as long as it has Java '17' or above installed
+* Should work on any _mainstream OS_ as long as it has Java '17' or above installed.
 * The app shall operate offline with full feature availability.
-* Data consistency shall be maintained at all times across features (name, phone, email, address, tags, remarks, status).
 
 #### Security & Privacy
 * User data must only be stored locally and accessible through the host OS file system — no external server transmission.
@@ -618,10 +836,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
+* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship. Each application has an associated Status that tracks its current stage.
+* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage.
+* **Command Prefix**: Prefixes like n/, s/, t/ used to specify field types in CLI commands.
+* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at. Company names must be unique (case-insensitive).
+* **GUI**: Graphical User Interface - The visual interface components built with JavaFX, as opposed to the command-line interface.
 * **Mainstream OS**: Windows, Linux, MacOS
-* **CLI-first interface**: an interface that prioritises keyboard-only interactions in order to optimise for speed of usage
-* **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at; a company can have any number of applications
-* **Application**: The entire process of securing a potential internship with the company, starting from the first contact with the company (via email or otherwise) to the point of securing the internship
+* **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM.
+* **Status**: Application stage enum defined in `Status.Stage` (TO_APPLY, APPLIED, OA, TECH_INTERVIEW, HR_INTERVIEW, IN_PROCESS, OFFERED, ACCEPTED, REJECTED).
+* **Tag**: Alphanumeric labels with single hyphens to separate words (max 30 chars) used for categorizing companies, stored in lowercase.
+* **OA**: Online Assessment - A digital evaluation typically containing coding challenges, technical questions, or aptitude tests that companies use to screen candidates early in the application process.
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -742,13 +967,6 @@ testers are expected to do more *exploratory* testing.
       Steps: Execute `delete 1,3` to delete companies at index 1 and 3. Close and relaunch the application.<br>
       Expected: The deleted companies are deleted from data/Cerebro.json upon execution of command. The remaining companies are preserved with their data intact.
 
-1. Data file permissions and access
-
-   1. **Test case: Read-only data file**<br>
-      Prerequisites: Make `data/Cerebro.json` read-only (remove write permissions) using your operating system's file properties.<br>
-      Steps: Launch the application and execute any command that modifies data (e.g., `add n/Test p/12345678`).<br>
-      Expected: The command appears to execute in the UI, but changes are not saved to the file. An error may be logged indicating inability to write to the file. Upon relaunch, the changes are lost.
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Planned Enhancements**
@@ -756,4 +974,81 @@ testers are expected to do more *exploratory* testing.
 Team size: 5
 
 1. **Filter by multiple statuses at once with same OR logic as tags.** Currently, our filter method only accepts 1 status input to filter by. However, users might want to see companies of certain statuses at the same time, and hence would like to filter by multiple statuses. Through this enhancement, users would be able to type in multiple statuses, like `filter s/offered s/rejected` and see all companies with one of the mentioned statuses.
-      Expected: An error is displayed on the result display. Error logged indicates inability to write to the file.
+
+2. **Allow filtering within find results or finding within filter results.** Currently, users cannot apply a `filter` command after executing a `find` command, or vice versa. For example, running `find test` followed by `filter s/applied` does not filter within the found companies that match "test" - instead, it filters across all companies in the address book, ignoring the previous `find` results. This limitation prevents users from narrowing down their search progressively. Through this enhancement, users would be able to chain `find` and `filter` commands to progressively narrow their search results, allowing for more flexible and powerful querying of their internship applications.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Appendix: Effort
+
+### Difficulty Level
+
+While AB3 deals with only one entity type (`Person`), Cerebro is significantly more complex as it transforms the simple contact management paradigm into a specialized internship application tracking system. The project required not just renaming fields, but reimagining the entire domain model, adding domain-specific features (9-stage status pipeline, batch operations, advanced filtering), and implementing strict validation rules appropriate for professional internship tracking.
+
+### Challenges and Effort Required
+
+**1. Batch Operations Architecture (~15-20% additional effort)**
+
+AB3 only supports single-entity operations (`edit 1`, `delete 2`). We implemented batch editing and deletion to handle high-volume internship applications (students typically manage 30-50+ companies):
+- **Challenge:** Engineering flexible index notation supporting comma-separated indices (`edit 1,3,5`), ranges (`edit 2-4`), and combinations (`edit 1,3,6-8,10`)
+- **Implementation:** Enhanced parser to handle multiple index formats, validate ranges, detect duplicate indices, and prevent name conflicts during batch edits
+- **Testing complexity:** Extensive edge case testing for invalid ranges, out-of-bounds indices, and referential integrity
+
+**2. Domain-Specific Entity Transformation (~20-25% additional effort)**
+
+- **Person → Company:** Completely reoriented the core entity from contact management to opportunity tracking. Added critical new fields: `Status` (9-stage application pipeline: TO-APPLY → APPLIED → OA → TECH-INTERVIEW → HR-INTERVIEW → IN-PROCESS → OFFERED → ACCEPTED/REJECTED) and `Remark` (for interview feedback, referral notes)
+- **Challenge:** Implementing case-insensitive company name handling, creating comprehensive validation logic for 9 distinct statuses, and ensuring data integrity
+- **Tag repurposing:** Reimagined tags from generic labels ("friend", "colleague") to internship-specific descriptors ("frontend", "backend", "remote-work") with strict validation (max 30 chars, alphanumeric with hyphens only, case-insensitive storage)
+
+**3. Advanced Filtering System (~10-15% additional effort)**
+
+AB3's `find` command only supports simple name-based searches with exact word matching. We implemented:
+- **Filter command:** `filter <s/STATUS|t/TAG> [t/TAG]…` supporting status filtering (exact match), tag filtering (substring match), and combined filtering with AND/OR logic
+- **Enhanced find:** Substring matching (`find Go` matches "Google"), case-insensitive search, and OR logic across multiple substrings
+- **Challenge:** Creating custom predicate classes, implementing substring matching logic, combining predicates with complex boolean logic, and maintaining filter state across UI updates
+
+**4. Metrics and Analytics (~10% additional effort)**
+
+AB3 has no analytics features. We implemented a `metrics` command that displays real-time distribution of applications across all 9 statuses in a separate window, helping users understand their application funnel at a glance.
+
+**5. Enhanced Field Validation (~10% additional effort)**
+
+Implemented stricter, domain-specific validation appropriate for professional internship tracking:
+- Upgraded email validation to Apache Commons Validator (RFC 822 standard)
+- Enhanced phone validation (min 3 digits, international format support with `+`, single spaces between digits)
+- Strict tag validation (max 30 chars, alphanumeric with single hyphens, case-insensitive storage)
+- Case-insensitive duplicate company name detection
+
+**6. Escape Character System (~5% additional effort)**
+
+Implemented backslash escaping (`add n/Company r/Meet with Ollie's \s/o`) to allow slash characters in fields without triggering parameter prefix parsing—a unique challenge requiring parser modifications and complex edge case handling.
+
+### Achievements
+
+- Successfully transformed AB3 from a generic contact manager into a specialized, production-ready internship tracking system tailored for CS students
+- Implemented batch operations that enable users to manage dozens of applications efficiently in a single command
+- Created a sophisticated 9-stage status pipeline that provides clear visibility into application progress
+- Designed an intuitive filtering system with flexible matching logic (substring, AND/OR combinations)
+- Achieved comprehensive test coverage despite significantly increased complexity
+
+### Reuse from AB3
+
+Significant effort (~15-20%) was saved by reusing AB3's foundation:
+- **Storage system:** JSON serialization/deserialization logic was largely reusable with minor adaptations for new fields (`Status`, `Remark`)—our work on adapting the storage system is contained in `JsonAdaptedCompany.java` and `JsonSerializableAddressBook.java`
+- **UI framework:** JavaFX structure and base components were reused, though heavily customized for displaying companies, status, and metrics window
+- **Command pattern:** AB3's command architecture provided a solid foundation for our enhanced commands with batch operations
+
+### Estimated Total Effort
+
+| Component | Effort Compared to AB3 Baseline |
+|-----------|---------------------------------|
+| Basic AB3 functionality | ~100%                           |
+| Domain transformation + Status pipeline | +25%                            |
+| Batch operations | +20%                            |
+| Advanced filtering | +15%                            |
+| Metrics + Enhanced validation + Escape system | +25%                            |
+| **Subtotal** | **~185%**                       |
+| **Reuse benefit** | **20%**                         |
+| **Total Estimated Effort** | **~165% of AB3 baseline**       |
+
+Cerebro required approximately **65% more effort** than baseline AB3, with the most significant challenges being batch operations, domain-specific entity transformation, and advanced filtering—all critical features for CS students managing high-volume internship applications.
