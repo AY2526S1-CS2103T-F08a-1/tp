@@ -211,6 +211,61 @@ The `Storage` component,
 
 Classes used by multiple components are in the `seedu.address.commons` package.
 
+**Purpose**: The Commons package contains utility classes, core configurations, and shared exceptions that are used across multiple components of the application. This promotes code reuse, reduces duplication, and provides a centralized location for common functionality.
+
+**Package Structure**:
+
+The Commons package is organized into three main sub-packages:
+
+#### `seedu.address.commons.core`
+
+Contains core classes that define fundamental application settings and behaviors:
+
+* **`Config`** - Stores configurable values used throughout the app, such as logging level and user preferences file path. Loaded from `config.json` at startup.
+* **`GuiSettings`** - Encapsulates GUI-specific settings like window size and position.
+* **`LogsCenter`** - Configures and manages all loggers in the application. Provides centralized logging to both console and file (`addressbook.log`).
+* **`Version`** - Represents the application version number in semantic versioning format (major.minor.patch).
+* **`Index`** - Represents a zero-based or one-based index, used to avoid confusion when passing indices between components that may use different indexing conventions.
+
+#### `seedu.address.commons.exceptions`
+
+Contains custom exception classes used across the application:
+
+* **`DataLoadingException`** - Thrown when there is an error loading data from a file (e.g., corrupted JSON in storage).
+* **`IllegalValueException`** - Thrown when a data value does not conform to expected constraints (e.g., invalid email format).
+
+These exceptions allow components to handle errors in a consistent and meaningful way.
+
+#### `seedu.address.commons.util`
+
+Contains utility classes that provide helper methods for common operations:
+
+* **`StringUtil`** - String manipulation utilities (e.g., checking if a sentence contains a word, validating integer strings).
+* **`FileUtil`** - File operation utilities (e.g., checking if a file exists, reading/writing files).
+* **`JsonUtil`** - JSON serialization and deserialization utilities using Jackson library.
+* **`CollectionUtil`** - Utilities for null-checking and validating collections.
+* **`ConfigUtil`** - Utilities for reading and saving `Config` objects.
+* **`AppUtil`** - General application utilities (e.g., argument validation with `checkArgument`).
+* **`ToStringBuilder`** - Builder pattern implementation for generating `toString()` output in a consistent format.
+* **`ScreenBoundsValidator`** - Validates and adjusts GUI window bounds to ensure they fit within screen dimensions.
+
+**Usage Examples**:
+
+1. **Index conversion**: When the UI displays a one-based list to users but the Model uses zero-based indexing internally, `Index` handles the conversion:
+   ```java
+   Index index = ParserUtil.parseIndex("1"); // User sees "1"
+   int zeroBasedIndex = index.getZeroBased(); // Model uses 0
+   ```
+
+2. **Input validation**: `StringUtil` is used by parsers to validate user input:
+   ```java
+   if (!StringUtil.isNonZeroUnsignedInteger(args)) {
+       throw new ParseException("Index must be a positive integer");
+   }
+   ```
+
+3. **Exception handling**: Storage component throws `DataLoadingException` when JSON files are corrupted, which is caught by MainApp to initialize with sample data instead.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Implementation**
@@ -231,6 +286,22 @@ The `FilterCommand` works as follows:
    - The specified status (if provided), AND
    - Any of the specified tags as substrings (if provided)
 4. The UI automatically updates to display only companies matching the filter
+
+The sequence diagram below illustrates the interactions within the `Logic` and `Model` components when executing the command `filter s/applied t/tech`:
+
+![Filter Sequence Diagram](images/FilterSequenceDiagram.png)
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `FilterCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</div>
+
+How the filtering mechanism works:
+1. The `FilterCommandParser` tokenizes the input arguments to extract the status and tag parameters
+2. It validates the status value (if provided) using `ParserUtil.parseStatus()` and parses any tag keywords using `ParserUtil.parseTags()`
+3. A `FilterCommand` object is created with the parsed status and tag keywords
+4. When executed, the `FilterCommand` creates a `FilterPredicate` with the filtering criteria
+5. The predicate is passed to `Model#updateFilteredCompanyList()` which applies it to the company list
+6. The filtered list size is retrieved and used to generate a success message
+7. A `CommandResult` containing the success message is returned to the UI
 
 The supported status values are:
 * `to-apply` - Companies the user plans to apply to

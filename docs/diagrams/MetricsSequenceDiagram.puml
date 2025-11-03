@@ -1,0 +1,109 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant "m:MetricsCommand" as MetricsCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box UI UI_COLOR_T1
+participant ":MainWindow" as MainWindow UI_COLOR
+participant ":MetricsWindow" as MetricsWindow UI_COLOR
+participant ":MetricsCalculator" as MetricsCalculator UI_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+end box
+
+[-> LogicManager : execute("metrics")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("metrics")
+activate AddressBookParser
+
+create MetricsCommand
+AddressBookParser -> MetricsCommand
+activate MetricsCommand
+
+MetricsCommand --> AddressBookParser
+deactivate MetricsCommand
+
+AddressBookParser --> LogicManager : m
+deactivate AddressBookParser
+
+LogicManager -> MetricsCommand : execute(model)
+activate MetricsCommand
+
+create CommandResult
+MetricsCommand -> CommandResult : new(message, false, false, true)
+activate CommandResult
+
+CommandResult --> MetricsCommand
+deactivate CommandResult
+
+MetricsCommand --> LogicManager : r
+deactivate MetricsCommand
+
+LogicManager --> MainWindow : r
+deactivate LogicManager
+
+MainWindow -> MainWindow : executeCommand(commandText)
+activate MainWindow UI_COLOR_T1
+
+MainWindow -> CommandResult : isShowMetrics()
+activate CommandResult
+CommandResult --> MainWindow : true
+deactivate CommandResult
+
+MainWindow -> MainWindow : handleMetrics()
+MainWindow --> MainWindow
+deactivate MainWindow
+
+MainWindow -> MetricsWindow : isShowing()
+activate MetricsWindow
+MetricsWindow --> MainWindow : false
+deactivate MetricsWindow
+
+MainWindow -> Model : getAddressBook()
+activate Model
+Model -> AddressBook
+activate AddressBook
+AddressBook --> Model : addressBook
+deactivate AddressBook
+Model --> MainWindow : addressBook
+deactivate Model
+
+MainWindow -> MetricsWindow : setData(addressBook)
+activate MetricsWindow
+
+MetricsWindow -> MetricsWindow : refreshMetrics()
+activate MetricsWindow UI_COLOR_T1
+
+MetricsWindow -> MetricsCalculator : calculateMetrics(addressBook)
+activate MetricsCalculator
+MetricsCalculator --> MetricsWindow : metricsData
+deactivate MetricsCalculator
+
+MetricsWindow -> MetricsCalculator : renderMetrics(statusMetrics, metricsData)
+activate MetricsCalculator
+MetricsCalculator --> MetricsWindow
+deactivate MetricsCalculator
+
+MetricsWindow --> MetricsWindow
+deactivate MetricsWindow
+
+MetricsWindow --> MainWindow
+deactivate MetricsWindow
+
+MainWindow -> MetricsWindow : show()
+activate MetricsWindow
+MetricsWindow --> MainWindow
+deactivate MetricsWindow
+
+[<-- MainWindow
+@enduml
