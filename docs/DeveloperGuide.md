@@ -283,6 +283,22 @@ The `FilterCommand` works as follows:
    - Any of the specified tags as substrings (if provided)
 4. The UI automatically updates to display only companies matching the filter
 
+The sequence diagram below illustrates the interactions within the `Logic` and `Model` components when executing the command `filter s/applied t/tech`:
+
+![Filter Sequence Diagram](images/FilterSequenceDiagram.png)
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `FilterCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</div>
+
+How the filtering mechanism works:
+1. The `FilterCommandParser` tokenizes the input arguments to extract the status and tag parameters
+2. It validates the status value (if provided) using `ParserUtil.parseStatus()` and parses any tag keywords using `ParserUtil.parseTags()`
+3. A `FilterCommand` object is created with the parsed status and tag keywords
+4. When executed, the `FilterCommand` creates a `FilterPredicate` with the filtering criteria
+5. The predicate is passed to `Model#updateFilteredCompanyList()` which applies it to the company list
+6. The filtered list size is retrieved and used to generate a success message
+7. A `CommandResult` containing the success message is returned to the UI
+
 The supported status values are:
 * `to-apply` - Companies the user plans to apply to
 * `applied` - Applications that have been submitted
