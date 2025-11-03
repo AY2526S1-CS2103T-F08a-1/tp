@@ -35,38 +35,66 @@ public class MetricsCalculatorTest {
         addressBook = new AddressBook();
     }
 
-    @Test
-    public void calculateMetrics_nullAddressBook_returnsEmptyMetrics() {
-        MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(null);
+    /**
+     * Helper method to add multiple companies with specified statuses to the address book.
+     */
+    private void addCompaniesToAddressBook(String... statuses) throws Exception {
+        for (int i = 0; i < statuses.length; i++) {
+            addressBook.addCompany(createCompany("Company" + i, statuses[i]));
+        }
+    }
 
-        assertEquals(0, result.getTotalCompanies());
-        assertTrue(result.getStatusCounts().isEmpty());
-        assertFalse(result.hasData());
+    /**
+     * Helper method to assert basic metrics properties.
+     */
+    private void assertBasicMetrics(MetricsCalculator.MetricsData result, int expectedTotal, boolean expectedHasData) {
+        assertEquals(expectedTotal, result.getTotalCompanies());
+        assertEquals(expectedHasData, result.hasData());
+    }
+
+    /**
+     * Helper method to assert status counts match expected values.
+     */
+    private void assertStatusCounts(MetricsCalculator.MetricsData result, Map<String, Long> expectedCounts) {
+        for (Map.Entry<String, Long> entry : expectedCounts.entrySet()) {
+            assertEquals(entry.getValue(), result.getStatusCount(entry.getKey()),
+                "Status " + entry.getKey() + " should have " + entry.getValue() + " companies");
+        }
+    }
+
+    /**
+     * Helper method to assert status percentages match expected values.
+     */
+    private void assertStatusPercentages(MetricsCalculator.MetricsData result, Map<String, Double> expectedPercentages) {
+        for (Map.Entry<String, Double> entry : expectedPercentages.entrySet()) {
+            assertEquals(entry.getValue(), result.getStatusPercentage(entry.getKey()), 0.01,
+                "Status " + entry.getKey() + " should have " + entry.getValue() + "% of companies");
+        }
     }
 
     @Test
-    public void calculateMetrics_emptyAddressBook_returnsEmptyMetrics() {
-        MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
+    public void calculateMetrics_nullOrEmptyAddressBook_returnsEmptyMetrics() {
+        // Test null address book
+        MetricsCalculator.MetricsData nullResult = metricsCalculator.calculateMetrics(null);
+        assertBasicMetrics(nullResult, 0, false);
+        assertTrue(nullResult.getStatusCounts().isEmpty());
 
-        assertEquals(0, result.getTotalCompanies());
-        assertTrue(result.getStatusCounts().isEmpty());
-        assertFalse(result.hasData());
-        assertEquals(0.0, result.getStatusPercentage("TO-APPLY"));
+        // Test empty address book
+        MetricsCalculator.MetricsData emptyResult = metricsCalculator.calculateMetrics(addressBook);
+        assertBasicMetrics(emptyResult, 0, false);
+        assertTrue(emptyResult.getStatusCounts().isEmpty());
+        assertEquals(0.0, emptyResult.getStatusPercentage("TO-APPLY"));
     }
 
     @Test
     public void calculateMetrics_singleCompany_returnsCorrectMetrics() throws Exception {
-        Company company = createCompany("Google", "applied");
-        addressBook.addCompany(company);
+        addCompaniesToAddressBook("applied");
 
         MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
 
-        assertEquals(1, result.getTotalCompanies());
-        assertTrue(result.hasData());
-        assertEquals(1L, result.getStatusCount("APPLIED"));
-        assertEquals(0L, result.getStatusCount("TO-APPLY"));
-        assertEquals(100.0, result.getStatusPercentage("APPLIED"));
-        assertEquals(0.0, result.getStatusPercentage("TO-APPLY"));
+        assertBasicMetrics(result, 1, true);
+        assertStatusCounts(result, Map.of("APPLIED", 1L, "TO-APPLY", 0L));
+        assertStatusPercentages(result, Map.of("APPLIED", 100.0, "TO-APPLY", 0.0));
     }
 
     @Test
@@ -156,30 +184,6 @@ public class MetricsCalculatorTest {
         assertEquals(0.0, result.getStatusPercentage("TO-APPLY"));
     }
 
-    @Test
-    public void metricsData_getStatusCounts_returnsCorrectMap() throws Exception {
-        addressBook.addCompany(createCompany("Company1", "applied"));
-        addressBook.addCompany(createCompany("Company2", "rejected"));
-
-        MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
-        Map<String, Long> statusCounts = result.getStatusCounts();
-
-        assertTrue(statusCounts.containsKey("APPLIED"));
-        assertTrue(statusCounts.containsKey("REJECTED"));
-        assertEquals(1L, statusCounts.get("APPLIED"));
-        assertEquals(1L, statusCounts.get("REJECTED"));
-    }
-
-    @Test
-    public void metricsData_edgeCasePercentages_handlesCorrectly() throws Exception {
-        // Test with single company to verify 100% calculation
-        addressBook.addCompany(createCompany("OnlyCompany", "applied"));
-
-        MetricsCalculator.MetricsData result = metricsCalculator.calculateMetrics(addressBook);
-
-        assertEquals(100.0, result.getStatusPercentage("APPLIED"));
-        assertEquals(0.0, result.getStatusPercentage("REJECTED"));
-    }
 
     /**
      * Helper method to create a Company with minimal required fields.
