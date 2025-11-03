@@ -1,6 +1,6 @@
 package seedu.address.ui;
 
-import java.util.logging.Logger;
+import static java.util.Objects.requireNonNull;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -11,7 +11,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.company.Company;
 
 /**
@@ -19,7 +18,9 @@ import seedu.address.model.company.Company;
  */
 public class CompanyListPanel extends UiPart<Region> {
     private static final String FXML = "CompanyListPanel.fxml";
-    private final Logger logger = LogsCenter.getLogger(CompanyListPanel.class);
+
+    @FXML
+    ResultDisplay resultDisplay;
 
     @FXML
     private ListView<Object> companyListView; // <— changed from <Company> to <Object>
@@ -34,7 +35,7 @@ public class CompanyListPanel extends UiPart<Region> {
         super(FXML);
 
         // Create ResultDisplay component
-        ResultDisplay resultDisplay = new ResultDisplay();
+        resultDisplay = new ResultDisplay();
 
         // Combine it with your company list
         ObservableList<Object> mixedItems = FXCollections.observableArrayList();
@@ -64,5 +65,10 @@ public class CompanyListPanel extends UiPart<Region> {
         // Show placeholder only when there are no companies (ignore ResultDisplay)
         emptyPlaceholder.visibleProperty().bind(Bindings.isEmpty(companyList));
         emptyPlaceholder.managedProperty().bind(emptyPlaceholder.visibleProperty());
+    }
+
+    public void setFeedbackToUser(String feedbackToUser) {
+        requireNonNull(feedbackToUser);
+        resultDisplay.setFeedbackToUser(feedbackToUser);
     }
 }

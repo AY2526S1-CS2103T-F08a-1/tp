@@ -2,15 +2,25 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="placeHolder" styleClass="pane-with-border" xmlns="http://javafx.com/javafx/17"
-    xmlns:fx="http://javafx.com/fxml/1">
-    <VBox>
-      <padding>
-        <Insets top="5" right="10" bottom="5" left="10" />
-      </padding>
-      <Label fx:id="resultDisplay" wrapText="true" styleClass="result-display"/>
-    </VBox>
-</StackPane>
+<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <GridPane HBox.hgrow="ALWAYS">
+    <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
+    </columnConstraints>
+    <StackPane fx:id="placeHolder" styleClass="pane-with-border" xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml/1">
+        <VBox>
+          <padding>
+            <Insets top="5" right="10" bottom="5" left="10" />
+          </padding>
+          <Label fx:id="resultDisplay" wrapText="true" styleClass="result-display"/>
+        </VBox>
+    </StackPane>
+  </GridPane>
+</HBox>
