@@ -242,25 +242,20 @@ Contains utility classes that provide helper methods for common operations:
 
 **Usage Examples**:
 
-1. **Logging across components**: All components (UI, Logic, Model, Storage) use `LogsCenter.getLogger()` to obtain loggers for diagnostic messages:
-   ```java
-   private static final Logger logger = LogsCenter.getLogger(LogicManager.class);
-   ```
-
-2. **Index conversion**: When the UI displays a one-based list to users but the Model uses zero-based indexing internally, `Index` handles the conversion:
+1. **Index conversion**: When the UI displays a one-based list to users but the Model uses zero-based indexing internally, `Index` handles the conversion:
    ```java
    Index index = ParserUtil.parseIndex("1"); // User sees "1"
    int zeroBasedIndex = index.getZeroBased(); // Model uses 0
    ```
 
-3. **Input validation**: `StringUtil` is used by parsers to validate user input:
+2. **Input validation**: `StringUtil` is used by parsers to validate user input:
    ```java
    if (!StringUtil.isNonZeroUnsignedInteger(args)) {
        throw new ParseException("Index must be a positive integer");
    }
    ```
 
-4. **Exception handling**: Storage component throws `DataLoadingException` when JSON files are corrupted, which is caught by MainApp to initialize with sample data instead.
+3. **Exception handling**: Storage component throws `DataLoadingException` when JSON files are corrupted, which is caught by MainApp to initialize with sample data instead.
 
 --------------------------------------------------------------------------------------------------------------------
 
