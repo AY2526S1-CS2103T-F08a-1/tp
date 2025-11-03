@@ -324,20 +324,59 @@ The supported status values are:
 
 ### Metrics feature
 
-The metrics feature provides users with statistics about their internship applications. This is implemented through the `MetricsCommand` and `MetricsWindow` classes.
+The metrics feature provides users with statistics about their internship applications. This is implemented through the `MetricsCommand`, `MetricsWindow`, and `MetricsCalculator` classes.
 
 #### Implementation
 
 The `MetricsCommand` works as follows:
 
 1. The user executes the `metrics` command
-2. The `MetricsCommand` returns a `CommandResult` with `showMetrics` flag set to true
-3. The `MainWindow` detects this flag and opens/focuses the `MetricsWindow`
-4. The `MetricsWindow` retrieves data from the address book and displays statistics about application statuses
+2. The `AddressBookParser` parses the command and creates a `MetricsCommand` object
+3. The `MetricsCommand` is executed and returns a `CommandResult` with the `showMetrics` flag set to true
+4. The `MainWindow` detects this flag in the command result and calls `handleMetrics()`
+5. The `MetricsWindow` is opened (or focused if already open) and retrieves the address book data
+6. The `MetricsCalculator` calculates statistics from the address book and renders them in the UI
 
-The metrics window shows:
-* Distribution of applications across different status categories
-* Total number of applications
+The sequence diagram below illustrates the interactions within the `Logic`, `UI`, and `Model` components when executing the command `metrics`:
+
+![Metrics Sequence Diagram](images/MetricsSequenceDiagram.png)
+
+How the metrics mechanism works:
+1. The `MetricsCommand` is a simple command with no parameters - it directly returns a `CommandResult` with `showMetrics` set to true
+2. The `MainWindow` checks the `CommandResult` using `isShowMetrics()` and invokes `handleMetrics()`
+3. If the `MetricsWindow` is not already showing, it retrieves the address book from the model via `logic.getAddressBook()`
+4. The `MetricsWindow` calls `setData()` with the address book, which triggers `refreshMetrics()`
+5. `refreshMetrics()` uses `MetricsCalculator.calculateMetrics()` to compute statistics from the company list
+6. The calculated metrics are rendered in the UI using `MetricsCalculator.renderMetrics()`, which displays:
+   - Distribution of applications across different status categories (to-apply, applied, oa, tech-interview, hr-interview, in-process, offered, accepted, rejected)
+   - Total number of applications tracked
+7. The window is displayed using `show()` and centered on the screen
+
+The `MetricsWindow` also includes automatic refresh functionality:
+* When the window regains focus after being minimized or moved to background
+* This ensures the displayed statistics are always current with the latest data
+
+#### Design considerations
+
+**Aspect: How to display metrics:**
+
+* **Alternative 1 (current choice):** Use a separate window to display metrics
+  * Pros: Provides a dedicated, distraction-free view of statistics; can remain open while user works with the main window
+  * Cons: Requires additional window management; takes up screen space
+
+* **Alternative 2:** Display metrics in the main window (e.g., in a panel or dialog)
+  * Pros: Simpler implementation; no need for window management
+  * Cons: May clutter the main interface; harder to view metrics and company list simultaneously
+
+**Aspect: When to refresh metrics data:**
+
+* **Alternative 1 (current choice):** Refresh when window gains focus or is restored
+  * Pros: Ensures data is current when user views it; minimal performance impact
+  * Cons: Data may be slightly stale if window is open but not focused
+
+* **Alternative 2:** Real-time updates using listeners
+  * Pros: Always shows current data
+  * Cons: More complex implementation; potential performance overhead from frequent updates
 
 ### \[Proposed\] Undo/redo feature
 
