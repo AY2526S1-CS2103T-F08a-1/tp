@@ -1030,7 +1030,14 @@ Implemented stricter, domain-specific validation appropriate for professional in
 - Strict tag validation (max 30 chars, alphanumeric with single hyphens, case-insensitive storage)
 - Case-insensitive duplicate company name detection
 
-**6. Escape Character System (~5% additional effort)**
+**6. Nullable Fields Architecture (~25% additional effort)**
+
+AB3 requires all fields to be present. We redesigned the system to make all fields except `Name` and `Status` nullable (optional), aligning with real-world internship tracking where contact information may be incomplete initially:
+- **Challenge:** Refactoring the entire storage, model, and UI layers to handle `null` values gracefully while maintaining data integrity
+- **Implementation:** Modified field classes (`Phone`, `Email`, `Address`) to accept `null` in constructors, updated JSON adapters to serialize/deserialize optional fields, enhanced UI to display placeholder text for missing fields, and ensured commands handle optional fields correctly
+- **Testing complexity:** Comprehensive testing for all combinations of present/absent optional fields across add, edit, filter, and display operations
+
+**7. Escape Character System (~5% additional effort)**
 
 Implemented backslash escaping (`add n/Company r/Meet with Ollie's \s/o`) to allow slash characters in fields without triggering parameter prefix parsing—a unique challenge requiring parser modifications and complex edge case handling.
 
@@ -1053,13 +1060,14 @@ Significant effort (~15-20%) was saved by reusing AB3's foundation:
 
 | Component | Effort Compared to AB3 Baseline |
 |-----------|---------------------------------|
-| Basic AB3 functionality | ~100%                           |
+| Basic AB3 functionality | 100%                            |
 | Domain transformation + Status pipeline | +25%                            |
 | Batch operations | +20%                            |
 | Advanced filtering | +15%                            |
-| Metrics + Enhanced validation + Escape system | +25%                            |
-| **Subtotal** | **~185%**                       |
-| **Reuse benefit** | **20%**                         |
-| **Total Estimated Effort** | **~165% of AB3 baseline**       |
+| Nullable fields architecture | +25%                            |
+| Metrics + Enhanced validation + Escape system | +20%                            |
+| **Subtotal** | **205%**                        |
+| **Reuse benefit** | **-20%**                        |
+| **Total Estimated Effort** | **185% of AB3 baseline**        |
 
-Cerebro required approximately **65% more effort** than baseline AB3, with the most significant challenges being batch operations, domain-specific entity transformation, and advanced filtering—all critical features for CS students managing high-volume internship applications.
+Cerebro required approximately **85% more effort** than baseline AB3, with the most significant challenges being batch operations, domain-specific entity transformation, nullable fields architecture, and advanced filtering—all critical features for CS students managing high-volume internship applications.
