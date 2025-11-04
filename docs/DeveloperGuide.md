@@ -981,6 +981,8 @@ Team size: 5
 
 5. **Add tag appending/removing syntax alongside current replacement behavior.** Currently, when editing tags, all existing tags are completely replaced. For example, if a company has tags `backend` and `remote`, and a user wants to add `fulltime`, they must retype all previous tags: `edit 1 t/backend t/remote t/fulltime`. This is inefficient for fast typists who want to quickly add or remove individual tags without retyping everything. Through this enhancement, we will add append/remove syntax (e.g., `edit 1 t/+fulltime` to add a tag, `edit 1 t/-remote` to remove a tag) while keeping the current complete replacement behavior as the default when using standard syntax. This reduces typing overhead and maintains workflow efficiency for CLI-focused users who frequently manage tags during their internship application tracking.
 
+6. **Add dedicated deadline field with enhanced GUI visibility.** Currently, important deadlines for OA, tech interviews, and HR interviews are tracked in the free-text remarks field, making them hard to spot and manage efficiently. Users must scan through remark text to find deadline information, which is inefficient for fast typists managing multiple application deadlines. Through this enhancement, we will add a dedicated `d/DEADLINE` field to the Company entity with prominent GUI display (e.g., highlighted date, color coding for urgent deadlines), while keeping the remarks field for other notes. This makes critical deadline information immediately visible and allows for faster deadline updates using the standard command syntax.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Appendix: Effort
