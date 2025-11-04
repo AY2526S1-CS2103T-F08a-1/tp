@@ -990,6 +990,8 @@ Team size: 5
 
 --------------------------------------------------------------------------------------------------------------------
 
+<div style="page-break-after: always;"></div>
+
 ## Appendix: Effort
 
 ### Difficulty Level
@@ -1034,6 +1036,7 @@ Implemented stricter, domain-specific validation appropriate for professional in
 
 Implemented backslash escaping (`add n/Company r/Meet with Ollie's \s/o`) to allow slash characters in fields without triggering parameter prefix parsing—a unique challenge requiring parser modifications and complex edge case handling.
 
+<div style="page-break-after: always;"></div>
 ### Achievements
 
 - Successfully transformed AB3 from a generic contact manager into a specialized, production-ready internship tracking system tailored for CS students
