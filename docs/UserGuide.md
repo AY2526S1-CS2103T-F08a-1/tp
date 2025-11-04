@@ -33,14 +33,14 @@ Installation and first commands to get you started with Cerebro.
 
 1. **Check Java Version**
 
-    - Ensure you have Java `17` or above installed
-        - If not, [follow these guides](https://se-education.org/guides/tutorials/javaInstallation.html) to install Java 17 on your system
-        - **Mac users:** Use the specific JDK version from [here](https://se-education.org/guides/tutorials/javaInstallationMac.html)
-    - Verify installation: `java --version` in terminal
+    - Ensure you have Java `17` or above installed.
+        - If not, [follow these guides](https://se-education.org/guides/tutorials/javaInstallation.html) to install Java 17 on your system.
+        - **Mac users:** Use the specific JDK version from [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+    - Verify installation: `java --version` in terminal.
 2. **Download Cerebro**
 
-    - Download the latest `cerebro.jar` from [here](https://github.com/AY2526S1-CS2103T-F08a-1/tp/releases)
-    - Choose a folder as your _home folder_ for Cerebro (e.g. `~/Applications/Cerebro/`)
+    - Download the latest `cerebro.jar` from [here](https://github.com/AY2526S1-CS2103T-F08a-1/tp/releases).
+    - Choose a folder as your _home folder_ for Cerebro (e.g. `~/Applications/Cerebro/`).
 3. **Launch Application**
 
    ```bash
@@ -253,9 +253,9 @@ You can close the help window with the `ESC` key, `Ctrl/Cmd` + `W` or `alt` + `f
 
 Shows a list of all companies in Cerebro.
 
-* Shows all your tracked companies along with their saved details
-* Resets any active filters from previous `find` and `filter` commands
-* Shows companies with their current index numbers
+* Shows all your tracked companies along with their saved details.
+* Resets any active filters from previous `find` and `filter` commands.
+* Shows companies with their current index numbers.
 
 [↑ Back to Top](#table-of-contents)
 
@@ -297,13 +297,13 @@ filter s/applied t/rem t/good  → Shows companies with "applied" status AND​
 
 <div markdown="block" class="alert alert-success">
 **Filter Rules:**
-* **At least one field required** - Must specify either status or tag(s)
-* **Case-insensitive** - `APPLIED` matches `applied`, `FRONTEND` matches `frontend`
-* **Substring matching for tags** - `rem` matches `remote-work`, `premium`
-* **OR logic for multiple tags** - Any matching tag qualifies
-* **AND logic between status and tags** - Must match status AND at least one tag
-* **Only 1 status to filter by is allowed** - `filter s/applied s/to-apply` is not allowed
-* **Input validation logic follows the same field requirements** - although `remote-` is a substring of `remote-work`, it won't be accepted due to the trailing `-`
+* **At least one field required** - Must specify either status or tag(s).
+* **Case-insensitive** - `APPLIED` matches `applied`, `FRONTEND` matches `frontend`.
+* **Substring matching for tags** - `rem` matches `remote-work`, `premium`.
+* **OR logic for multiple tags** - Any matching tag qualifies.
+* **AND logic between status and tags** - Must match status AND at least one tag.
+* **Only 1 status to filter by is allowed** - `filter s/applied s/to-apply` is not allowed.
+* **Input validation logic follows the same field requirements** - although `remote-` is a substring of `remote-work`, it won't be accepted due to the trailing `-`.
 </div>
 
 **Result for `filter s/applied t/cl t/og`:**
@@ -322,10 +322,10 @@ Finds companies by matching name substring. Case-insensitive, lists all companie
 
 <div markdown="block" class="alert alert-success">
 **Search Rules:**
-* **Case-insensitive** - `google` matches `Google`
-* **Substring order flexible** - `Google Meta` = `Meta Google`
-* **Substrings allowed** - `Go` will show `Google`, and all other companies with 'go' in their name
-* **OR search** - `Google Meta` finds both `Google Inc` AND `Meta Platforms`
+* **Case-insensitive** - `google` matches `Google`.
+* **Substring order flexible** - `Google Meta` = `Meta Google`.
+* **Substrings allowed** - `Go` will show `Google`, and all other companies with 'go' in their name.
+* **OR search** - `Google Meta` finds both `Google Inc` AND `Meta Platforms`.
 </div>
 
 **Examples:**
@@ -376,9 +376,9 @@ add n/ByteDance p/12345678 e/recruit@bytedance.com​
 
 <div markdown="block" class="alert alert-success" style="page-break-inside: avoid;">
 **Usage:**
-* **Required:** Company name only
-* **Optional:** All other fields
-* **Default status:** `to-apply`
+* **Required:** Company name only.
+* **Optional:** All other fields.
+* **Default status:** `to-apply`.
 * **Tags:** Multiple allowed. Tags are coerced to lowercase on saving (e.g. `Client` becomes `client`).
 </div>
 
@@ -460,13 +460,13 @@ filter s/applied  → edit 1-3 (edits 1st, 2nd, 3rd company from filtered result
 ```
 
 **Rules:**
-- At least 1 field must be specified
-- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
-- Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error)
-- Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`)
-- Maximum of 10,000 companies can be edited in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq)
-- Single editing: All fields allowed
-- Batch editing: All fields allowed except Name (prevents creating duplicate company names)
+- At least 1 field must be specified.
+- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only).
+- Duplicate indices are not allowed (e.g. `edit 1,1,2` or `edit 1,3,2-4` will throw an error).
+- Space between indices are not allowed (e.g. `edit 3555`, not `edit 3 555`).
+- Maximum of 10,000 companies can be edited in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq).
+- Single editing: All fields allowed.
+- Batch editing: All fields allowed except Name (prevents creating duplicate company names).
 - Tags provided during add or edit are coerced to lowercase and stored in lowercase.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -517,10 +517,10 @@ filter s/applied  → delete 1 (deletes 1st company from filtered results)
 ```
 
 **Rules:**
-- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only)
-- Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error)
-- Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`)
-- Maximum of 10,000 companies can be deleted in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq)
+- Indices must be positive integers within the current list size (e.g. if 5 companies shown, use indices 1-5 only).
+- Duplicate indices are not allowed (e.g. `delete 1,1,2` or `delete 1,3,2-4` will throw an error).
+- Space between indices are not allowed (e.g. `delete 3555`, not `delete 3 555`).
+- Maximum of 10,000 companies can be deleted in a single batch operation (e.g. ranges like `1-10001` will be rejected) [See FAQ for rationale](#batch-limit-faq).
 
 <div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
 This action cannot be undone! Company data will be permanently deleted.
@@ -566,8 +566,8 @@ If your changes to the data file make its format invalid, **Cerebro will discard
 </div>
 
 ### Upcoming Features
-- Undo changes: Quickly revert mistaken edits or deletions
-- Reminders: Stay on top of application deadlines with a new deadline field for companies (`d/DEADLINE`) and a `remind` command to view upcoming deadlines and overdue applications
+- Undo changes: Quickly revert mistaken edits or deletions.
+- Reminders: Stay on top of application deadlines with a new deadline field for companies (`d/DEADLINE`) and a `remind` command to view upcoming deadlines and overdue applications.
 
 ---
 
@@ -600,9 +600,9 @@ Common questions and troubleshooting for using Cerebro.
 <a id="batch-limit-faq"></a>
 **Q: Why is there a limit of 10,000 companies for batch edit and delete operations?**
 **A**: This limit balances performance and usability considerations:
-- **Performance**: Large batch operations can cause significant lag or memory issues that may crash the application due to Java's memory limitations
-- **Safety**: Prevents accidental large-scale edits or deletions that could unintentionally affect your entire dataset
-- **Practicality**: It's extremely rare for users to legitimately need to edit or delete 10,000+ companies at once in typical internship tracking scenarios, as most users would never have more than 10,000 internship applications
+- **Performance**: Large batch operations can cause significant lag or memory issues that may crash the application due to Java's memory limitations.
+- **Safety**: Prevents accidental large-scale edits or deletions that could unintentionally affect your entire dataset.
+- **Practicality**: It's extremely rare for users to legitimately need to edit or delete 10,000+ companies at once in typical internship tracking scenarios, as most users would never have more than 10,000 internship applications.
 
 In the rare case whereby you need to perform operations on more than 10,000 companies, consider breaking them into smaller batches.
 
