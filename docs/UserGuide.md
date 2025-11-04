@@ -373,7 +373,7 @@ add n/ByteDance p/12345678 e/recruit@bytedance.com​
     s/tech-interview t/backend t/remote  → Adds complete entry with all details
 ```
 
-<div markdown="block" class="alert alert-success">
+<div markdown="block" class="alert alert-success" style="page-break-inside: avoid;">
 **Usage:**
 * **Required:** Company name only
 * **Optional:** All other fields
