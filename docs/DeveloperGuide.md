@@ -1044,7 +1044,6 @@ AB3 requires all fields to be present. We redesigned the system to make all fiel
 
 Implemented backslash escaping (`add n/Company r/Meet with Ollie's \s/o`) to allow slash characters in fields without triggering parameter prefix parsing—a unique challenge requiring parser modifications and complex edge case handling.
 
-<div style="page-break-after: always;"></div>
 ### Achievements
 
 - Successfully transformed AB3 from a generic contact manager into a specialized, production-ready internship tracking system tailored for CS students
