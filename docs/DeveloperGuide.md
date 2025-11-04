@@ -77,6 +77,8 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 The sections below give more details of each component.
 
+<div style="page-break-after: always;"></div>
+
 ### UI component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
@@ -86,9 +88,9 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/AY2
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `CompanyListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
 Additionally, the UI includes separate window components:
-* `HelpWindow` - Displays help information to the user
-* `MetricsWindow` - Displays statistics and metrics about the companies in the address book
-* `ClosableWindow` - Abstract base class for windows that can be closed with keyboard shortcuts
+* `HelpWindow` - Displays help information to the user.
+* `MetricsWindow` - Displays statistics and metrics about the companies in the address book.
+* `ClosableWindow` - Abstract base class for windows that can be closed with keyboard shortcuts.
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
@@ -130,17 +132,18 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+<div style="page-break-after: always;"></div>
 The following commands are currently supported:
-* `AddCommand` - Adds a company to the address book
-* `EditCommand` - Edits an existing company's details
-* `DeleteCommand` - Deletes a company from the address book
-* `FindCommand` - Finds companies by name keywords
-* `FilterCommand` - Filters companies by status and/or tags
-* `ListCommand` - Lists all companies
-* `ClearCommand` - Clears all companies from the address book
-* `MetricsCommand` - Displays statistics about the companies
-* `HelpCommand` - Shows help information
-* `ExitCommand` - Exits the application
+* `AddCommand` - Adds a company to the address book.
+* `EditCommand` - Edits an existing company's details.
+* `DeleteCommand` - Deletes a company from the address book.
+* `FindCommand` - Finds companies by name keywords.
+* `FilterCommand` - Filters companies by status and/or tags.
+* `ListCommand` - Lists all companies.
+* `ClearCommand` - Clears all companies from the address book.
+* `MetricsCommand` - Displays statistics about the companies.
+* `HelpCommand` - Shows help information.
+* `ExitCommand` - Exits the application.
 
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -156,13 +159,13 @@ The `Model` component,
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 Each `Company` object contains the following fields:
-* `Name` (required) - The company name
-* `Phone` (required wrapper; value may be null) - Contact phone number (absent phone is represented as `new Phone(null)`)
-* `Email` (required wrapper; value may be null) - Contact email address (absent email is represented as `new Email(null)`)
-* `Address` (required wrapper; value may be null) - Company address (absent address is represented as `new Address(null)`)
-* `Tags` (required, but can be empty) - Set of tags for categorization
-* `Remark` (required wrapper; value may be null or empty) - Additional notes about the company (absent remark is represented as `new Remark(null)`)
-* `Status` (required) - Application status (e.g., Applied, Interview, Offered, Rejected)
+* `Name` (required) - The company name.
+* `Phone` (required wrapper; value may be null) - Contact phone number (absent phone is represented as `new Phone(null)`).
+* `Email` (required wrapper; value may be null) - Contact email address (absent email is represented as `new Email(null)`).
+* `Address` (required wrapper; value may be null) - Company address (absent address is represented as `new Address(null)`).
+* `Tags` (required, but can be empty) - Set of tags for categorization.
+* `Remark` (required wrapper; value may be null or empty) - Additional notes about the company (absent remark is represented as `new Remark(null)`).
+* `Status` (required) - Application status (e.g., Applied, Interview, Offered, Rejected).
 
 Why always-present wrappers? Optional user input (e.g., phone) is modeled as a non-null wrapper object whose internal value may be null. This keeps model associations at multiplicity “1” and allows commands (especially `EditCommand`) to distinguish between “leave unchanged” and “clear value”. See the design note below for details.
 
@@ -196,7 +199,7 @@ If `Company` stored null directly in its fields, `EditCommand` would be unable t
 
 </div>
 
-
+<div style="page-break-after: always;"></div>
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
@@ -208,6 +211,7 @@ The `Storage` component,
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+<div style="page-break-after: always;"></div>
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
@@ -305,27 +309,27 @@ How the filtering mechanism works:
 7. A `CommandResult` containing the success message is returned to the UI
 
 The supported status values are:
-* `to-apply` - Companies the user plans to apply to
-* `applied` - Applications that have been submitted
-* `oa` - Online assessment stage
-* `tech-interview` - Technical interview stage
-* `hr-interview` - HR interview stage
-* `in-process` - Applications currently in process
-* `offered` - Received an offer
-* `accepted` - Accepted an offer
-* `rejected` - Application rejected
+* `to-apply` - Companies the user plans to apply to.
+* `applied` - Applications that have been submitted.
+* `oa` - Online assessment stage.
+* `tech-interview` - Technical interview stage.
+* `hr-interview` - HR interview stage.
+* `in-process` - Applications currently in process.
+* `offered` - Received an offer.
+* `accepted` - Accepted an offer.
+* `rejected` - Application rejected.
 
 #### Design considerations
 
 **Aspect: How to implement filtering:**
 
-* **Alternative 1 (current choice):** Use a predicate to filter the ObservableList
-  * Pros: Simple to implement, leverages existing filtered list functionality
-  * Cons: Limited to single status filtering at a time
+* **Alternative 1 (current choice):** Use a predicate to filter the ObservableList.
+  * Pros: Simple to implement, leverages existing filtered list functionality.
+  * Cons: Limited to single status filtering at a time.
 
-* **Alternative 2:** Allow multiple status filters
-  * Pros: More flexible for users who want to see multiple statuses
-  * Cons: More complex parsing and predicate logic required
+* **Alternative 2:** Allow multiple status filters.
+  * Pros: More flexible for users who want to see multiple statuses.
+  * Cons: More complex parsing and predicate logic required.
 
 ### Metrics feature
 
@@ -335,31 +339,31 @@ The metrics feature provides users with statistics of the status of all their ap
 
 The metrics feature operates through a command-window interaction pattern with separation of concerns. The implementation involves four main components:
 
-1. **Command Execution**: `MetricsCommand` processes the user input and signals the UI
-2. **Window Management**: `MainWindow` handles the lifecycle of the `MetricsWindow`  
-3. **UI Display**: `MetricsWindow` manages the window state and data refresh
-4. **Data Processing**: `MetricsCalculator` performs calculations and UI rendering
+1. **Command Execution**: `MetricsCommand` processes the user input and signals the UI.
+2. **Window Management**: `MainWindow` handles the lifecycle of the `MetricsWindow`.
+3. **UI Display**: `MetricsWindow` manages the window state and data refresh.
+4. **Data Processing**: `MetricsCalculator` performs calculations and UI rendering.
 
 **Detailed Implementation Flow:**
 
 **Step 1: Command Processing**
-1. User executes `metrics` command
-2. `MetricsCommandParser` validates no parameters are provided
-3. `MetricsCommand#execute()` returns `CommandResult` with `showMetrics` flag set to `true`
+1. User executes `metrics` command.
+2. `MetricsCommandParser` validates no parameters are provided.
+3. `MetricsCommand#execute()` returns `CommandResult` with `showMetrics` flag set to `true`.
 
 **Step 2: Window Lifecycle Management (MainWindow)**
-4. `MainWindow#executeCommand()` detects the `showMetrics` flag in `CommandResult`
+4. `MainWindow#executeCommand()` detects the `showMetrics` flag in `CommandResult`.
 5. `MainWindow#handleMetrics()` is called, which:
-   - Checks if `MetricsWindow` instance exists and is showing
-   - If not showing: calls `metricsWindow.setData(logic.getAddressBook())` and `metricsWindow.show()`
-   - If already showing: restores from minimized state if needed, updates data, and focuses window
-   - Auto-updates metrics display after any command execution when window is visible
+   - Checks if `MetricsWindow` instance exists and is showing.
+   - If not showing: calls `metricsWindow.setData(logic.getAddressBook())` and `metricsWindow.show()`.
+   - If already showing: restores from minimized state if needed, updates data, and focuses window.
+   - Auto-updates metrics display after any command execution when window is visible.
 
 **Step 3: Data Processing and UI Rendering**
 6. `MetricsWindow#setData()` triggers `refreshMetrics()`, which delegates to `MetricsCalculator` to:
-   - Calculate status distribution using Java streams grouping
-   - Generate `MetricsData` with counts, percentages, and display order
-   - Render JavaFX labels in the UI container with styling
+   - Calculate status distribution using Java streams grouping.
+   - Generate `MetricsData` with counts, percentages, and display order.
+   - Render JavaFX labels in the UI container with styling.
 
 **Real-time Update Mechanism:**
 
@@ -368,39 +372,39 @@ The metrics window automatically refreshes after every command execution if visi
 **Data Architecture:**
 
 The `MetricsCalculator.MetricsData` inner class encapsulates calculated metrics:
-- `totalCompanies`: Total count for percentage calculations
-- `statusCounts`: Map of status strings to occurrence counts  
-- `statusOrder`: Display order derived from `Arrays.stream(Status.Stage.values())` ensuring single source of truth
-- Helper methods: `getStatusCount()`, `getStatusPercentage()`, `hasData()`
+- `totalCompanies`: Total count for percentage calculations.
+- `statusCounts`: Map of status strings to occurrence counts.
+- `statusOrder`: Display order derived from `Arrays.stream(Status.Stage.values())` ensuring single source of truth.
+- Helper methods: `getStatusCount()`, `getStatusPercentage()`, `hasData()`.
 
 **Status Enum Integration:**
 
 The metrics feature maintains consistency by using `Status.Stage` enum as the single source of truth:
-- **Status ordering**: Display order derived from `Status.Stage.values()` array sequence
-- **Status extraction**: Companies grouped using canonical `toUserInputString()` method
-- **Display consistency**: Metrics always reflect authoritative status definitions from domain model
+- **Status ordering**: Display order derived from `Status.Stage.values()` array sequence.
+- **Status extraction**: Companies grouped using canonical `toUserInputString()` method.
+- **Display consistency**: Metrics always reflect authoritative status definitions from domain model.
 
 #### Design considerations
 
 **Aspect: Data presentation method:**
 
-* **Alternative 1 (current choice):** Separate popup window
-  * Pros: Doesn't interfere with main workflow; can be kept open for reference; dedicated space for detailed statistics
-  * Cons: Additional window management complexity; potential for users to lose/forget the window
+* **Alternative 1 (current choice):** Separate popup window.
+  * Pros: Doesn't interfere with main workflow; can be kept open for reference; dedicated space for detailed statistics.
+  * Cons: Additional window management complexity; potential for users to lose/forget the window.
 
-* **Alternative 2:** Inline display in main window
-  * Pros: Simpler implementation; always visible; no window management needed
-  * Cons: Takes space away from company list; less detailed view possible; temporary display only
+* **Alternative 2:** Inline display in main window.
+  * Pros: Simpler implementation; always visible; no window management needed.
+  * Cons: Takes space away from company list; less detailed view possible; temporary display only.
 
 **Aspect: Data refresh strategy:**
 
-* **Alternative 1 (current choice):** Multi-trigger refresh - updates after command execution (if visible), when window gains focus, and when restored from minimized state
-  * Pros: Always current data; immediate updates during active sessions; handles all window state changes; simple hook implementation
-  * Cons: Recalculation overhead on every command; unnecessary updates for non-data commands
+* **Alternative 1 (current choice):** Multi-trigger refresh - updates after command execution (if visible), when window gains focus, and when restored from minimized state.
+  * Pros: Always current data; immediate updates during active sessions; handles all window state changes; simple hook implementation.
+  * Cons: Recalculation overhead on every command; unnecessary updates for non-data commands.
 
-* **Alternative 2:** Refresh only when window gains focus or is shown
-  * Pros: Reduced computation overhead; updates only when needed
-  * Cons: Potential stale data if window remains open; users might not see latest changes
+* **Alternative 2:** Refresh only when window gains focus or is shown.
+  * Pros: Reduced computation overhead; updates only when needed.
+  * Cons: Potential stale data if window remains open; users might not see latest changes.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -479,8 +483,7 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
+* **Alternative 2:** Individual command knows how to undo/redo by itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the company being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
@@ -502,12 +505,12 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Target user profile**:
 
-* Computer Science students mass applying for internships
-* Well-accustomed to CLI-interfaces and prefers keyboard shortcuts over GUI interfaces
-* Fast typist who prefers typing to mouse interactions
-* Makes occasional data entry mistakes
-* Needs to manage a significant number of internship applications simultaneously
-* Is reasonably comfortable using CLI apps
+* Computer Science students mass applying for internships.
+* Well-accustomed to CLI-interfaces and prefers keyboard shortcuts over GUI interfaces.
+* Fast typist who prefers typing to mouse interactions.
+* Makes occasional data entry mistakes.
+* Needs to manage a significant number of internship applications simultaneously.
+* Is reasonably comfortable using CLI apps.
 
 **Value proposition**: Helps students keep track of prospective and current internship companies and their application status in a centralized location. Manages applications faster than a typical mouse/GUI driven app.
 
@@ -839,7 +842,7 @@ Use case ends.
 * **Command Prefix**: Prefixes like n/, s/, t/ used to specify field types in CLI commands.
 * **Company**: Any entity, legally registered or otherwise, that the user can undertake an internship at. Company names must be unique (case-insensitive).
 * **GUI**: Graphical User Interface - The visual interface components built with JavaFX, as opposed to the command-line interface.
-* **Mainstream OS**: Windows, Linux, MacOS
+* **Mainstream OS**: Windows, Linux, MacOS.
 * **Standard Hardware**: Hardware meeting minimum requirements: 4GB RAM, Intel i3 equivalent processor (2015 or newer), 500MB available disk space, Java 17+ JVM.
 * **Status**: Application stage enum defined in `Status.Stage` (TO_APPLY, APPLIED, OA, TECH_INTERVIEW, HR_INTERVIEW, IN_PROCESS, OFFERED, ACCEPTED, REJECTED).
 * **Tag**: Alphanumeric labels with single hyphens to separate words (max 30 chars) used for categorizing companies, stored in lowercase.
