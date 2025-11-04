@@ -109,7 +109,7 @@ Here's a (partial) class diagram of the `Logic` component:
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+<img src="images/DeleteSequenceDiagram.png" width="900" />
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
@@ -290,7 +290,7 @@ The `FilterCommand` works as follows:
 
 The sequence diagram below illustrates the interactions within the `Logic` and `Model` components when executing the command `filter s/applied t/tech`:
 
-![Filter Sequence Diagram](images/FilterSequenceDiagram.png)
+<img src="images/FilterSequenceDiagram.png" width="900" />
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `FilterCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
