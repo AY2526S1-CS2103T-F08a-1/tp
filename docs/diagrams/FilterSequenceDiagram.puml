@@ -36,15 +36,24 @@ activate FilterCommandParser LOGIC_COLOR_T1
 FilterCommandParser --> FilterCommandParser
 deactivate FilterCommandParser
 
-FilterCommandParser -> FilterCommandParser : parseStatus("applied")
-activate FilterCommandParser LOGIC_COLOR_T1
-FilterCommandParser --> FilterCommandParser : Status.APPLIED
-deactivate FilterCommandParser
+opt status provided
+    FilterCommandParser -> FilterCommandParser : parseStatus("applied")
+    activate FilterCommandParser LOGIC_COLOR_T1
+    FilterCommandParser --> FilterCommandParser : Status.APPLIED
+    deactivate FilterCommandParser
+end
 
-FilterCommandParser -> FilterCommandParser : parseTags(["tech"])
-activate FilterCommandParser LOGIC_COLOR_T1
-FilterCommandParser --> FilterCommandParser : tagKeywords
-deactivate FilterCommandParser
+opt tags provided
+    FilterCommandParser -> FilterCommandParser : parseTags(["tech"])
+    activate FilterCommandParser LOGIC_COLOR_T1
+
+    loop for each tag
+        FilterCommandParser -> FilterCommandParser : parse tag
+    end
+
+    FilterCommandParser --> FilterCommandParser : tagKeywords
+    deactivate FilterCommandParser
+end
 
 create FilterCommand
 FilterCommandParser -> FilterCommand : new(status, tagKeywords)
@@ -82,10 +91,22 @@ activate Model
 Model --> FilterCommand : filteredList
 deactivate Model
 
-FilterCommand -> FilterCommand : generateSuccessMessage(count)
-activate FilterCommand LOGIC_COLOR_T1
-FilterCommand --> FilterCommand : successMessage
-deactivate FilterCommand
+alt status and tags provided
+    FilterCommand -> FilterCommand : generateSuccessMessage(count)
+    activate FilterCommand LOGIC_COLOR_T1
+    FilterCommand --> FilterCommand : "X companies listed!\nFiltered by status and tags"
+    deactivate FilterCommand
+else only status provided
+    FilterCommand -> FilterCommand : generateSuccessMessage(count)
+    activate FilterCommand LOGIC_COLOR_T1
+    FilterCommand --> FilterCommand : "X companies listed!\nFiltered by status"
+    deactivate FilterCommand
+else only tags provided
+    FilterCommand -> FilterCommand : generateSuccessMessage(count)
+    activate FilterCommand LOGIC_COLOR_T1
+    FilterCommand --> FilterCommand : "X companies listed!\nFiltered by tags"
+    deactivate FilterCommand
+end
 
 create CommandResult
 FilterCommand -> CommandResult : new(successMessage)

@@ -49,18 +49,48 @@ deactivate AddressBookParser
 LogicManager -> DeleteCommand : execute(m)
 activate DeleteCommand
 
-DeleteCommand -> Model : deleteCompany(1)
+DeleteCommand -> Model : getFilteredCompanyList()
 activate Model
-
-Model --> DeleteCommand
+Model --> DeleteCommand : lastShownList
 deactivate Model
 
-create CommandResult
-DeleteCommand -> CommandResult
-activate CommandResult
+loop for each index
+    DeleteCommand -> DeleteCommand : validate index is within bounds
+    activate DeleteCommand LOGIC_COLOR_T1
+    DeleteCommand --> DeleteCommand
+    deactivate DeleteCommand
+end
 
-CommandResult --> DeleteCommand
-deactivate CommandResult
+DeleteCommand -> DeleteCommand : show confirmation dialog
+activate DeleteCommand LOGIC_COLOR_T1
+
+alt user confirms deletion
+    DeleteCommand --> DeleteCommand : confirmed
+    deactivate DeleteCommand
+
+    loop for each company (in descending order)
+        DeleteCommand -> Model : deleteCompany(company)
+        activate Model
+        Model --> DeleteCommand
+        deactivate Model
+    end
+
+    create CommandResult
+    DeleteCommand -> CommandResult : new("Deleted Company: X")
+    activate CommandResult
+    CommandResult --> DeleteCommand
+    deactivate CommandResult
+
+else user cancels deletion
+    DeleteCommand --> DeleteCommand : cancelled
+    deactivate DeleteCommand
+
+    create CommandResult
+    DeleteCommand -> CommandResult : new("Deletion cancelled.")
+    activate CommandResult
+    CommandResult --> DeleteCommand
+    deactivate CommandResult
+end
 
 DeleteCommand --> LogicManager : r
 deactivate DeleteCommand
