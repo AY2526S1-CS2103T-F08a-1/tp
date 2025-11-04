@@ -77,6 +77,8 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 The sections below give more details of each component.
 
+<div style="page-break-after: always;"></div>
+
 ### UI component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
@@ -130,6 +132,7 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+<div style="page-break-after: always;"></div>
 The following commands are currently supported:
 * `AddCommand` - Adds a company to the address book
 * `EditCommand` - Edits an existing company's details
@@ -196,7 +199,7 @@ If `Company` stored null directly in its fields, `EditCommand` would be unable t
 
 </div>
 
-
+<div style="page-break-after: always;"></div>
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F08a-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
@@ -208,6 +211,7 @@ The `Storage` component,
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+<div style="page-break-after: always;"></div>
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
